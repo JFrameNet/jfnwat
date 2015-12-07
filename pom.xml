@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>jp.keio.jfn</groupId>
-    <artifactId>jfnwat</artifactId>
+    <artifactId>JFNWAT</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <parent>
@@ -90,7 +90,12 @@
     </dependencies>
 
     <build>
+        <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
         <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.lesscss</groupId>
                 <artifactId>lesscss-maven-plugin</artifactId>
