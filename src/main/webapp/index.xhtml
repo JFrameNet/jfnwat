@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="#{localeBean.language}"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <ui:composition template="layout.xhtml">
 
+    <ui:composition template="layout.xhtml">
         <ui:define name="content">
             <h:form >
                 <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
@@ -15,12 +16,15 @@
                     <p:inputText id="search" size="40" style="font-size: larger"/>
                 </div>
                 <div style="margin-top: 25px">
-                    <p:button outcome="test-content.xhtml" value="#{msg['frameIndex']}" style="font-size: medium"/>
-                    <p:button outcome="test-content.xhtml" value="#{msg['lexUnitIndex']}" style="margin-left: 5px; margin-right: 5px; font-size: medium"/>
-                    <p:button outcome="test-content.xhtml" value="#{msg['documentIndex']}" style="font-size: medium"/>
+                    <h:outputText value="#{text['selectLanguageText']}" />
+                    <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
+                </div>
+                <div style="margin-top: 25px">
+                    <p:button outcome="test-content.xhtml" value="#{text['frameIndex']}" style="font-size: medium"/>
+                    <p:button outcome="test-content.xhtml" value="#{text['lexUnitIndex']}" style="margin-left: 5px; margin-right: 5px; font-size: medium"/>
+                    <p:button outcome="test-content.xhtml" value="#{text['documentIndex']}" style="font-size: medium"/>
                 </div>
             </h:form>
         </ui:define>
-
     </ui:composition>
 </html>

@@ -6,8 +6,9 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
+<f:view locale="#{localeBean.locale}">
     <head>
+        <title>JFN Web Report</title>
         <h:outputScript library="js" name="test.js"  />
     </head>
     <h:body>
