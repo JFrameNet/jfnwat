@@ -6,21 +6,20 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
-    <ui:composition template="layout.xhtml">
-
-        <ui:define name="content">
-            <h:form >
-                <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
-                <div style="margin-top: 30px">
-                    <p:inputText id="search" size="40" style="font-size: larger"/>
-                </div>
-                <div style="margin-top: 25px">
+<f:view>
+    <h:head>
+            <p:toolbar>
+                <f:facet name="left">
+                    <p:graphicImage name="logo/jfn_logo_only.jpg" width="60"/>
                     <p:button outcome="test-content.xhtml" value="#{msg['frameIndex']}" style="font-size: medium"/>
                     <p:button outcome="test-content.xhtml" value="#{msg['lexUnitIndex']}" style="margin-left: 5px; margin-right: 5px; font-size: medium"/>
                     <p:button outcome="test-content.xhtml" value="#{msg['documentIndex']}" style="font-size: medium"/>
-                </div>
-            </h:form>
-        </ui:define>
-
-    </ui:composition>
+                </f:facet>
+            </p:toolbar>
+    </h:head>
+    <h:body>
+        <div style="display:block; width:100%; height:30px; overflow:hidden;" ></div>
+        <ui:insert name="content">Default content</ui:insert>
+    </h:body>
+</f:view>
 </html>
