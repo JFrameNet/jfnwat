@@ -6,33 +6,11 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/layout.xhtml">
 
-    <ui:define name="subheader">
-        Page Header
-    </ui:define>
-
     <ui:define name="content">
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card TexAlCenter">
-                    <br/>
-                    <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
-                    <br/><br/>
-                    <p:inputText style="border-bottom-color: transparent" size="40" ></p:inputText> <br/>
-                    <br/>
-                    <h:form>
-                        <h:outputText value="#{text['selectLanguageText']}" />
-                        <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
-                    </h:form>
-                    <br/>
-                    <p:button value="#{text['frameIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
-                    <p:button value="#{text['lexUnitIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
-                    <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile"/>
-                    <br/><br/>
-
-                </div>
-            </div>
+        <div id="layout-topbar">
+            <h:graphicImage id="top-logo" name="logo/jfn_logo_only.jpg" width="50" style="margin: 15px"/>
+            <p:inputText id="mySearch" style="border-bottom-color: transparent;" size="60"></p:inputText>
         </div>
-
     </ui:define>
 
 </ui:composition>
