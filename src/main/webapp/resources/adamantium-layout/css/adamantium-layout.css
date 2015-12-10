@@ -667,6 +667,11 @@ li {
 }
 /* MEDIA QUERIES **************************************************************************************************************** */
 /* Large desktop */
+@media (max-width: 600px) {
+  #top-logo {
+    width: 200px;
+  }
+}
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 640px) and (max-width: 960px) {
   html,
