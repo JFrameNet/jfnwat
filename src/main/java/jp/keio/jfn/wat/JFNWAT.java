@@ -22,6 +22,7 @@ public class JFNWAT implements ServletContextAware {
 	@Override
 	public void setServletContext(ServletContext servletContext) {
 		servletContext.setInitParameter("com.sun.faces.forceLoadConfiguration", Boolean.TRUE.toString());
+		servletContext.setInitParameter("primefaces.THEME", "adamantium");
 	}
 
 	@Bean
