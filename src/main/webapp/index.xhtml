@@ -11,26 +11,23 @@
     </ui:define>
 
     <ui:define name="content">
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card TexAlCenter">
-                    <br/>
-                    <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
-                    <br/><br/>
-                    <p:inputText style="border-bottom-color: transparent" size="40" ></p:inputText> <br/>
-                    <br/>
-                    <h:form>
-                        <h:outputText value="#{text['selectLanguageText']}" />
-                        <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
-                    </h:form>
-                    <br/>
-                    <p:button value="#{text['frameIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
-                    <p:button value="#{text['lexUnitIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
-                    <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile"/>
-                    <br/><br/>
+        <div class="Card TexAlCenter">
+            <div class="EmptyBox150"></div>
+            <br/>
+            <p:graphicImage name="#{text['mainLogo']}" width="400"/>
+            <br/><br/>
+            <p:inputText style="border-bottom-color: transparent" size="40" ></p:inputText> <br/>
+            <br/>
+            <h:form>
+                <h:outputText value="#{text['selectLanguageText']}" />
+                <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
+            </h:form>
+            <br/>
+            <p:button value="#{text['frameIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
+            <p:button value="#{text['lexUnitIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
+            <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile"/>
+            <br/><br/>
 
-                </div>
-            </div>
         </div>
 
     </ui:define>

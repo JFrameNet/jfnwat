@@ -24,11 +24,8 @@
     </h:head>
     <h:body>
         <div>
-            <div style="display:block; width:100%; height:120px; overflow:hidden;" ></div>
-            <div>
-                <p:growl for="errors" showDetail="true" autoUpdate="true"/>
-                <ui:insert name="content">Default content</ui:insert>
-            </div>
+            <p:growl for="errors" showDetail="true" autoUpdate="true"/>
+            <ui:insert name="content">Default content</ui:insert>
         </div>
         <h:outputStylesheet name="css/core-layout.css" library="adamantium-layout" />
         <h:outputStylesheet name="css/animate.css" library="adamantium-layout" />
