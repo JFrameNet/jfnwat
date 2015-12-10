@@ -1,30 +1,38 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html lang="#{localeBean.language}"
-      xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/layout.xhtml">
 
-    <ui:composition template="layout.xhtml">
-        <ui:define name="content">
-            <h:form >
-                <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
-                <div style="margin-top: 30px">
-                    <p:inputText id="search" size="40" style="font-size: larger"/>
+    <ui:define name="subheader">
+        Page Header
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card TexAlCenter">
+                    <br/>
+                    <p:graphicImage name="logo/JFN_color/JFN_color_S.jpg" width="400"/>
+                    <br/><br/>
+                    <p:inputText style="border-bottom-color: transparent" size="40" ></p:inputText> <br/>
+                    <br/>
+                    <h:form>
+                        <h:outputText value="#{text['selectLanguageText']}" />
+                        <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
+                    </h:form>
+                    <br/>
+                    <p:button value="#{text['frameIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
+                    <p:button value="#{text['lexUnitIndex']}"  styleClass="GreenButton FloatNoneOnMobile"/>
+                    <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile"/>
+                    <br/><br/>
+
                 </div>
-                <div style="margin-top: 25px">
-                    <h:outputText value="#{text['selectLanguageText']}" />
-                    <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
-                </div>
-                <div style="margin-top: 25px">
-                    <p:button outcome="test-content.xhtml" value="#{text['frameIndex']}" style="font-size: medium"/>
-                    <p:button outcome="test-content.xhtml" value="#{text['lexUnitIndex']}" style="margin-left: 5px; margin-right: 5px; font-size: medium"/>
-                    <p:button outcome="test-content.xhtml" value="#{text['documentIndex']}" style="font-size: medium"/>
-                </div>
-            </h:form>
-        </ui:define>
-    </ui:composition>
-</html>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
