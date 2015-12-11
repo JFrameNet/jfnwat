@@ -7,9 +7,21 @@
                 template="/layout.xhtml">
 
     <ui:define name="content">
-        <div id="layout-topbar">
-            <h:graphicImage id="top-logo" name="logo/jfn_logo_only.jpg" width="50" style="margin: 15px"/>
-            <p:inputText id="mySearch" style="border-bottom-color: transparent;" size="60"></p:inputText>
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <a href="/index.jsf" style="float: left"><h:graphicImage name="logo/jfn_logo_only.jpg" width="50"/></a>
+                        <a >
+                            <p:inputText style="border-bottom-color: transparent; margin-left: 20px" size="60" value="#{viewParamPush.keyword}">
+                            </p:inputText>
+                            <p:commandButton type="button" value="Search" styleClass="GreenButton"/>
+                        </a>
+                    </f:facet>
+
+                </p:toolbar>
+            </div>
+
         </div>
     </ui:define>
 
