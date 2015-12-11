@@ -11,15 +11,51 @@
             <div class="ContainerIndent">
                 <p:toolbar>
                     <f:facet name="left">
-                        <a href="/index.jsf" style="float: left"><h:graphicImage name="logo/jfn_logo_only.jpg" width="50"/></a>
-                        <a >
-                            <p:inputText style="border-bottom-color: transparent; margin-left: 20px" size="60" value="#{viewParamPush.keyword}">
-                            </p:inputText>
-                            <p:commandButton type="button" value="Search" styleClass="GreenButton"/>
-                        </a>
+                        <h:form>
+                            <a href="/index.jsf" style="float: left"><h:graphicImage name="logo/jfn_logo_only.jpg" width="50" style="margin-right: 20px"/></a>
+                            <p:inputText id="search-bar" style="border-bottom-color: transparent" onfocus="this.select()" size="60" value="#{viewParamPush.keyword}"></p:inputText>
+                            <p:button type="button" value="Search" styleClass="GreenButton" style="margin-top: 5px"/>
+                        </h:form>
                     </f:facet>
 
                 </p:toolbar>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card">
+                    <div class="CardTopic"> Frames</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataList value="#{frameController.getAll()}" var="frame" type="ordered">
+                        #{frame.name}
+                    </p:dataList>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card">
+                    <div class="CardTopic"> Lexical Units</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataTable var="lexUnit" value="#{lexUnitController.getAll()}">
+                        <p:column headerText="Lexical Unit">
+                            <h:outputText value="#{lexUnit.name}" />
+                        </p:column>
+
+                        <p:column headerText="Frame">
+                            <h:outputText value="#{lexUnit.frame}" />
+                        </p:column>
+
+                        <p:column headerText="LU Status">
+                            <h:outputText value="#{lexUnit.status}" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card" >
+                    <div class="CardTopic"> Documents</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                        #{car.brand}, #{car.year}
+                    </p:dataList>
+                </div>
             </div>
 
         </div>
