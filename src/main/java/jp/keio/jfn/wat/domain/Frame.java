@@ -11,6 +11,7 @@ import java.util.List;
  *
  */
 @Entity
+@Table(name = "Frame")
 @NamedQuery(name="Frame.findAll", query="SELECT f FROM Frame f")
 public class Frame implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -19,8 +20,10 @@ public class Frame implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id; //changed from int
 
+	@Column(name = "CreatedBy")
 	private String createdBy;
 
+	@Column(name = "CreatedDate")
 	private Timestamp createdDate;
 
 	private String definition;
@@ -28,10 +31,12 @@ public class Frame implements Serializable {
 	@Lob
 	private byte[] image;
 
+	@Column(name = "ModifiedDate")
 	private Timestamp modifiedDate;
 
 	private String name;
 
+	@Column(name = "SymbolicRep")
 	private String symbolicRep;
 
 	//bi-directional many-to-one association to FrameElement
