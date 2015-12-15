@@ -16,12 +16,15 @@
             <br/>
             <p:graphicImage id="top-logo" name="#{text['mainLogo']}" width="400"/>
             <br/><br/>
-            <p:inputText id="mySearch" style="border-bottom-color: transparent" size="60"></p:inputText>
-            <script type="text/javascript">
-                document.getElementById("mySearch").onkeydown = function () {
-                    location.href = "test-content.jsf";
-                };
-            </script>
+            <h:form>
+                <p:inputText id="mySearch" value="#{viewParamPush.keyword}" size="60"/>
+                <!--<script type="text/javascript">-->
+                    <!--document.getElementById("mySearch").onkeydown = function () {-->
+                        <!--location.href = "test-content.jsf";-->
+                    <!--}-->
+                <!--</script>-->
+                <p:commandButton icon="fa fa-search" id="btnSearch" action="test-content.xhtml" styleClass="GreenButton" style="margin-top: 2px" />
+            </h:form>
             <br/><br/>
             <h:form>
                 <h:outputText value="#{text['selectLanguageText']}" />
@@ -29,9 +32,11 @@
             </h:form>
             <br/>
             <div class="EmptyBox10"></div>
-            <p:button value="#{text['frameIndex']}"  styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
+
+            <p:button value="#{text['frameIndex']}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
             <p:button value="#{text['lexUnitIndex']}"  styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
             <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
+
             <br/><br/>
 
         </div>

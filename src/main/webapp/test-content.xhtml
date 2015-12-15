@@ -7,9 +7,57 @@
                 template="/layout.xhtml">
 
     <ui:define name="content">
-        <div id="layout-topbar">
-            <h:graphicImage id="top-logo" name="logo/jfn_logo_only.jpg" width="50" style="margin: 15px"/>
-            <p:inputText id="mySearch" style="border-bottom-color: transparent;" size="60"></p:inputText>
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <h:form>
+                            <a href="/index.jsf" style="float: left"><h:graphicImage name="logo/jfn_logo_only.jpg" width="50" style="margin-right: 20px"/></a>
+                            <p:inputText id="search-bar" style="border-bottom-color: transparent" onfocus="this.select()" size="60" value="#{viewParamPush.keyword}"></p:inputText>
+                            <p:button type="button" value="#{text['search']}" styleClass="GreenButton" style="margin-top: 5px"/>
+                        </h:form>
+                    </f:facet>
+
+                </p:toolbar>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card" style="line-height: 2">
+                    <div class="CardTopic"> #{text['frames']}</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataList value="#{frameController.getAll()}" var="frame">
+                        #{frame.name}
+                    </p:dataList>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card">
+                    <div class="CardTopic"> #{text['lexUnits']}</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataTable var="lexUnit" value="#{lexUnitController.getAll()}">
+                        <p:column headerText="#{text['lexUnit']}">
+                            <h:outputText value="#{lexUnit.name}" />
+                        </p:column>
+
+                        <p:column headerText="#{text['frame']}">
+                            <h:outputText value="#{lexUnit.frame.name}" />
+                        </p:column>
+
+                        <p:column headerText="#{text['LUStatus']}">
+                            <h:outputText value="Created" />
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card" style="line-height: 2">
+                    <div class="CardTopic"> #{text['documents']}</div>
+                    <div class="SeparatorFull"></div>
+                    <p:dataList value="#{documentController.getAll()}" var="doc">
+                        #{doc.name}
+                    </p:dataList>
+                </div>
+            </div>
+
         </div>
     </ui:define>
 
