@@ -52,7 +52,7 @@
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-  color: #ffffff;
+  color: #546e7a;
   text-decoration: none;
 }
 .ui-state-hover {
@@ -70,13 +70,13 @@
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
 .ui-state-focus a:visited {
-  color: #ffffff;
+  color: #546e7a;
   text-decoration: none;
 }
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-  color: #ffffff;
+  color: #546e7a;
   text-decoration: none;
 }
 /* Interaction Cues
@@ -1178,7 +1178,7 @@ label {
   padding-bottom: 15px;
   padding-right: 15px;
   font-family: 'latoregular';
-  font-size: 16px;
+  font-size: 14px;
   color: #546e7a;
 }
 .ui-datalist-item {
@@ -2472,19 +2472,7 @@ hr.ui-widget-header {
   background-color: #1b9085;
   color: #ffffff;
 }
-.ui-accordion-header .ui-icon-triangle-1-s {
-  background-image: url("#{resource['primefaces-adamantium:images/downarrow-white.svg']}");
-  background-position: center !important;
-  background-repeat: no-repeat;
-  background-size: 110%;
-}
-.ui-accordion-header .ui-icon-triangle-1-e {
-  background-image: url("#{resource['primefaces-adamantium:images/right-arrow-white.svg']}");
-  background-position: center !important;
-  background-repeat: no-repeat;
-  background-size: 100%;
-}
-.ui-accordion-content {
+.ui-accordion-header .ui-accordion-header .ui-accordion-content {
   padding: 5px!important;
   font-size: 14px !important;
   color: #546e7a;
@@ -3252,17 +3240,17 @@ hr.ui-widget-header {
 }
 /*Style For UI Fieldset------------------------------------------------------------------------------------- */
 .ui-fieldset {
-  border: solid 1px #e0e0e0;
+  border: solid 1px #ffffff;
   background-color: #ffffff;
   font-family: 'latoregular';
   border-radius: 3px;
 }
 .ui-fieldset-legend {
-  color: #ffffff;
+  color: #546e7a;
   font-size: 14px;
   line-height: 15px;
-  font-family: 'latobold';
-  background-color: #0288d1;
+  font-family: 'latoregular';
+  background-color: #ffffff;
   padding: 13px 20px !important;
   border-bottom-right-radius: 2px;
   border-bottom-left-radius: 2px;
@@ -3275,10 +3263,10 @@ hr.ui-widget-header {
   transition: all 0.3s ease;
 }
 .ui-fieldset-legend.ui-state-hover {
-  background-color: #1797dd;
+  background-color: #ffffff;
 }
 .ui-fieldset-legend .ui-icon-plusthick {
-  background-image: url("#{resource['primefaces-adamantium:images/plus-sign-white.svg']}");
+  background-image: url("#{resource['primefaces-adamantium:images/plus-sign.svg']}");
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 90%;
@@ -3286,7 +3274,7 @@ hr.ui-widget-header {
   margin-top: 0px !important;
 }
 .ui-fieldset-legend .ui-icon-minusthick {
-  background-image: url("#{resource['primefaces-adamantium:images/minus-sign-white.svg']}");
+  background-image: url("#{resource['primefaces-adamantium:images/minus-sign.svg']}");
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 90%;
@@ -3294,7 +3282,7 @@ hr.ui-widget-header {
   margin-top: 0px !important;
 }
 .ui-fieldset-content {
-  font-size: 16px;
+  font-size: 14px;
   color: #546e7a;
 }
 /*Style For UI InputField ------------------------------------------------------------------------------------- */
