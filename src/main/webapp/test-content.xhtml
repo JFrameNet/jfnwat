@@ -5,6 +5,9 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/layout.xhtml">
+    <f:metadata>
+        <f:viewParam name="search" value="#{searchViewController.search}" />
+    </f:metadata>
 
     <ui:define name="content">
         <div class="Container100">
@@ -13,8 +16,8 @@
                     <f:facet name="left">
                         <h:form>
                             <a href="/index.jsf" style="float: left"><h:graphicImage name="logo/jfn_logo_only.jpg" width="50" style="margin-right: 20px"/></a>
-                            <p:inputText id="search-bar" style="border-bottom-color: transparent" onfocus="this.select()" size="60" value="#{viewParamPush.keyword}"></p:inputText>
-                            <p:button type="button" value="#{text['search']}" styleClass="GreenButton" style="margin-top: 5px"/>
+                            <p:inputText id="mySearch" style="border-bottom-color: transparent" onfocus="this.select()" value="#{searchViewController.search}" size="60"/>
+                            <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 5px"/>
                         </h:form>
                     </f:facet>
 
@@ -24,8 +27,14 @@
                 <div class="Card" style="line-height: 2">
                     <div class="CardTopic"> #{text['frames']}</div>
                     <div class="SeparatorFull"></div>
-                    <p:dataList value="#{frameController.getAll()}" var="frame">
-                        #{frame.name}
+                    <p:dataList value="#{searchViewController.findByName()}" var="frame">
+                        <p:link outcome="index" value="#{frame.name}" style="font-size: larger"/>
+                        <p:fieldset id="viewFrame" legend="Definition" toggleable="true" collapsed="true">
+                            <p:ajax event="toggle"/>
+                            <h:panelGrid>
+                                <h:outputText value="#{frameController.testDef()}"/>
+                            </h:panelGrid>
+                        </p:fieldset>
                     </p:dataList>
                 </div>
             </div>
@@ -39,11 +48,11 @@
                         </p:column>
 
                         <p:column headerText="#{text['frame']}">
-                            <h:outputText value="#{lexUnit.frame.name}" />
+                            <p:link outcome="index" value="#{lexUnit.frame.name}"/>
                         </p:column>
 
                         <p:column headerText="#{text['LUStatus']}">
-                            <h:outputText value="Created" />
+                            <h:outputText value="#{lexUnitController.getStatusForLU(lexUnit)}" />
                         </p:column>
                     </p:dataTable>
                 </div>
