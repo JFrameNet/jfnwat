@@ -8,22 +8,28 @@
 
     <ui:define name="content">
         <div class="Container100">
-            <h:form>
-                <p:tabMenu activeIndex="#{param.i}">
-                    <p:menuitem icon="ui-jfn-icon" outcome="index">
-                        <f:param name="i" value="0" />
-                    </p:menuitem>
-                    <p:menuitem value="Frame">
-                        <f:param name="i" value="1" />
-                    </p:menuitem>
-                    <p:menuitem value="LexUnit">
-                        <f:param name="i" value="2" />
-                    </p:menuitem>
-                    <p:menuitem value="Document">
-                        <f:param name="i" value="3" />
-                    </p:menuitem>
-                </p:tabMenu>
-            </h:form>
+            <div class="ContainerIndent">
+                <div class="Fleft OvHidden">
+                    <p:link outcome="index">
+                        <h:graphicImage name="logo/jfn_logo_only.jpg" width="60"/>
+                    </p:link>
+                </div>
+                <div class="Fleft OvHidden">
+                    <h:form>
+                        <p:tabMenu activeIndex="#{param.i}">
+                            <p:menuitem value="Frame" outcome="frameIndex">
+                                <f:param name="i" value="0" />
+                            </p:menuitem>
+                            <p:menuitem value="LexUnit">
+                                <f:param name="i" value="1" />
+                            </p:menuitem>
+                            <p:menuitem value="Document">
+                                <f:param name="i" value="2" />
+                            </p:menuitem>
+                        </p:tabMenu>
+                    </h:form>
+                </div>
+            </div>
         </div>
         <div class="Container100 BorderBottom">
             <div class="ContainerIndent">

@@ -56,11 +56,11 @@
   text-decoration: none;
 }
 .ui-state-hover {
-  -webkit-transition: all 0.5s ease;
-  -moz-transition: all 0.5s ease;
-  -ms-transition: all 0.5s ease;
-  -o-transition: all 0.5s ease;
-  transition: all 0.5s ease;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
 }
 .ui-state-hover a,
 .ui-state-hover a:hover,
@@ -706,30 +706,30 @@ label.ui-state-error {
 /* Misc visuals
 ----------------------------------*/
 /* Corner radius */
-.ui-corner-all,
+/*.ui-corner-all,
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-  border-top-left-radius: 5px;
+	border-top-left-radius: @border-radius;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-  border-top-right-radius: 5px;
+	border-top-right-radius: @border-radius;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-  border-bottom-left-radius: 5px;
+	border-bottom-left-radius: @border-radius;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-  border-bottom-right-radius: 5px;
-}
+	border-bottom-right-radius: @border-radius;
+}*/
 /* Overlays */
 .ui-widget-overlay {
   background: #444444;
@@ -3684,35 +3684,40 @@ hr.ui-widget-header {
   background-repeat: no-repeat;
   background-size: 90%;
 }
+/*.ui-tabmenu{border:solid 1px @tabmenu-border-color; background-color:@tabmenu-bg-color; color:@tabmenu-color; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; padding:5px 5px 0px 5px;}
+    .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem{border:solid 1px transparent; border-top-left-radius:2px; border-top-right-radius:2px;}
+    .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem a{font-size:@tabmenu-menuitem-font-size; color:@tabmenu-menuitem-text-color; padding:12px 15px !important; font-family:'latobold'; line-height: 1;}
+    .ui-tabmenu .ui-tabmenu-nav .ui-state-hover, .ui-tabmenu .ui-tabmenu-nav .ui-state-active{border-bottom: solid 5px @tabmenu-menuitem-border-color-hover-active !important; color:@tabmenu-menuitem-color-hover-active;}
+    .ui-tabmenu .ui-tabmenu-nav .ui-state-hover a, .ui-tabmenu .ui-tabmenu-nav .ui-state-active a{color:@tabmenu-menuitem-text-color-hover-active;}
+    .ui-tabmenu .ui-tabmenu-nav .ui-state-active a .ui-icon{background-position: center !important; background-repeat: no-repeat; background-size: 90%; top: 1px;}*/
+/*.ui-tabmenu{background-color:@tabmenu-bg-color; color:@tabmenu-color;}
+  .ui-tabmenu .ui-tabmenu-nav {padding: 0 !important;}
+  .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem a{font-size:@tabmenu-menuitem-font-size; color:@tabmenu-menuitem-text-color; font-family:'latoregular';}
+  .ui-tabmenu .ui-tabmenu-nav .ui-state-hover, .ui-tabmenu .ui-tabmenu-nav .ui-state-active{background-color:@tabmenu-menuitem-color-hover-active;}
+  .ui-tabmenu .ui-tabmenu-nav .ui-state-hover a, .ui-tabmenu .ui-tabmenu-nav .ui-state-active a{color:@tabmenu-menuitem-text-color-hover-active;}
+  //.ui-tabmenu .ui-tabmenu-nav .ui-state-active a .ui-icon{background-position: center !important; background-repeat: no-repeat; background-size: 90%; top: 1px;}*/
 .ui-tabmenu {
-  border: solid 1px #e0e0e0;
   background-color: #ffffff;
   color: #546e7a;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  padding: 5px 5px 0px 5px;
 }
-.ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem {
-  border: solid 1px transparent;
-  border-top-left-radius: 2px;
-  border-top-right-radius: 2px;
+.ui-tabmenu .ui-tabmenu-nav {
+  padding: 0.2em 1.5em !important;
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem a {
-  font-size: 14px;
-  color: #546e7a;
+  font-size: 18px;
+  color: #666f77;
   padding: 12px 15px !important;
-  font-family: 'latobold';
+  font-family: 'latoregular';
   line-height: 1;
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-state-hover,
 .ui-tabmenu .ui-tabmenu-nav .ui-state-active {
-  border-bottom: solid 5px #0288d1 !important;
-  color: #0288d1;
+  border-bottom: solid 3px #66bb6a !important;
+  color: #66bb6a;
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-state-hover a,
 .ui-tabmenu .ui-tabmenu-nav .ui-state-active a {
-  color: #0288d1;
+  color: #66bb6a;
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-state-active a .ui-icon {
   background-position: center !important;
