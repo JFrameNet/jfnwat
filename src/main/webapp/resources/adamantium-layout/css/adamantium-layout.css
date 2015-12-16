@@ -427,7 +427,7 @@ body {
   -moz-border-radius: 2px;
   font-family: 'latoregular', sans-serif;
   color: #666f77;
-  border: solid 1px #e0e0e0;
+  border: solid 1px #ffffff;
 }
 .CardTopic {
   font-size: 20px;
@@ -608,6 +608,9 @@ li {
 }
 .BorderAll {
   border: solid 1px #E0E0E0;
+}
+.NoBorder {
+  border: 0;
 }
 /* seperator line */
 .Separator {
