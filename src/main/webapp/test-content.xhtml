@@ -29,12 +29,10 @@
                     <div class="SeparatorFull"></div>
                     <p:dataList value="#{searchViewController.findByName()}" var="frame">
                         <p:link outcome="index" value="#{frame.name}" style="font-size: larger"/>
-                        <p:fieldset id="viewFrame" legend="Definition" toggleable="true" collapsed="true">
-                            <p:ajax event="toggle"/>
-                            <h:panelGrid>
-                                <h:outputText value="#{frameController.testDef()}"/>
-                            </h:panelGrid>
-                        </p:fieldset>
+                        <div id="#{frame.id}" class="answerToQuery" onclick="toggle_login(#{frame.id})">
+                            <h:outputText value="#{frameController.testDef()}" escape="false"/>
+                        </div>
+                        <br/>
                     </p:dataList>
                 </div>
             </div>
