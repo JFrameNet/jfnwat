@@ -1,0 +1,21 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/indexTemplate.xhtml">
+
+    <ui:define name="filter">
+        <p:inputText />
+    </ui:define>
+
+    <ui:define name="indexList">
+        Here will be displayed the list of Frames
+    </ui:define>
+
+    <ui:define name="indexOutput">
+        Here will be displayed Frame information
+    </ui:define>
+
+</ui:composition>
