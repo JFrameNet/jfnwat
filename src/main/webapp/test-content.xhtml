@@ -26,7 +26,6 @@
             <div class="ContainerIndent">
                 <div class="Card" style="line-height: 2">
                     <div class="CardTopic"> #{text['frames']}</div>
-                    <div class="SeparatorFull"></div>
                     <p:dataList value="#{searchViewController.findByName()}" var="frame">
                         <p:link outcome="index" value="#{frame.name}" style="font-size: larger"/>
                         <p:fieldset id="viewFrame" legend="Definition" toggleable="true" collapsed="true">
