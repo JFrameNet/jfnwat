@@ -803,7 +803,7 @@ label {
 }
 /*Style For DataTable ------------------------------------------------------------------------------------- */
 .ui-datatable {
-  border: solid 1px #e0e0e0;
+  border: solid 1px #00ffff FF;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1155,11 +1155,11 @@ label {
 }
 /*Style For Data List ------------------------------------------------------------------------------------- */
 .ui-datalist {
-  border: solid 1px #e0e0e0;
+  border: solid 1px #00ffff FF;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  background-color: #ffffff;
+  background-color: #00ffff FF;
   color: #546e7a;
   font-family: 'latoregular';
 }
@@ -4981,7 +4981,10 @@ hr.ui-widget-header {
 }
 /*Style For UI Link --------------------------------------------------------------------------------------*/
 .ui-link {
-  color: #0091ea !important;
+  color: #546e7a !important;
+}
+.ui-link:hover {
+  text-decoration: underline !important;
 }
 /*Style For UI Editor --------------------------------------------------------------------------------------*/
 .ui-editor {
