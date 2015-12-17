@@ -2542,7 +2542,6 @@ hr.ui-widget-header {
 }
 /*Style For UI ToolBar --------------------------------------------------------------------------------------*/
 .ui-toolbar {
-  border: solid 1px #e0e0e0;
   background-color: #ffffff;
   border-radius: 2px;
   -webkit-border-radius: 2px;

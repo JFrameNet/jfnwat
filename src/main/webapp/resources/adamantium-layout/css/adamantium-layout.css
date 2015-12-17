@@ -621,7 +621,7 @@ li {
   border: solid 1px #E0E0E0;
 }
 .NoBorder {
-  border: 0;
+  border: none !important;
 }
 /* seperator line */
 .Separator {
