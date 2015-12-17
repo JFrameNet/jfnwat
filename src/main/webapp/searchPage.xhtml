@@ -1,0 +1,51 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/searchTemplate.xhtml">
+    <ui:define name="search">
+        <div class="Fleft OvHidden">
+            <p:link outcome="index">
+                <h:graphicImage name="logo/jfn_logo_only.jpg" width="60" style="margin-right: 20px"/>
+            </p:link>
+        </div>
+        <div class="Fleft OvHidden">
+            <h:form>
+                <p:autoComplete id="acMaxResults" maxResults="5" completeMethod="#{searchViewController.completeText}" onfocus="this.select()" value="#{searchViewController.search}" size="60"/>
+                <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 5px"/>
+            </h:form>
+        </div>
+    </ui:define>
+    <ui:define name="frame">
+        <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition">
+            <p:link class="horizontal" outcome="frameIndex" value="#{frame.name}" target="_blank" style="font-size: medium;  padding: 10px 10px 0px 3px"/>
+        </p:dataList>
+    </ui:define>
+    <ui:define name="lexunit">
+        <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}">
+            <p:column headerText="#{text['lexUnit']}">
+                <p:link  style="padding: 10px 10px 10px" outcome="index" value="#{lexUnit.name}" />
+            </p:column>
+
+            <p:column headerText="#{text['frame']}">
+                <p:link outcome="frameIndex" target="_blank" value="#{lexUnit.frame.name}"/>
+            </p:column>
+
+            <p:column headerText="#{text['LUStatus']}">
+                <p:dataList value="#{lexUnitController.getStatusForLU(lexUnit)}" var="status" type="definition">
+                    <h:outputText class="horizontal tooltip-status" value="#{status.getStatusType().getName()}" />
+                    <h:outputText class="horizontal" value="?" id="fade" style="font-size: x-small; padding-left: 3px; padding-right: 10px" />
+                    <p:tooltip id="toolTipFade" for="fade" value="#{status.getStatusType().getDescription()}" style="font-size: smaller"/>
+                </p:dataList>
+            </p:column>
+        </p:dataTable>
+    </ui:define>
+    <ui:define name="docs">
+        <p:dataList value="#{searchViewController.findCorpusKeyword()}" var="doc" type="definition">
+            <p:link value="#{doc.name}" outcome="index"/>
+        </p:dataList>
+    </ui:define>
+
+</ui:composition>

@@ -11,7 +11,7 @@
     </ui:define>
     <ui:define name="search">
         <h:form>
-            <p:inputText id="mySearch" value="#{searchViewController.search}" size="60"/>
+            <p:autoComplete id="acMaxResults" maxResults="5" value="#{searchViewController.search}" completeMethod="#{searchViewController.completeText}" size="60"/>
             <p:commandButton icon="fa fa-search" id="btnSearch" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 2px"/>
         </h:form>
     </ui:define>

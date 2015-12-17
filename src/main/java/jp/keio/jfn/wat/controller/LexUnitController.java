@@ -21,16 +21,12 @@ public class LexUnitController implements Serializable {
     @Autowired
     StatusRepository statusRepository;
 
-    public Iterable<LexUnit> getAll () {
-        return lexUnitRepository.findAll();
-    }
-
-    public List<String> getStatusForLU (LexUnit lu) {
+    public List<Status> getStatusForLU (LexUnit lu) {
         Iterable<Status> allStatus = statusRepository.findAll();
-        List<String> myList = new ArrayList<String>();
+        List<Status> myList = new ArrayList<Status>();
         for (Status status : allStatus) {
             if (status.getLexUnit().getId() == lu.getId()) {
-                myList.add(status.getStatusType().getName());
+                myList.add(status);
             }
         }
         return myList;

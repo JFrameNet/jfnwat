@@ -52,7 +52,9 @@ body {
   display: inline;
   float: left;
   width: auto;
-  padding: 10px 10px 0px 3px;
+}
+.tooltip-status {
+  border-bottom: 1px dashed #999;
 }
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
@@ -430,7 +432,7 @@ body {
   padding: 90px 70px;
 }
 .Card {
-  padding: 30px;
+  padding: 20px;
   display: block;
   background-color: #ffffff;
   border-radius: 2px;

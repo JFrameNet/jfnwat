@@ -1,0 +1,44 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/layout.xhtml">
+    <f:metadata>
+        <f:viewParam name="search" value="#{searchViewController.search}" />
+    </f:metadata>
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <ui:insert name="search">Search bar</ui:insert>
+            </div>
+        </div>
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card BorderAll">
+                    <div class="CardTopic"> #{text['frames']}</div>
+                </div>
+                <div class="Card" >
+                    <ui:insert name="frame">Display results for Frames</ui:insert>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card BorderAll">
+                    <div class="CardTopic"> #{text['lexUnits']}</div>
+                </div>
+                <div class="Card">
+                    <ui:insert name="lexunit">Display results for Lexical Units</ui:insert>
+                </div>
+            </div>
+            <div class="ContainerIndent">
+                <div class="Card BorderAll">
+                    <div class="CardTopic"> #{text['documents']}</div>
+                </div>
+                <div class="Card">
+                    <ui:insert name="docs">Display results for documents</ui:insert>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
