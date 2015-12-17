@@ -17,13 +17,13 @@
                 <div class="Fleft OvHidden">
                     <h:form>
                         <p:tabMenu activeIndex="#{param.i}">
-                            <p:menuitem value="Frame" outcome="frameIndex">
+                            <p:menuitem value="#{text['frameTabMenuItem']}" outcome="frameIndex">
                                 <f:param name="i" value="0" />
                             </p:menuitem>
-                            <p:menuitem value="LexUnit">
+                            <p:menuitem value="#{text['lexUnitTabMenuItem']}">
                                 <f:param name="i" value="1" />
                             </p:menuitem>
-                            <p:menuitem value="Document">
+                            <p:menuitem value="#{text['docTabMenuItem']}">
                                 <f:param name="i" value="2" />
                             </p:menuitem>
                         </p:tabMenu>
@@ -35,8 +35,8 @@
             <div class="ContainerIndent">
                 <div class="Card">
                     <div class="CardTopic">
-                        This is the Frame Index Layout <br/>
-                        <span class="CardSubTopic">Explanations about how to manipulate Frame Index</span>
+                        #{text['frameIndexCardTopic']} <br/>
+                        <span class="CardSubTopic">#{text['frameIndexCardSubTopic']}</span>
                     </div>
                 </div>
             </div>
