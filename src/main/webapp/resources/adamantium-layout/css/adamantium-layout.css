@@ -43,13 +43,17 @@ body {
   background-image: url("#{resource['adamantium-layout:images/loginback.svg']}");
   background-repeat: repeat;
 }
-
 .answerToQuery {
-  height:40px;
-  line-height:20px; /* Height / no. of lines to display */
-  overflow:hidden;
+  height: 40px;
+  line-height: 20px;
+  overflow: hidden;
 }
-
+.horizontal {
+  display: inline;
+  float: left;
+  width: auto;
+  padding: 10px 10px 0px 3px;
+}
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
 #layout-topbar {
