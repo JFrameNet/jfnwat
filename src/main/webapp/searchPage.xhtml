@@ -8,12 +8,12 @@
     <ui:define name="search">
         <div class="Fleft OvHidden">
             <p:link outcome="index">
-                <h:graphicImage name="logo/jfn_logo_only.jpg" width="60" style="margin-right: 20px"/>
+                <h:graphicImage id="small-logo" name="logo/jfn_logo_only.jpg" width="60" style="margin-right: 20px"/>
             </p:link>
         </div>
         <div class="Fleft OvHidden">
             <h:form>
-                <p:autoComplete id="acMaxResults" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" onfocus="this.select()" value="#{searchViewController.search}" size="60"/>
+                <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" style="padding: 10px 0px;" onfocus="this.select()" value="#{searchViewController.search}"/>
                 <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 5px"/>
             </h:form>
         </div>

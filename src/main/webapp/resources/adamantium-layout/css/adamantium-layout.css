@@ -59,6 +59,9 @@ body {
 .ui-datalist-empty-message {
   font-size: 14px !important;
 }
+.searchBar {
+  width: 450px !important;
+}
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
 #layout-topbar {
@@ -686,9 +689,15 @@ li {
 }
 /* MEDIA QUERIES **************************************************************************************************************** */
 /* Large desktop */
-@media (max-width: 600px) {
+@media (max-width: 500px) {
   #top-logo {
-    width: 200px;
+    width: 230px;
+  }
+  #small-logo {
+    display: none;
+  }
+  .searchBar {
+    width: auto !important;
   }
 }
 /* Portrait tablet to landscape and desktop */

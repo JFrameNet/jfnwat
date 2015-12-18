@@ -1,5 +1,8 @@
 package jp.keio.jfn.wat.controller;
 
+
+import org.springframework.context.annotation.Scope;
+
 import jp.keio.jfn.wat.domain.Document;
 import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.domain.LexUnit;
@@ -8,26 +11,24 @@ import jp.keio.jfn.wat.repository.CorpusRepository;
 import jp.keio.jfn.wat.repository.DocumentRepository;
 import jp.keio.jfn.wat.repository.FrameRepository;
 import jp.keio.jfn.wat.repository.LexUnitRepository;
-import org.primefaces.component.tree.Tree;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.springframework.web.bind.annotation.RestController;
 
 
+import javax.annotation.ManagedBean;
 import java.util.ArrayList;
 import java.util.List;
 
 @ManagedBean
-@RequestScoped
-@Controller
+@RestController
+//@Scope("view")
+
 public class SearchViewController implements Serializable{
 
     @Autowired
@@ -46,14 +47,14 @@ public class SearchViewController implements Serializable{
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<String>();
-        for (Frame frame : frameRepository.findAll()) {
-            if (matchSearch(query, frame.getName())) {
-                results.add(frame.getName());
-            }
-        }
         for (LexUnit lu : lexUnitRepository.findAll()) {
             if (matchSearch(query, lu.getName())) {
                 results.add(lu.getName());
+            }
+        }
+        for (Frame frame : frameRepository.findAll()) {
+            if (matchSearch(query, frame.getName())) {
+                results.add(frame.getName());
             }
         }
         for (Corpus cp : corpusRepository.findAll()) {
