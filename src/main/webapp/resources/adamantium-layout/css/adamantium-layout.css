@@ -56,6 +56,9 @@ body {
 .tooltip-status {
   border-bottom: 1px dashed #999;
 }
+.ui-datalist-empty-message {
+  font-size: 14px !important;
+}
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
 #layout-topbar {
@@ -432,7 +435,7 @@ body {
   padding: 90px 70px;
 }
 .Card {
-  padding: 20px;
+  padding: 15px;
   display: block;
   background-color: #ffffff;
   border-radius: 2px;

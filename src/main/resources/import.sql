@@ -57,8 +57,15 @@ INSERT INTO Status (ID, Text, CreatedBy, ModifiedDate, LexUnit_Ref, StatusType_R
 INSERT INTO Status (ID, Text, CreatedBy, ModifiedDate, LexUnit_Ref, StatusType_Ref) VALUES (10032, NULL, 'shizuka', '2005-05-11 18:56:21', 12, 3);
 INSERT INTO Status (ID, Text, CreatedBy, ModifiedDate, LexUnit_Ref, StatusType_Ref) VALUES (10034, NULL, 'shizuka', '2005-05-11 18:56:21', 12, 2);
 
-# INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate) VALUES (10061, NULL, 'sb100042.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52');
+INSERT INTO Corpus (ID, Name, Description) VALUES (1, 'BCCWJ_CORE_OC_YAHOO_知恵袋_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML');
+INSERT INTO Corpus (ID, Name, Description) VALUES (2, 'BCCWJ_CORE_OW_白書_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML');
+INSERT INTO Corpus (ID, Name, Description) VALUES (3, 'BCCWJ_CORE_PB_書籍_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML');
 
-INSERT INTO Corpus (ID, Name, Description) VALUES (1, 'BCCWJ_CORE_OC_YAHOO_知恵袋_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML')
-INSERT INTO Corpus (ID, Name, Description) VALUES (2, 'BCCWJ_CORE_OW_白書_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML')
-INSERT INTO Corpus (ID, Name, Description) VALUES (3, 'BCCWJ_CORE_PB_書籍_v1_1', 'BCCWJ v1.1 CORE Data Yahoo!知恵袋 Q&A | NumTrans 非適用 | Disc3_CORE_OT_core_M-XML')
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10061, NULL, 'sb100042.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 1);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10062, NULL, '950108.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 1);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10063, NULL, 'mai020214.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 2);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10064, NULL, '9507ED.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 2);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10065, NULL, '9502ED.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 3);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10066, NULL, 'PB39_00059.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 3);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10067, NULL, 'PB50_00012.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 3);
+INSERT INTO Document (ID, Author, Name, Description, CreatedDate, CreatedBy, ModifiedDate, Corpus_Ref) VALUES (10068, NULL, 'PB39_00193.KNP', 'sb100042.KNP', '2005-11-03 03:21:56', 'shizuka', '2015-07-16 08:18:52', 3);

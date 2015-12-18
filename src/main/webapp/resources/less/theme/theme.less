@@ -820,14 +820,15 @@ hr.ui-widget-header{background-color: #E5EBF0; border-width:0px;}
 
 /*Style For Tree --------------------------------------------------------------------------------------*/
 
-.ui-tree{border:solid 1px @tree-border-color; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; color:@tree-color; .medium-transition; background-color: @tree-bg-color; padding:10px; font-family:'latoregular';}
+.ui-tree{border:solid 1px @tree-border-color; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px; color:@tree-color; .medium-transition; background-color: @tree-bg-color; font-family:'latoregular';}
 .ui-tree:hover{}
     .ui-tree .ui-treenode{padding:3px !important;}
     .ui-tree .ui-treenode .ui-treenode-label.ui-state-hover{color:@tree-nodelabel-color-hover;}
     .ui-tree .ui-tree-droppoint.ui-state-hover{background-color:@tree-droppoint-bg-color-hover;}
     .ui-tree .ui-treenode .ui-state-highlight{color:@tree-node-color-highlight;}
         .ui-tree .ui-treenode .ui-treenode-leaf-icon{/*background-image:url("#{resource['primefaces-adamantium:images/treenode-gray.svg']}");*/ background-position: center !important; 
-                         background-repeat: no-repeat; background-size: 90%;}
+                         background-repeat: no-repeat; background-size: 90%;
+          display: none !important;}
         .ui-tree .ui-treenode .ui-icon-grip-dotted-vertical{background-image:url("#{resource['primefaces-adamantium:images/treenode-dots-gray.svg']}"); background-position: center !important; 
                          background-repeat: no-repeat; background-size: 100%;}
         .ui-tree .ui-treenode-content{line-height:16px;}

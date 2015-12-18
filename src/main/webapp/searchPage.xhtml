@@ -13,22 +13,21 @@
         </div>
         <div class="Fleft OvHidden">
             <h:form>
-                <p:autoComplete id="acMaxResults" maxResults="5" completeMethod="#{searchViewController.completeText}" onfocus="this.select()" value="#{searchViewController.search}" size="60"/>
+                <p:autoComplete id="acMaxResults" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" onfocus="this.select()" value="#{searchViewController.search}" size="60"/>
                 <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 5px"/>
             </h:form>
         </div>
     </ui:define>
     <ui:define name="frame">
-        <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition">
-            <p:link class="horizontal" outcome="frameIndex" value="#{frame.name}" target="_blank" style="font-size: medium;  padding: 10px 10px 0px 3px"/>
+        <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}" style="font-size: small">
+            <p:link class="horizontal" outcome="frameIndex" value="#{frame.name}" target="_blank" style="padding: 10px 10px 0px 3px"/>
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">
-        <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}">
+        <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
                 <p:link  style="padding: 10px 10px 10px" outcome="index" value="#{lexUnit.name}" />
             </p:column>
-
             <p:column headerText="#{text['frame']}">
                 <p:link outcome="frameIndex" target="_blank" value="#{lexUnit.frame.name}"/>
             </p:column>
@@ -43,9 +42,17 @@
         </p:dataTable>
     </ui:define>
     <ui:define name="docs">
-        <p:dataList value="#{searchViewController.findCorpusKeyword()}" var="doc" type="definition">
-            <p:link value="#{doc.name}" outcome="index"/>
-        </p:dataList>
+        <p:tree value="#{searchViewController.getDocTree()}" var="node" dynamic="true">
+            <p:treeNode type="empty">
+                <h:outputText value="#{text['emptyMessage']}" />
+            </p:treeNode>
+            <p:treeNode type="head">
+                <h:outputText value="#{node}" />
+            </p:treeNode>
+            <p:treeNode type="default">
+                <p:link outcome="index" value="#{node}" />
+            </p:treeNode>
+        </p:tree>
     </ui:define>
 
 </ui:composition>

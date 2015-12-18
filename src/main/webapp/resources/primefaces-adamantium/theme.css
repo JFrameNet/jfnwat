@@ -2113,7 +2113,7 @@ hr.ui-widget-header {
 }
 /*Style For Tree --------------------------------------------------------------------------------------*/
 .ui-tree {
-  border: solid 1px #e0e0e0;
+  border: solid 1px #ffffff;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -2124,7 +2124,6 @@ hr.ui-widget-header {
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
   background-color: #ffffff;
-  padding: 10px;
   font-family: 'latoregular';
 }
 .ui-tree .ui-treenode {
@@ -2144,6 +2143,7 @@ hr.ui-widget-header {
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 90%;
+  display: none !important;
 }
 .ui-tree .ui-treenode .ui-icon-grip-dotted-vertical {
   background-image: url("#{resource['primefaces-adamantium:images/treenode-dots-gray.svg']}");
