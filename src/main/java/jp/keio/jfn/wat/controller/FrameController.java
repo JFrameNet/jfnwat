@@ -1,25 +1,151 @@
 package jp.keio.jfn.wat.controller;
 
+import java.util.*;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.repository.FrameRepository;
+import jp.keio.jfn.wat.domain.*;
+import jp.keio.jfn.wat.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+
+import org.springframework.web.bind.annotation.RestController;
 
 @ManagedBean
-@Controller
+@RestController
+@Scope("view")
 public class FrameController implements Serializable {
     @Autowired
     FrameRepository frameRepository;
+    
+    @Autowired
+    FrameElementRepository frameElementRepository;
+
+    @Autowired
+    FrameRelationRepository frameRelationRepository;
+
+    @Autowired
+    RelationTypeRepository relationTypeRepository;
+
+    @Autowired
+    LexUnitRepository lexUnitRepository;
+
+    private Frame currentFrame;
+
+    private String frameName;
+
+    private List<FrameElement> coreFrameEl;
+
+    private List<FrameElement> nonCoreFrameEl;
+
+    private List<FrameRelation> relations;
+
+    private List<LexUnit> allLexUnits;
+
+    public Frame frameDisplay () {
+        currentFrame = frameRepository.findByName(frameName).get(0);
+        findFrameElements();
+        findFrameRelations();
+        findLexicalUnits();
+        return currentFrame;
+    }
 
     public Iterable<Frame> getAll () {
         return frameRepository.findAll();
     }
 
-    public String testDef () {
-        return "<def-root>Some entity (<fen>Theme</fen>) starts out in one place (<fen>Source</fen>) and ends up in some other place (<fen>Goal</fen>), having covered some space between the two (<fen>Path</fen>). The frames that inherit the general Motion frame add some elaboration to this simple idea.  Inheriting frames can add Goal-profiling (<ment>arrive, reach</ment>), Source-profiling (<ment>leave, depart</ment>), or Path-profiling (<ment>traverse, cross</ment>), or aspects of the manner of motion (<ment>run, jog</ment>) or assumptions about the shape-properties, etc., of any of the places involved (<ment>insert, extract</ment>).  A particularly complex area in the vocabulary of Motion is the depiction of the relation of Vehicles to the Theme.  In some cases, no separate Theme is expressed:  <ex>The plane <t>flew</t> over the city.</ex>  In this case, the sentence is annotated in Self-motion.  When the Vehicle is profiled as being operated by a Driver, the sentence is annotated in the Operate_vehicles frame:  <ex>Don't try to <t>fly</t> an F-16 without training!</ex>  This is very similar to the Carrying frame which covers cases where the Vehicle is necessarily involved, but the movement of the <fen>Theme</fen> (something carried by the Vehicle) is profiled:  <ex>It's scary <t>flying</t> hundreds of people over thousands of miles of ocean every day.</ex> ";
+    public List<String> frameNameOrdered () {
+        List <String> sortedNames = new ArrayList<String>();
+        for (Frame frame : frameRepository.findAll()) {
+            sortedNames.add(frame.getName());
+        }
+        Collections.sort(sortedNames);
+        return sortedNames;
+    }
+
+    private void findFrameElements () {
+        Iterable<FrameElement> allFE = frameElementRepository.findAll();
+        List<FrameElement> frameCore = new ArrayList<FrameElement>();
+        List<FrameElement> frameNonCore = new ArrayList<FrameElement>();
+        for (FrameElement fe : allFE) {
+            if (fe.getFrame().getId().equals(currentFrame.getId())) {
+                if (fe.getCore().equals("Y")) {
+                    frameCore.add(fe);
+                } else {
+                    frameNonCore.add(fe);
+                }
+            }
+        }
+        coreFrameEl = frameCore;
+        nonCoreFrameEl = frameNonCore;
+    }
+
+    private void findFrameRelations () {
+        List<FrameRelation> allRelations = new ArrayList<FrameRelation>();
+        for (FrameRelation frameRelation : frameRelationRepository.findAll()) {
+            if (frameRelation.getFrame1().getId().equals(currentFrame.getId())) {
+                allRelations.add(frameRelation);
+            }
+            if (frameRelation.getFrame2().getId().equals(currentFrame.getId())) {
+                allRelations.add(frameRelation);
+            }
+        }
+        relations = allRelations;
+    }
+
+    private void findLexicalUnits () {
+        List <LexUnit> lexicalUnits = new ArrayList<LexUnit>();
+        for (LexUnit lu : lexUnitRepository.findAll()) {
+            if (lu.getFrame().getId().equals(currentFrame.getId())) {
+                lexicalUnits.add(lu);
+            }
+        }
+        allLexUnits = lexicalUnits;
+    }
+
+    public List<Map.Entry<String, Frame>> displayFrameRelations () {
+        HashMap<String, Frame> mapRelations = new HashMap<String, Frame>();
+        for (FrameRelation rel : relations) {
+            RelationType relationType = rel.getRelationType();
+            if (rel.getFrame1().getId().equals(currentFrame.getId())) {
+                mapRelations.put(relationType.getName() + " by",rel.getFrame2());
+            } else {
+                mapRelations.put(relationType.getName() + " from",rel.getFrame1());
+            }
+        }
+    return new ArrayList(mapRelations.entrySet());
+    }
+
+    public void setCurrentFrame (Frame frame) {
+        currentFrame = frame;
+    }
+
+    public Frame getCurrentFrame() {
+        return currentFrame;
+    }
+
+    public void setFrameName (String name) {
+        frameName = name;
+    }
+
+    public String getFrameName () {
+        return frameName;
+    }
+
+    public List<FrameElement> getCoreFrameEl() {
+        return coreFrameEl;
+    }
+
+    public List<FrameElement> getNonCoreFrameEl () {
+        return nonCoreFrameEl;
+    }
+
+    public List<FrameRelation> getRelations () {
+        return  relations;
+    }
+
+    public List<LexUnit> getAllLexUnits () {
+        return allLexUnits;
     }
 
 }

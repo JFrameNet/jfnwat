@@ -33,7 +33,7 @@ import javax.persistence.Id;
 		this.name = name;
 	}
 
-	@Basic @Column(name = "Description", nullable = true, length = -1) public String getDescription() {
+	@Basic @Column(name = "Description", nullable = true, length = 255) public String getDescription() {
 		return description;
 	}
 

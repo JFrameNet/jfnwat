@@ -20,7 +20,7 @@
                             <p:menuitem value="#{text['frameTabMenuItem']}" outcome="frameIndex">
                                 <f:param name="i" value="0" />
                             </p:menuitem>
-                            <p:menuitem value="#{text['lexUnitTabMenuItem']}">
+                            <p:menuitem value="#{text['lexUnitTabMenuItem']}" outcome="lexUnitIndex">
                                 <f:param name="i" value="1" />
                             </p:menuitem>
                             <p:menuitem value="#{text['docTabMenuItem']}">
@@ -35,8 +35,7 @@
             <div class="ContainerIndent">
                 <div class="Card">
                     <div class="CardTopic">
-                        #{text['frameIndexCardTopic']} <br/>
-                        <span class="CardSubTopic">#{text['frameIndexCardSubTopic']}</span>
+                        <ui:insert name="topic"/>
                     </div>
                 </div>
             </div>
@@ -48,7 +47,6 @@
                         <div class="ContainerIndent">
                             <div class="Card NoPadding">
                                 <div class="CardTopicMini">
-                                    List of Frames by Name
                                 </div>
                             </div>
                         </div>

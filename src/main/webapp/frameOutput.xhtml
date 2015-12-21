@@ -1,0 +1,54 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frameIndex.xhtml">
+    <f:metadata>
+        <f:viewParam name="frame" value="#{frameController.frameName}" />
+    </f:metadata>
+    <ui:define name="frameOutput">
+        <div class="ContainerIndent">
+            <h3 style="padding-bottom: 20px">#{frameController.frameName}</h3>
+            <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+                <p:tab title="Definition">
+                    <h:outputText value="#{frameController.frameDisplay().getDefinition()}" escape="false"/>
+                </p:tab>
+                <p:tab title="Frame Elements">
+                    <h:outputText value="Core:" class="CardTopic" style="font-size: medium"/>
+                    <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="">
+                        <div class="Wid20 Fleft OvHidden">
+                            #{fe.name}[#{fe.abbrev}]
+                        </div>
+                        <div class="Wid70 OvHidden">
+                            <h:outputText value="#{fe.definition}" escape="false"/>
+                        </div>
+                    </p:dataList>
+                    <h:outputText value="Non-Core:" class="CardTopic" style="font-size: medium"/>
+                    <p:dataList var="fe" type="definition" value="#{frameController.getNonCoreFrameEl()}" emptyMessage="">
+                        <div class="Wid20 Fleft OvHidden">
+                            #{fe.name}[#{fe.abbrev}]
+                        </div>
+                        <div class="Wid70 OvHidden">
+                            <h:outputText value="#{fe.definition}" escape="false"/>
+                        </div>
+                    </p:dataList>
+                </p:tab>
+                <p:tab title="Frame Relations">
+                    <p:dataList var="rel" type="definition" value="#{frameController.displayFrameRelations()}" emptyMessage="">
+                        #{rel.key} : <p:link outcome="frameOutput" value="#{rel.value.name}">
+                        <f:param name="frame" value="#{rel.value.name}"/>
+                    </p:link>
+                    </p:dataList>
+                </p:tab>
+                <p:tab title="Lexical Units">
+                    <p:dataList var="lexUnit" type="definition" value="#{frameController.getAllLexUnits()}" emptyMessage="">
+                        <p:link class="horizontal" outcome="lexUnitIndex" value="#{lexUnit.name}" target="_blank"/>
+                    </p:dataList>
+                </p:tab>
+            </p:accordionPanel>
+        </div>
+
+    </ui:define>
+</ui:composition>

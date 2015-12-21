@@ -5,6 +5,9 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/searchTemplate.xhtml">
+    <f:metadata>
+        <f:viewParam name="search" value="#{searchViewController.search}" />
+    </f:metadata>
     <ui:define name="search">
         <div class="Fleft OvHidden">
             <p:link outcome="index">

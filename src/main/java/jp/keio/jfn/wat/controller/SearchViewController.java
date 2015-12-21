@@ -27,7 +27,7 @@ import java.util.List;
 
 @ManagedBean
 @RestController
-//@Scope("view")
+@Scope("view")
 
 public class SearchViewController implements Serializable{
 
@@ -43,7 +43,7 @@ public class SearchViewController implements Serializable{
     @Autowired
     DocumentRepository documentRepository;
 
-    private String search;
+    private String search = "";
 
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<String>();

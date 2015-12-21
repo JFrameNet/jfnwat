@@ -2,9 +2,11 @@ package jp.keio.jfn.wat.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 
+import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.domain.LexUnit;
 import jp.keio.jfn.wat.domain.Status;
 import jp.keio.jfn.wat.repository.LexUnitRepository;
@@ -30,5 +32,14 @@ public class LexUnitController implements Serializable {
             }
         }
         return myList;
+    }
+
+    public List<String> luNameOrdered () {
+        List <String> sortedNames = new ArrayList<String>();
+        for (LexUnit lexUnit : lexUnitRepository.findAll()) {
+            sortedNames.add(lexUnit.getName());
+        }
+        Collections.sort(sortedNames);
+        return sortedNames;
     }
 }

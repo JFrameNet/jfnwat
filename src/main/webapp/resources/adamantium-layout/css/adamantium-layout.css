@@ -62,6 +62,9 @@ body {
 .searchBar {
   width: 450px !important;
 }
+.ui-accordion .ui-accordion-header .ui-icon {
+  display: none;
+}
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
 #layout-topbar {
@@ -462,7 +465,7 @@ body {
 }
 .CardTopicMini {
   font-size: 14px;
-  color: #439fe0;
+  color: #546e7a;
   padding: 0px;
   font-family: 'latobold', sans-serif;
 }

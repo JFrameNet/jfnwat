@@ -5,9 +5,10 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 template="/indexTemplate.xhtml">
+
     <ui:define name="topic">
-            #{text['frameIndexCardTopic']} <br/>
-            <span class="CardSubTopic">#{text['frameIndexCardSubTopic']}</span>
+        #{text['lexUnitIndexCardTopic']} <br/>
+        <span class="CardSubTopic">#{text['lexUnitIndexCardSubTopic']}</span>
     </ui:define>
 
     <ui:define name="filter">
@@ -15,15 +16,13 @@
     </ui:define>
 
     <ui:define name="indexList">
-        <p:dataList value="#{frameController.frameNameOrdered()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
-            <p:link outcome="frameOutput" value="#{frame}">
-                <f:param name="frame" value="#{frame}"/>
-            </p:link>
+        <p:dataList value="#{lexUnitController.luNameOrdered()}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}">
+            <p:link outcome="lexUnitIndex" value="#{lu}"/>
         </p:dataList>
     </ui:define>
 
     <ui:define name="indexOutput">
-        <ui:insert name="frameOutput"/>
+        Here will be displayed Frame information
     </ui:define>
 
 </ui:composition>
