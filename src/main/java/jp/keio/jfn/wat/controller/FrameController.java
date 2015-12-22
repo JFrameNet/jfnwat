@@ -108,12 +108,42 @@ public class FrameController implements Serializable {
         for (FrameRelation rel : relations) {
             RelationType relationType = rel.getRelationType();
             if (rel.getFrame1().getId().equals(currentFrame.getId())) {
-                mapRelations.put(relationType.getName() + " by",rel.getFrame2());
+                mapRelations.put(processFrameRelation(relationType, true),rel.getFrame2());
             } else {
-                mapRelations.put(relationType.getName() + " from",rel.getFrame1());
+                mapRelations.put(processFrameRelation(relationType, false),rel.getFrame1());
             }
         }
     return new ArrayList(mapRelations.entrySet());
+    }
+
+    private String processFrameRelation (RelationType rel, boolean isFrame1) {
+        String result="";
+        switch (rel.getId()){
+            case 1:
+                result=isFrame1?"Is Inherited by":"Inherits from";
+                break;
+            case 2:
+                result=isFrame1?"Has Subframe(s)":"Subframe of";
+                break;
+            case 3:
+                result=isFrame1?"Is Used by":"Uses";
+                break;
+            case 4:
+                result="See also";
+                break;
+            case 5:
+                result=isFrame1?"Is Preceded by":"Precedes";
+                break;
+            case 6:
+                result=isFrame1?"Is Causative of":"Is Inchoative of";
+                break;
+            case 7:
+                result=isFrame1?"Is Perspectivized in":"Perspective on";
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 
     public void setCurrentFrame (Frame frame) {

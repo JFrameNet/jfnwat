@@ -52,6 +52,7 @@ body {
   display: inline;
   float: left;
   width: auto;
+  padding-top: 0px !important;
 }
 .tooltip-status {
   border-bottom: 1px dashed #999;
@@ -64,6 +65,9 @@ body {
 }
 .ui-accordion .ui-accordion-header .ui-icon {
   display: none;
+}
+.ui-datalist .ui-datalist-empty-message {
+  padding: 0px !important;
 }
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */

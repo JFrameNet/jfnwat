@@ -12,39 +12,45 @@
         <div class="ContainerIndent">
             <h3 style="padding-bottom: 20px">#{frameController.frameName}</h3>
             <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
-                <p:tab title="Definition">
+                <p:tab title="#{text['definition']}">
                     <h:outputText value="#{frameController.frameDisplay().getDefinition()}" escape="false"/>
                 </p:tab>
-                <p:tab title="Frame Elements">
-                    <h:outputText value="Core:" class="CardTopic" style="font-size: medium"/>
-                    <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="">
-                        <div class="Wid20 Fleft OvHidden">
-                            #{fe.name}[#{fe.abbrev}]
+                <p:tab title="#{text['frameElements']}">
+                    <h:outputText value="#{text['core']}" class="CardTopic" style="font-size: medium"/>
+                    <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="" style="padding-top: 10px">
+                        <div class="Wid20 Fleft OvHidden" style="padding-top: 15px">
+                            <h:outputText value="#{fe.name}[#{fe.abbrev}]"/>
                         </div>
-                        <div class="Wid70 OvHidden">
+                        <div class="Wid80 OvHidden" style="padding-top: 15px">
                             <h:outputText value="#{fe.definition}" escape="false"/>
                         </div>
                     </p:dataList>
-                    <h:outputText value="Non-Core:" class="CardTopic" style="font-size: medium"/>
+                    <div class="EmptyBox20"/>
+                    <h:outputText value="#{text['non-core']}" class="CardTopic" style="font-size: medium"/>
                     <p:dataList var="fe" type="definition" value="#{frameController.getNonCoreFrameEl()}" emptyMessage="">
-                        <div class="Wid20 Fleft OvHidden">
+                        <div class="Wid20 Fleft OvHidden" style="padding-top: 10px">
                             #{fe.name}[#{fe.abbrev}]
                         </div>
-                        <div class="Wid70 OvHidden">
+                        <div class="Wid80 OvHidden" style="padding-top: 10px">
                             <h:outputText value="#{fe.definition}" escape="false"/>
                         </div>
                     </p:dataList>
                 </p:tab>
-                <p:tab title="Frame Relations">
-                    <p:dataList var="rel" type="definition" value="#{frameController.displayFrameRelations()}" emptyMessage="">
-                        #{rel.key} : <p:link outcome="frameOutput" value="#{rel.value.name}">
-                        <f:param name="frame" value="#{rel.value.name}"/>
-                    </p:link>
+                <p:tab title="#{text['frameRelations']}">
+                    <p:dataList var="rel" type="definition" value="#{frameController.displayFrameRelations()}" emptyMessage="#{text['emptyMessage']}">
+                        <div style="padding-top: 5px">
+                            #{rel.key} : <p:link outcome="frameOutput" value="#{rel.value.name}">
+                            <f:param name="frame" value="#{rel.value.name}"/>
+                        </p:link>
+                        </div>
                     </p:dataList>
                 </p:tab>
-                <p:tab title="Lexical Units">
-                    <p:dataList var="lexUnit" type="definition" value="#{frameController.getAllLexUnits()}" emptyMessage="">
-                        <p:link class="horizontal" outcome="lexUnitIndex" value="#{lexUnit.name}" target="_blank"/>
+                <p:tab title="#{text['lexUnits']}">
+                    <p:dataList var="lexUnit" type="definition" value="#{frameController.getAllLexUnits()}" emptyMessage="#{text['emptyMessage']}">
+                        <p:link class="horizontal" outcome="lexUnitOutput" value="#{lexUnit.name}" target="_blank" style="padding-left: 3px; padding-right: 10px">
+                            <f:param name="lexUnit" value="#{lexUnit.id}"/>
+                            <f:param name="i" value="1" />
+                        </p:link>
                     </p:dataList>
                 </p:tab>
             </p:accordionPanel>

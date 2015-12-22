@@ -23,16 +23,23 @@
     </ui:define>
     <ui:define name="frame">
         <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}" style="font-size: small">
-            <p:link class="horizontal" outcome="frameIndex" value="#{frame.name}" target="_blank" style="padding: 10px 10px 0px 3px"/>
+            <p:link class="horizontal" outcome="frameOutput" value="#{frame.name}" target="_blank" style="padding: 10px 10px 0px 3px">
+                <f:param name="frame" value="#{frame.name}"/>
+            </p:link>
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">
         <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
-                <p:link  style="padding: 10px 10px 10px" outcome="index" value="#{lexUnit.name}" />
+                <p:link  style="padding: 10px 10px 10px" outcome="lexUnitOutput" target="_blank" value="#{lexUnit.name}">
+                    <f:param name="lexUnit" value="#{lexUnit.id}"/>
+                    <f:param name="i" value="1" />
+                </p:link>
             </p:column>
             <p:column headerText="#{text['frame']}">
-                <p:link outcome="frameIndex" target="_blank" value="#{lexUnit.frame.name}"/>
+                <p:link outcome="frameOutput" target="_blank" value="#{lexUnit.frame.name}">
+                    <f:param name="frame" value="#{lexUnit.frame.name}"/>
+                </p:link>
             </p:column>
 
             <p:column headerText="#{text['LUStatus']}">

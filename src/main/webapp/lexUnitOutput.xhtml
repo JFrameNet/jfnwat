@@ -1,0 +1,40 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/lexUnitIndex.xhtml">
+    <f:metadata>
+        <f:viewParam name="lexUnit" value="#{lexUnitController.lexUnitId}" />
+    </f:metadata>
+    <ui:define name="lexUnitOutput">
+        <div class="ContainerIndent">
+            <h3>#{lexUnitController.displayLexUnit()}</h3>
+            <div class="ContainerIndent">
+                <h:outputText value="#{text['frame']} : " style="font-size: smaller"/>
+                <p:link value="#{lexUnitController.currentLU.getFrame().getName()}" var="frame" outcome="frameOutput" escape="false" target="_blank" style="font-size: smaller">
+                    <f:param name="frame" value="#{lexUnitController.currentLU.getFrame().getName()}"/>
+                </p:link>
+            </div>
+            <p:accordionPanel multiple="true" activeIndex="0,1">
+                <p:tab title="#{text['lexicalEntry']}">
+                    <h:outputText value="#{text['frameElements']} :" class="CardTopic" style="font-size: medium"/>
+                    <p:dataList var="fe" type="definition" value="" emptyMessage="" style="padding-top: 10px">
+                    </p:dataList>
+                    <h:outputText value="#{text['valencePatterns']} :" class="CardTopic" style="font-size: medium"/>
+                    <p:dataList var="fe" type="definition" value="" emptyMessage="" style="padding-top: 10px">
+                    </p:dataList>
+                </p:tab>
+                <p:tab title="#{text['annotation']}">
+                    <p:dataList var="sentence" type="definition" value="#{lexUnitController.annotatedSentence}" emptyMessage="#{text['emptyMessage']}">
+                        <div style="padding-top: 20px; padding-bottom: 10px">
+                            <h:outputText value="#{sentence.text}"/>
+                        </div>
+                    </p:dataList>
+                </p:tab>
+            </p:accordionPanel>
+        </div>
+
+    </ui:define>
+</ui:composition>

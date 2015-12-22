@@ -4,6 +4,5 @@ import jp.keio.jfn.wat.domain.LexUnit;
 import org.springframework.data.repository.CrudRepository;
 
 public interface LexUnitRepository extends CrudRepository<LexUnit, Long> {
-
-
+    LexUnit findById(int id);
 }
