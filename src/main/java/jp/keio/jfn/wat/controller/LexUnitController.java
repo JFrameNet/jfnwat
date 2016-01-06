@@ -31,6 +31,10 @@ public class LexUnitController implements Serializable {
 
     private int lexUnitId;
 
+    private String filter = "";
+
+    private List<LexUnit> orderedLU = new ArrayList<LexUnit>();
+
     private LexUnit currentLU;
 
     private List<Sentence> annotatedSentence;
@@ -52,7 +56,7 @@ public class LexUnitController implements Serializable {
         return myList;
     }
 
-    public List<LexUnit> luNameOrdered () {
+    public void orderLU () {
 //        List <String> sortedNames = new ArrayList<String>();
 //        for (LexUnit lexUnit : lexUnitRepository.findAll()) {
 //            sortedNames.add(lexUnit.getName());
@@ -61,9 +65,13 @@ public class LexUnitController implements Serializable {
 //        return sortedNames;
         List<LexUnit> allLU= new ArrayList<LexUnit>();
         for (LexUnit lu : lexUnitRepository.findAll()) {
-            allLU.add(lu);
+            if (matchSearch(filter, lu.getName())) {
+                allLU.add(lu);
+            } else if (matchSearch(filter, lu.getFrame().getName())) {
+                allLU.add(lu);
+            }
         }
-        return allLU;
+        orderedLU = allLU;
     }
 
     private void findSentences () {
@@ -90,4 +98,35 @@ public class LexUnitController implements Serializable {
     public List<Sentence> getAnnotatedSentence () {
         return annotatedSentence;
     }
+
+    public void setFilter (String f) {
+        filter = f;
+    }
+
+    public String getFilter () {
+        return filter;
+    }
+
+    public void setOrderedLU (List<LexUnit> list) {
+        orderedLU = list;
+    }
+
+    public List<LexUnit> getOrderedLU () {
+        if (orderedLU.isEmpty() && filter.isEmpty()) {
+            List <LexUnit> allLu = new ArrayList<LexUnit>();
+            for (LexUnit lu : lexUnitRepository.findAll()) {
+                allLu.add(lu);
+            }
+            return allLu;
+        } else {
+            return orderedLU;
+        }
+    }
+
+    private boolean matchSearch (String query, String name) {
+        return ((name.equalsIgnoreCase(query))
+                ||(name.toLowerCase().contains(query.toLowerCase()))
+                ||(query.toLowerCase().contains(name.toLowerCase())));
+    }
+
 }

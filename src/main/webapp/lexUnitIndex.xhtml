@@ -12,12 +12,16 @@
     </ui:define>
 
     <ui:define name="filter">
-        <p:inputText placeholder="#{text['luFilter']}"/>
+        <h:form>
+            <p:inputText placeholder="#{text['luFilter']}" value="#{lexUnitController.filter}">
+                <p:ajax event="keyup" listener="#{lexUnitController.orderLU()}" update="list"/>
+            </p:inputText>
+        </h:form>
     </ui:define>
 
     <ui:define name="indexList">
-        <p:dataList value="#{lexUnitController.luNameOrdered()}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}">
-            <p:link outcome="lexUnitOutput" value="#{lu.name}" style="line-height: 20px; padding-left: 5px">
+        <p:dataList id="list" value="#{lexUnitController.orderedLU}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}">
+            <p:link outcome="lexUnitOutput" value="#{lu.name}, #{lu.frame.name}" style="line-height: 20px; padding-left: 5px">
                 <f:param name="lexUnit" value="#{lu.id}"/>
                 <f:param name="i" value="1" />
             </p:link>

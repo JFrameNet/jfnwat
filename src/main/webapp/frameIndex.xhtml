@@ -12,13 +12,15 @@
 
     <ui:define name="filter">
         <h:form>
-            <p:inputText placeholder="#{text['frameFilter']}"/>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{frameController.filter}">
+                <p:ajax event="keyup" listener="#{frameController.orderFrames()}" update="frameList"/>
+            </p:inputText>
         </h:form>
     </ui:define>
 
     <ui:define name="indexList">
         <div>
-            <p:dataList value="#{frameController.frameNameOrdered()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
+            <p:dataList  id="frameList" value="#{frameController.orderedFrames}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
                 <p:link outcome="frameOutput" value="#{frame}" style="line-height: 20px; padding-left: 5px">
                     <f:param name="frame" value="#{frame}"/>
                 </p:link>
