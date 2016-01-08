@@ -12,6 +12,8 @@
         <div class="ContainerIndent">
             <h3>#{lexUnitController.displayLexUnit()}</h3>
             <div class="ContainerIndent">
+                <h:outputText value="#{lexUnitController.currentLU.getSenseDesc()}" />
+                <div class="EmptyBox5"/>
                 <h:outputText value="#{text['frame']} : " style="font-size: smaller"/>
                 <p:link value="#{lexUnitController.currentLU.getFrame().getName()}" var="frame" outcome="frameOutput" escape="false" target="_blank" style="font-size: smaller">
                     <f:param name="frame" value="#{lexUnitController.currentLU.getFrame().getName()}"/>
@@ -20,8 +22,21 @@
             <p:accordionPanel multiple="true" activeIndex="0,1">
                 <p:tab title="#{text['lexicalEntry']}">
                     <h:outputText value="#{text['frameElements']} :" class="CardTopic" style="font-size: medium"/>
-                    <p:dataList var="fe" type="definition" value="" emptyMessage="" style="padding-top: 10px">
-                    </p:dataList>
+                    <p:dataTable var="elements" value="#{lexUnitController.lexicalEntries}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px">
+                        <p:column headerText="Frame Element">
+                            <h:outputText value="#{elements.frameElement.name}" />
+                        </p:column>
+                        <p:column headerText="Number Annotated">
+                            <h:outputText value="#{elements.occurence.size() +1}" />
+                        </p:column>
+                        <p:column headerText="Realization(s)">
+                            <p:dataList var="var" value="#{lexUnitController.convertMapToList(elements)}" type="definition" emptyMessage="">
+                                <h:outputText value="#{var.key}" style="margin-right: 10px"/>
+                                (<h:outputText value="#{var.value.size()}"/>)
+                            </p:dataList>
+                        </p:column>
+                    </p:dataTable>
+
                     <h:outputText value="#{text['valencePatterns']} :" class="CardTopic" style="font-size: medium"/>
                     <p:dataList var="fe" type="definition" value="" emptyMessage="" style="padding-top: 10px">
                     </p:dataList>

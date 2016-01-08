@@ -1,5 +1,7 @@
 package jp.keio.jfn.wat.domain;
 
+import org.hibernate.annotations.Type;
+
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -26,6 +28,8 @@ public class Frame implements Serializable {
 	@Column(name = "CreatedDate")
 	private Timestamp createdDate;
 
+	@Column(name = "Definition")
+	@Type(type="text")
 	private String definition;
 
 	@Lob

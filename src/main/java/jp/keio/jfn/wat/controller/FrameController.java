@@ -75,7 +75,7 @@ public class FrameController implements Serializable {
         List<FrameElement> frameNonCore = new ArrayList<FrameElement>();
         for (FrameElement fe : allFE) {
             if (fe.getFrame().getId().equals(currentFrame.getId())) {
-                if (fe.getCore().equals("Y")) {
+                if (fe.getType().equals("Core")) {
                     frameCore.add(fe);
                 } else {
                     frameNonCore.add(fe);

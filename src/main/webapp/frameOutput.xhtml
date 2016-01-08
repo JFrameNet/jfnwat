@@ -19,7 +19,8 @@
                     <h:outputText value="#{text['core']}" class="CardTopic" style="font-size: medium"/>
                     <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="" style="padding-top: 10px">
                         <div class="Wid20 Fleft OvHidden" style="padding-top: 15px">
-                            <h:outputText value="#{fe.name}[#{fe.abbrev}]"/>
+                            <h:outputText value="#{fe.name}"/><br/>
+                            <h:outputText value="[#{fe.abbrev}]"/>
                         </div>
                         <div class="Wid80 OvHidden" style="padding-top: 15px">
                             <h:outputText value="#{fe.definition}" escape="false"/>
@@ -29,7 +30,8 @@
                     <h:outputText value="#{text['non-core']}" class="CardTopic" style="font-size: medium"/>
                     <p:dataList var="fe" type="definition" value="#{frameController.getNonCoreFrameEl()}" emptyMessage="">
                         <div class="Wid20 Fleft OvHidden" style="padding-top: 10px">
-                            #{fe.name}[#{fe.abbrev}]
+                            <h:outputText value="#{fe.name}"/><br/>
+                            <h:outputText value="[#{fe.abbrev}]"/>
                         </div>
                         <div class="Wid80 OvHidden" style="padding-top: 10px">
                             <h:outputText value="#{fe.definition}" escape="false"/>
