@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 
-import com.sun.xml.internal.bind.v2.TODO;
-import javassist.compiler.Lex;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +30,9 @@ public class LexUnitController implements Serializable {
     @Autowired
     LabelRepository labelRepository;
 
+    @Autowired
+    FrameElementRepository frameElementRepository;
+
     private int lexUnitId;
 
     private String filter = "";
@@ -42,9 +43,12 @@ public class LexUnitController implements Serializable {
 
     private List<Sentence> annotatedSentence;
 
-    private List<LexicalEntry> lexicalEntries = new ArrayList<LexicalEntry>();
+    private List<FERealization> feRealizations = new ArrayList<FERealization>();
+
+    private List<FEGroupRealization> feGroupRealizations = new ArrayList<FEGroupRealization>();
 
     private List<AnnotationSet> annotations = new ArrayList<AnnotationSet>();
+
 
     public String displayLexUnit () {
         currentLU = lexUnitRepository.findById(lexUnitId);
@@ -54,7 +58,7 @@ public class LexUnitController implements Serializable {
             }
         }
         findSentences();
-        findAnnotatedFE();
+        findRealizations();
         return currentLU.getName();
     }
 
@@ -69,77 +73,110 @@ public class LexUnitController implements Serializable {
         return myList;
     }
 
-    public void findAnnotatedFE () {
-        for (AnnotationSet annoSet : annotations) {
-            Sentence sentence = annoSet.getSentence();
-            List<Label> allLabels = new ArrayList<Label>();
-            for (Layer layer : getAllLayers(annoSet)) {
-                for (Label label : getAllLabels(layer)) {
-                    allLabels.add(label);
+    public void findFrameElements (AnnotationSet annotationSet, FrameElement fe, LayerTriplet valenceUnit) {
+        PatternEntry newPattern = new PatternEntry();
+        List<LayerTriplet> unit = new ArrayList<LayerTriplet>();
+        unit.add(valenceUnit);
+        newPattern.setValenceUnits(unit);
+        newPattern.addOccurence(annotationSet);
+        boolean insert = true;
+        for (FERealization realization : feRealizations) {
+            if (realization.getFrameElement().getId() == fe.getId()) {
+                insert = false;
+                boolean insertPattern = true;
+                for (PatternEntry patternEntry : realization.getPatterns()) {
+                    if (patternEntry.hasValence (valenceUnit)) {
+                        insertPattern = false;
+                        patternEntry.addOccurence(annotationSet);
+                        break;
+                    }
+                }
+                if (insertPattern) {
+                    realization.addPattern(newPattern);
                 }
             }
-            for (Label label : allLabels) {
-                if (label.getLabelType().getLayerType().getId() == 1) {
-                    FrameElement fe = label.getLabelType().getFrameElement();
-                    boolean insert = true;
-                    for (LexicalEntry lex : lexicalEntries) {
-                        if (lex.getFrameElement().getId() == fe.getId()) {
-                            lex.addOccurence(sentence);
-                            insert = false;
+        }
+        if (insert) {
+            feRealizations.add(new FERealization(fe, newPattern));
+        }
+    }
+
+    public void findGroupRealizations (AnnotationSet annotationSet, List<FrameElement> groupFE, List<LayerTriplet> valenceGroup) {
+        PatternEntry newGroupPattern = new PatternEntry();
+        newGroupPattern.setValenceUnits(valenceGroup);
+        newGroupPattern.addOccurence(annotationSet);
+        List<PatternEntry> patternEntries = new ArrayList<PatternEntry>();
+        patternEntries.add(newGroupPattern);
+
+        boolean insert = true;
+        for (FEGroupRealization realization : feGroupRealizations) {
+            if (realization.equalsFEGroup (groupFE)){
+                insert = false;
+                boolean insertPattern = true;
+                for (PatternEntry patternEntry : realization.getPatterns()){
+                    if (patternEntry.hasGroupValence (valenceGroup)) {
+                        insertPattern = false;
+                        patternEntry.addOccurence(annotationSet);
+                        break;
+                    }
+                }
+                if (insertPattern) {
+                    realization.addPattern(newGroupPattern);
+                }
+            }
+        }
+        if (insert) {
+            feGroupRealizations.add( new FEGroupRealization(groupFE, patternEntries));
+        }
+    }
+
+    public void findRealizations () {
+        for (AnnotationSet annoSet : annotations) {
+            Layer layerFE = null;
+            Layer layerPT = null;
+            Layer layerGF = null;
+            for (Layer layer : getAllLayers(annoSet)) {
+                if (layer.getLayerType().getId() == 1) {
+                    layerFE = layer;
+                } else if (layer.getLayerType().getId() == 4) {
+                    layerPT = layer;
+                } else if (layer.getLayerType().getId() == 3){
+                    layerGF = layer;
+                }
+                if ((layerFE != null) && (layerGF != null) && (layerPT != null)) {
+                    break;
+                }
+            }
+            List<Label> labelsFE = getAllLabels(layerFE);
+            List<Label> labelsPT = getAllLabels(layerPT);
+            List<Label> labelsGF = getAllLabels(layerGF);
+            List<FrameElement> groupFE = new ArrayList<FrameElement>();
+            List<LayerTriplet> valenceGroup = new ArrayList<LayerTriplet>();
+            for (Label label : labelsFE) {
+                FrameElement fe = label.getLabelType().getFrameElement();
+                groupFE.add(fe);
+                LayerTriplet valenceUnit = new LayerTriplet(label);
+                if (label.getInstantiationType().getId() == 1) {
+                    int start = label.getStartChar();
+                    int end = label.getEndChar();
+                    for (Label labelPT : labelsPT) {
+                        if ((labelPT.getStartChar() == start) && (labelPT.getEndChar() == end)) {
+                            valenceUnit.setLabelPT(labelPT);
                             break;
                         }
                     }
-                    if (insert) {
-                        lexicalEntries.add(new LexicalEntry(fe));
-                    }
-                }
-            }
-            for (LexicalEntry lexicalEntry : lexicalEntries) {
-                FrameElement fe = lexicalEntry.getFrameElement();
-                HashMap<String , List<Sentence>> list = lexicalEntry.getRealizations();
-                for (Label labelRef : allLabels) {
-                    if (labelRef.getLabelType().getLayerType().getId() == 1) {
-                        if (labelRef.getInstantiationType().getId() == 1) {
-                            if (labelRef.getLabelType().getFrameElement().getId() == fe.getId()) {
-                                int start = labelRef.getStartChar();
-                                int end = labelRef.getEndChar();
-                                for (Label label : allLabels) {
-                                    if (label.getLabelType().getLayerType().getId() == 3) {
-                                        if ((label.getStartChar() == start) && (label.getEndChar() == end)) {
-                                            String pt = label.getLabelType().getMiscLabel().getName();
-                                            for (Label labelGF : allLabels) {
-                                                if (labelGF.getLabelType().getLayerType().getId() == 4) {
-                                                    if ((labelGF.getStartChar() == start) && (labelGF.getEndChar() == end)) {
-                                                        String gf = labelGF.getLabelType().getMiscLabel().getName();
-                                                        String result = gf + "." + pt;
-                                                        List<Sentence> realizations = new ArrayList<Sentence>();
-                                                        if (list.containsKey(result)) {
-                                                            realizations = list.get(result);
-                                                        }
-                                                        realizations.add(sentence);
-                                                        list.put(result, realizations);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }   else if ((labelRef.getInstantiationType().getId() == 4) && (labelRef.getLabelType().getFrameElement().getId() == fe.getId())) {
-                            String result = labelRef.getInstantiationType().getName() + ".--";
-                            List<Sentence> realizations = new ArrayList<Sentence>();
-                            if (list.containsKey(result)) {
-                                realizations = list.get(result);
-                            }
-                            realizations.add(sentence);
-                            list.put(result, realizations);
+                    for (Label labelGF : labelsGF) {
+                        if ((labelGF.getStartChar() == start) && (labelGF.getEndChar() == end)) {
+                            valenceUnit.setLabelGF(labelGF);
+                            break;
                         }
                     }
                 }
-                lexicalEntry.setRealizations(list);
+                valenceGroup.add(valenceUnit);
+                findFrameElements(annoSet, fe, valenceUnit);
             }
+            findGroupRealizations(annoSet, groupFE, valenceGroup);
         }
-
     }
 
     public void orderLU () {
@@ -207,14 +244,6 @@ public class LexUnitController implements Serializable {
                 ||(query.toLowerCase().contains(name.toLowerCase())));
     }
 
-    public void setLexicalEntries (List<LexicalEntry> list) {
-        lexicalEntries = list;
-    }
-
-    public List<LexicalEntry> getLexicalEntries () {
-        return lexicalEntries;
-    }
-
     private List<Layer> getAllLayers(AnnotationSet annotationSet) {
         List<Layer> result = new ArrayList<Layer>();
         for (Layer layer : layerRepository.findAll()) {
@@ -235,7 +264,11 @@ public class LexUnitController implements Serializable {
         return result;
     }
 
-    public List<Map.Entry<String, List<Sentence>>> convertMapToList (LexicalEntry el) {
-        return new ArrayList(el.getRealizations().entrySet());
+    public List<FERealization> getFeRealizations() {
+        return feRealizations;
+    }
+
+    public List<FEGroupRealization> getFeGroupRealizations() {
+        return feGroupRealizations;
     }
 }

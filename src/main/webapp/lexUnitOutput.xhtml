@@ -21,25 +21,43 @@
             </div>
             <p:accordionPanel multiple="true" activeIndex="0,1">
                 <p:tab title="#{text['lexicalEntry']}">
-                    <h:outputText value="#{text['frameElements']} :" class="CardTopic" style="font-size: medium"/>
-                    <p:dataTable var="elements" value="#{lexUnitController.lexicalEntries}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px">
-                        <p:column headerText="Frame Element">
-                            <h:outputText value="#{elements.frameElement.name}" />
-                        </p:column>
-                        <p:column headerText="Number Annotated">
-                            <h:outputText value="#{elements.occurence.size() +1}" />
-                        </p:column>
-                        <p:column headerText="Realization(s)">
-                            <p:dataList var="var" value="#{lexUnitController.convertMapToList(elements)}" type="definition" emptyMessage="">
-                                <h:outputText value="#{var.key}" style="margin-right: 10px"/>
-                                (<h:outputText value="#{var.value.size()}"/>)
-                            </p:dataList>
-                        </p:column>
+                    <p:dataTable var="element" value="#{lexUnitController.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px"> 
+                        <p:column headerText="#{text['frameElement']}"> 
+                            <h:outputText value="#{element.frameElement.name}" /> 
+                        </p:column> 
+                        <p:column headerText="#{text['numberAnnotated']}"> 
+                            <h:outputText value="#{element.totalOccurences}" /> 
+                        </p:column> 
+                        <p:column headerText="#{text['realization']}"> 
+                            <p:dataList var="var" value="#{element.patterns}" type="definition" emptyMessage=""> 
+                                <h:outputText value="#{var.valenceUnits.get(0).outputString()}" style="margin-right: 10px"/> 
+                                [<h:outputText value="#{var.annoSet.size()}"/>]
+                            </p:dataList> 
+                        </p:column> 
                     </p:dataTable>
+                    <p:dataTable var="group" value="#{lexUnitController.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px"> 
+                        <p:column headerText="#{text['valencePatterns']}">
+                            <p:dataTable var="realization" value="#{group.patterns}">
+                                <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent; border: none; padding-top: 0px; padding-bottom: 0px">
+                                    <f:facet name="header">
+                                        <div style="border: solid 1px #C1D5DF; padding: 5px; background-color: #C1D5DF">
+                                            <h:outputText value="#{fe.name}"/>
+                                        </div>
 
-                    <h:outputText value="#{text['valencePatterns']} :" class="CardTopic" style="font-size: medium"/>
-                    <p:dataList var="fe" type="definition" value="" emptyMessage="" style="padding-top: 10px">
-                    </p:dataList>
+                                    </f:facet>
+                                    <div class="borderbottom">
+                                        <h:outputText value="#{realization.outputFE(fe)}" />
+                                    </div>
+                                </p:columns>
+                                <p:column headerText="#{text['total']} [#{group.totalOccurences}] " style="text-align: center; border: none; background-color: transparent; width: 15%">
+                                    <h:outputText value="#{realization.annoSet.size()}"/>
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                        <!--<p:column headerText="Total" style="width: 15%; text-align: center">-->
+                            <!--<h:outputText value="#{group.totalOccurences}"/>-->
+                        <!--</p:column>-->
+                    </p:dataTable>
                 </p:tab>
                 <p:tab title="#{text['annotation']}">
                     <p:dataList var="sentence" type="definition" value="#{lexUnitController.annotatedSentence}" emptyMessage="#{text['emptyMessage']}">

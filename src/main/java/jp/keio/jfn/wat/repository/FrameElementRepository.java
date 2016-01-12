@@ -8,4 +8,5 @@ import java.util.List;
  * Created by jfn on 12/21/15.
  */
 public interface FrameElementRepository extends CrudRepository<FrameElement, Long> {
+    FrameElement findById(int id);
 }
