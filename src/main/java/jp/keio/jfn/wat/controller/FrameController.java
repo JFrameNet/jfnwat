@@ -34,8 +34,6 @@ public class FrameController implements Serializable {
 
     private Frame currentFrame;
 
-    private String frameName;
-
     private List<String> orderedFrames = new ArrayList<String>();
 
     private List<FrameElement> coreFrameEl;
@@ -46,8 +44,8 @@ public class FrameController implements Serializable {
 
     private List<LexUnit> allLexUnits;
 
-    public Frame frameDisplay () {
-        currentFrame = frameRepository.findByName(frameName).get(0);
+    public Frame frameDisplay (Frame mainFrame) {
+        currentFrame = mainFrame;
         findFrameElements();
         findFrameRelations();
         findLexicalUnits();
@@ -158,14 +156,6 @@ public class FrameController implements Serializable {
 
     public Frame getCurrentFrame() {
         return currentFrame;
-    }
-
-    public void setFrameName (String name) {
-        frameName = name;
-    }
-
-    public String getFrameName () {
-        return frameName;
     }
 
     public List<FrameElement> getCoreFrameEl() {

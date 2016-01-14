@@ -2571,8 +2571,8 @@ hr.ui-widget-header {
   border-bottom-left-radius: 0px;
   border-top-right-radius: 1px;
   border-top-left-radius: 1px;
-  background-color: #eceff1;
-  border-bottom: solid 2px #e0e0e0;
+  background-color: #ffffff;
+  border-bottom: solid 0px #e0e0e0;
 }
 .ui-tabs-top .ui-tabs-navscroller {
   border-top-right-radius: 1px;
@@ -2666,12 +2666,12 @@ hr.ui-widget-header {
   background-color: transparent !important;
   border: solid 1px transparent !important;
   border-radius: 0px;
-  border-bottom: solid 3px #0091EA !important;
+  border-bottom: solid 3px #66BB6A !important;
 }
 .ui-tabs-top .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs-top .ui-tabs-nav li.ui-tabs-active a,
 .ui-tabs-top .ui-tabs-nav li.ui-state-hover a {
-  color: #0091ea !important;
+  color: #66bb6a !important;
 }
 .ui-tabs-top .ui-tabs-panels {
   background-color: transparent;
@@ -2770,7 +2770,7 @@ hr.ui-widget-header {
   border-top-right-radius: 0px;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
-  background-color: #eceff1;
+  background-color: #ffffff;
   border-right: solid 2px #e0e0e0;
 }
 .ui-tabs-left .ui-tabs-nav li {
@@ -2792,7 +2792,7 @@ hr.ui-widget-header {
   background-color: transparent !important;
   border: solid 1px transparent !important;
   border-radius: 0px;
-  border-right: solid 3px #0091EA !important;
+  border-right: solid 3px #66BB6A !important;
   -webkit-transition: none;
   -moz-transition: none;
   -ms-transition: none;
@@ -2802,7 +2802,7 @@ hr.ui-widget-header {
 .ui-tabs-left .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs-left .ui-tabs-nav li.ui-tabs-active a,
 .ui-tabs-left .ui-tabs-nav li.ui-state-hover a {
-  color: #0091ea !important;
+  color: #66bb6a !important;
   padding: 14px 14px !important;
 }
 .ui-tabs-left .ui-tabs-nav li .ui-icon-close {
@@ -2836,7 +2836,7 @@ hr.ui-widget-header {
   border-top-right-radius: 0px;
   border-top-left-radius: 2px;
   border-bottom-left-radius: 2px;
-  background-color: #eceff1;
+  background-color: #ffffff;
   border-left: solid 1px #e0e0e0;
 }
 .ui-tabs-right .ui-tabs-nav li {
@@ -2858,7 +2858,7 @@ hr.ui-widget-header {
   background-color: transparent !important;
   border: solid 1px transparent !important;
   border-radius: 0px;
-  border-left: solid 3px #0091EA !important;
+  border-left: solid 3px #66BB6A !important;
   -webkit-transition: none;
   -moz-transition: none;
   -ms-transition: none;
@@ -2868,7 +2868,7 @@ hr.ui-widget-header {
 .ui-tabs-right .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs-right .ui-tabs-nav li.ui-tabs-active a,
 .ui-tabs-right .ui-tabs-nav li.ui-state-hover a {
-  color: #0091ea !important;
+  color: #66bb6a !important;
   padding: 14px 14px !important;
 }
 .ui-tabs-right .ui-tabs-nav li .ui-icon-close {
@@ -2901,7 +2901,7 @@ hr.ui-widget-header {
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
   font-weight: normal;
-  background-color: #eceff1;
+  background-color: #ffffff;
   font-family: 'latolight';
   border-top: solid 1px #e0e0e0;
 }
@@ -3017,12 +3017,12 @@ hr.ui-widget-header {
   background-color: transparent !important;
   border: solid 1px transparent !important;
   border-radius: 0px;
-  border-top: solid 3px #0091EA !important;
+  border-top: solid 3px #66BB6A !important;
 }
 .ui-tabs-bottom .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs-bottom .ui-tabs-nav li.ui-tabs-active a,
 .ui-tabs-bottom .ui-tabs-nav li.ui-state-hover a {
-  color: #0091ea !important;
+  color: #66bb6a !important;
   padding: 14px 1em 14px !important;
 }
 .ui-tabs-bottom .ui-tabs-panels .ui-tabs-panel {
@@ -4976,7 +4976,7 @@ hr.ui-widget-header {
 }
 /*Style For UI CommandLink --------------------------------------------------------------------------------------*/
 .ui-commandlink {
-  color: #0091EA !important;
+  color: #546E7A !important;
 }
 /*Style For UI Link --------------------------------------------------------------------------------------*/
 .ui-link {

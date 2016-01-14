@@ -50,8 +50,8 @@ public class LexUnitController implements Serializable {
     private List<AnnotationSet> annotations = new ArrayList<AnnotationSet>();
 
 
-    public String displayLexUnit () {
-        currentLU = lexUnitRepository.findById(lexUnitId);
+    public String displayLexUnit (LexUnit mainLU) {
+        currentLU = mainLU;
         for (AnnotationSet annotSet : annotationSetRepository.findAll()) {
             if (annotSet.getLexUnit().getId() == currentLU.getId()) {
                 annotations.add(annotSet);
@@ -59,7 +59,7 @@ public class LexUnitController implements Serializable {
         }
         findSentences();
         findRealizations();
-        return currentLU.getName();
+        return currentLU.getSenseDesc();
     }
 
     public List<Status> getStatusForLU (LexUnit lu) {
@@ -213,16 +213,17 @@ public class LexUnitController implements Serializable {
                                     list.add(new ElementTag(wordEmpty, ""));
                                 }
                                 String word = sentence.getText().substring(label.getStartChar(), label.getEndChar() + 1);
-                                String tag = "";
+                                String tag = "Target";
+                                ElementTag elementTag = new ElementTag(word, tag);
                                 if (label.getLabelType().getLayerType().getId() == 1) {
                                     tag = label.getLabelType().getFrameElement().getName();
                                     if (! allFE.contains(tag)) {
                                         allFE.add(tag);
                                     }
-                                } else if (label.getLabelType().getLayerType().getId() == 2) {
-                                    tag = "Target";
+                                    elementTag.setTag(tag);
+                                    elementTag.setFrameElement(label.getLabelType().getFrameElement());
                                 }
-                                list.add(new ElementTag(word, tag));
+                                list.add(elementTag);
 
                                 imin = label.getEndChar();
                                 iaux = imin + 1;
@@ -240,8 +241,13 @@ public class LexUnitController implements Serializable {
                 for (Label label : allLabels) {
                     if (label.getInstantiationType().getId() != 1) {
                         String word = label.getInstantiationType().getName();
-                        String tag = label.getLabelType().getFrameElement().getName();
-                        list.add(new ElementTag(word, tag));
+                        FrameElement el = label.getLabelType().getFrameElement();
+                        ElementTag elementTag = new ElementTag(word, el.getName());
+                        elementTag.setFrameElement(el);
+                        if (! allFE.contains(el.getName())) {
+                            allFE.add(el.getName());
+                        }
+                        list.add(elementTag);
                     }
                 }
                 sentences.add(new SentenceOutput(list));
@@ -257,7 +263,6 @@ public class LexUnitController implements Serializable {
         colors.add("#F7941E");
         colors.add("#EA5753");
         colors.add("#EF9A9A");
-
 
         for (SentenceOutput sentenceOutput : list) {
             for (ElementTag elementTag : sentenceOutput.getElements()) {
@@ -292,20 +297,9 @@ public class LexUnitController implements Serializable {
         }
         annotatedSentence = allSenteces;
     }
-    public int getLexUnitId() {
-        return lexUnitId;
-    }
-
-    public void setLexUnitId (int id) {
-        lexUnitId = id;
-    }
 
     public LexUnit getCurrentLU () {
         return currentLU;
-    }
-
-    public List<Sentence> getAnnotatedSentence () {
-        return annotatedSentence;
     }
 
     public void setFilter (String f) {

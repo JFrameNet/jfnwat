@@ -23,27 +23,20 @@
     </ui:define>
     <ui:define name="frame">
         <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}" style="font-size: small">
-            <p:link class="horizontal" outcome="frameOutput" value="#{frame.name}" target="_blank" style="padding: 10px 10px 0px 3px">
-                <f:param name="frame" value="#{frame.name}"/>
-            </p:link>
+            <p:commandLink class="horizontal" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" style="padding: 10px 10px 0px 3px"/>
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">
         <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
-                <p:link  style="padding: 10px 10px 10px" outcome="lexUnitOutput" target="_blank" value="#{lexUnit.name}">
-                    <f:param name="lexUnit" value="#{lexUnit.id}"/>
-                    <f:param name="i" value="1" />
-                </p:link>
+                <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding: 10px 10px 10px"/>
             </p:column>
             <p:column headerText="#{text['frame']}">
-                <p:link outcome="frameOutput" target="_blank" value="#{lexUnit.frame.name}">
-                    <f:param name="frame" value="#{lexUnit.frame.name}"/>
-                </p:link>
+                <p:commandLink action="#{tabController.addFrame(lexUnit.frame.name)}" value="#{lexUnit.frame.name}"/>
             </p:column>
 
             <p:column headerText="#{text['LUStatus']}">
-                <p:dataList value="#{lexUnitController.getStatusForLU(lexUnit)}" var="status" type="definition">
+                <p:dataList value="#{lexUnitController.getStatusForLU(lexUnit)}" var="status" type="definition" emptyMessage="">
                     <h:outputText class="horizontal tooltip-status" value="#{status.getStatusType().getName()}" />
                     <h:outputText class="horizontal" value="?" id="fade" style="font-size: x-small; padding-left: 3px; padding-right: 10px" />
                     <p:tooltip id="toolTipFade" for="fade" value="#{status.getStatusType().getDescription()}" style="font-size: smaller"/>

@@ -10,17 +10,17 @@
         <div class="Container100">
             <div class="ContainerIndent">
                 <div class="Fleft OvHidden">
-                    <p:link outcome="index">
+                    <p:commandLink action="#{tabController.backToIndex()}">
                         <h:graphicImage name="logo/jfn_logo_only.jpg" width="60"/>
-                    </p:link>
+                    </p:commandLink>
                 </div>
                 <div class="Fleft OvHidden">
                     <h:form>
                         <p:tabMenu activeIndex="#{param.i}">
-                            <p:menuitem value="#{text['frameTabMenuItem']}" outcome="frameIndex">
+                            <p:menuitem value="#{text['frameTabMenuItem']}" outcome="frameOutput">
                                 <f:param name="i" value="0" />
                             </p:menuitem>
-                            <p:menuitem value="#{text['lexUnitTabMenuItem']}" outcome="lexUnitIndex">
+                            <p:menuitem value="#{text['lexUnitTabMenuItem']}" outcome="lexUnitOutput">
                                 <f:param name="i" value="1" />
                             </p:menuitem>
                             <p:menuitem value="#{text['docTabMenuItem']}">
@@ -46,10 +46,9 @@
                     <div class="Container100">
                         <ui:insert name="filter"/>
                     </div>
-                    <div class="Container100">
+                    <div class="Container100 BorderBottom">
                         <div class="ContainerIndent">
                             <ui:insert name="indexList"/>
-                            <div style="height: 150px"/>
                         </div>
                     </div>
                 </div>

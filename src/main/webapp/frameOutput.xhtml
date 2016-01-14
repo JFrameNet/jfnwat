@@ -6,56 +6,61 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frameIndex.xhtml">
     <f:metadata>
-        <f:viewParam name="frame" value="#{frameController.frameName}" />
+        <f:viewParam name="frame" value="#{tabController.mainFrame.name}" />
     </f:metadata>
     <ui:define name="frameOutput">
         <div class="ContainerIndent">
-            <h3 style="padding-bottom: 20px">#{frameController.frameName}</h3>
-            <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
-                <p:tab title="#{text['definition']}">
-                    <h:outputText value="#{frameController.frameDisplay().getDefinition()}" escape="false"/>
-                </p:tab>
-                <p:tab title="#{text['frameElements']}">
-                    <h:outputText value="#{text['core']}" class="CardTopic" style="font-size: medium"/>
-                    <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="" style="padding-top: 10px">
-                        <div class="Wid20 Fleft OvHidden" style="padding-top: 15px">
-                            <h:outputText value="#{fe.name}"/><br/>
-                            <h:outputText value="[#{fe.abbrev}]"/>
-                        </div>
-                        <div class="Wid80 OvHidden" style="padding-top: 15px">
-                            <h:outputText value="#{fe.definition}" escape="false"/>
-                        </div>
-                    </p:dataList>
-                    <div class="EmptyBox20"/>
-                    <h:outputText value="#{text['non-core']}" class="CardTopic" style="font-size: medium"/>
-                    <p:dataList var="fe" type="definition" value="#{frameController.getNonCoreFrameEl()}" emptyMessage="">
-                        <div class="Wid20 Fleft OvHidden" style="padding-top: 10px">
-                            <h:outputText value="#{fe.name}"/><br/>
-                            <h:outputText value="[#{fe.abbrev}]"/>
-                        </div>
-                        <div class="Wid80 OvHidden" style="padding-top: 10px">
-                            <h:outputText value="#{fe.definition}" escape="false"/>
-                        </div>
-                    </p:dataList>
-                </p:tab>
-                <p:tab title="#{text['frameRelations']}">
-                    <p:dataList var="rel" type="definition" value="#{frameController.displayFrameRelations()}" emptyMessage="#{text['emptyMessage']}">
-                        <div style="padding-top: 5px">
-                            #{rel.key} : <p:link outcome="frameOutput" value="#{rel.value.name}">
-                            <f:param name="frame" value="#{rel.value.name}"/>
-                        </p:link>
-                        </div>
-                    </p:dataList>
-                </p:tab>
-                <p:tab title="#{text['lexUnits']}">
-                    <p:dataList var="lexUnit" type="definition" value="#{frameController.getAllLexUnits()}" emptyMessage="#{text['emptyMessage']}">
-                        <p:link class="horizontal" outcome="lexUnitOutput" value="#{lexUnit.name}" target="_blank" style="padding-left: 3px; padding-right: 10px">
-                            <f:param name="lexUnit" value="#{lexUnit.id}"/>
-                            <f:param name="i" value="1" />
-                        </p:link>
-                    </p:dataList>
-                </p:tab>
-            </p:accordionPanel>
+            <h:form>
+                <p:tabView value="#{tabController.currentFrames}" var="frame" dynamic="true" cache="true" style="border: none">
+                    <p:ajax event="tabClose" listener="#{tabController.onTabClose}" update="output"/>
+                    <p:ajax event="tabChange" listener="#{tabController.onTabChange}" update="output"/>
+                    <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
+                        <p:scrollPanel id="output" mode="native" style="height: 550px; border: none; padding: 0">
+                            <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
+                                <p:tab title="#{text['definition']}">
+                                    <h:outputText value="#{frameController.frameDisplay(tabController.mainFrame).getDefinition()}" escape="false"/>
+                                </p:tab>
+                                <p:tab title="#{text['frameElements']}">
+                                    <h:outputText value="#{text['core']}" class="CardTopic" style="font-size: medium"/>
+                                    <p:dataList var="fe" type="definition" value="#{frameController.getCoreFrameEl()}" emptyMessage="" style="padding-top: 10px">
+                                        <div class="Wid20 Fleft OvHidden" style="padding-top: 15px">
+                                            <h:outputText value="#{fe.name}"/><br/>
+                                            <h:outputText value="[#{fe.abbrev}]"/>
+                                        </div>
+                                        <div class="Wid80 OvHidden" style="padding-top: 15px">
+                                            <h:outputText value="#{fe.definition}" escape="false"/>
+                                        </div>
+                                    </p:dataList>
+                                    <div class="EmptyBox20"/>
+                                    <h:outputText value="#{text['non-core']}" class="CardTopic" style="font-size: medium"/>
+                                    <p:dataList var="fe" type="definition" value="#{frameController.getNonCoreFrameEl()}" emptyMessage="">
+                                        <div class="Wid20 Fleft OvHidden" style="padding-top: 10px">
+                                            <h:outputText value="#{fe.name}"/><br/>
+                                            <h:outputText value="[#{fe.abbrev}]"/>
+                                        </div>
+                                        <div class="Wid80 OvHidden" style="padding-top: 10px">
+                                            <h:outputText value="#{fe.definition}" escape="false"/>
+                                        </div>
+                                    </p:dataList>
+                                </p:tab>
+                                <p:tab title="#{text['frameRelations']}">
+                                    <p:dataList var="rel" type="definition" value="#{frameController.displayFrameRelations()}" emptyMessage="#{text['emptyMessage']}">
+                                        <div style="padding-top: 5px">
+                                                #{rel.key} : <p:commandLink action="#{tabController.addFrame(rel.value.name)}" value="#{rel.value.name}"/>
+                                        </div>
+                                    </p:dataList>
+                                </p:tab>
+                                <p:tab title="#{text['lexUnits']}">
+                                    <p:dataList var="lexUnit" type="definition" value="#{frameController.getAllLexUnits()}" emptyMessage="#{text['emptyMessage']}">
+                                        <p:commandLink class="horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding-left: 3px; padding-right: 10px"/>
+                                    </p:dataList>
+                                    <div class="EmptyBox20"/>
+                                </p:tab>
+                            </p:accordionPanel>
+                        </p:scrollPanel>
+                    </p:tab>
+                </p:tabView>
+            </h:form>
         </div>
 
     </ui:define>

@@ -66,6 +66,9 @@ body {
 .ui-accordion .ui-accordion-header .ui-icon {
   display: none;
 }
+.ui-accordion .ui-accordion-content {
+  overflow: visible !important;
+}
 .ui-datalist .ui-datalist-empty-message {
   padding: 0px !important;
 }
