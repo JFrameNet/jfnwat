@@ -179,6 +179,100 @@ public class LexUnitController implements Serializable {
         }
     }
 
+    public List<SentenceOutput> processSentences () {
+        List<SentenceOutput> sentences = new ArrayList<SentenceOutput>();
+        List<String> allFE = new ArrayList<String>();
+        for (AnnotationSet annoSet : annotations) {
+            Sentence sentence = annoSet.getSentence();
+            Layer layerFE = null;
+            Layer layerTarget = null;
+            for (Layer layer : getAllLayers(annoSet)){
+                if (layer.getLayerType().getId() == 1) {
+                    layerFE = layer;
+                } else  if (layer.getLayerType().getId() == 2) {
+                    layerTarget = layer;
+                }
+                if ((layerFE != null) && (layerTarget != null)) {
+                    break;
+                }
+            }
+            List<ElementTag> list = new ArrayList<ElementTag>();
+            if (layerFE != null) {
+                List<Label> allLabels = getAllLabels(layerFE);
+                allLabels.addAll(getAllLabels(layerTarget));
+                int imin = 0;
+                int iaux = 0;
+                int imax = sentence.getText().length();
+
+                while (imin < imax) {
+                    for (Label label : allLabels) {
+                        if (label.getInstantiationType().getId() == 1){
+                            if (imin == label.getStartChar()) {
+                                if (imin > iaux) {
+                                    String wordEmpty = sentence.getText().substring(iaux, imin);
+                                    list.add(new ElementTag(wordEmpty, ""));
+                                }
+                                String word = sentence.getText().substring(label.getStartChar(), label.getEndChar() + 1);
+                                String tag = "";
+                                if (label.getLabelType().getLayerType().getId() == 1) {
+                                    tag = label.getLabelType().getFrameElement().getName();
+                                    if (! allFE.contains(tag)) {
+                                        allFE.add(tag);
+                                    }
+                                } else if (label.getLabelType().getLayerType().getId() == 2) {
+                                    tag = "Target";
+                                }
+                                list.add(new ElementTag(word, tag));
+
+                                imin = label.getEndChar();
+                                iaux = imin + 1;
+                                break;
+                            }
+                        }
+                    }
+                    imin ++;
+
+                }
+                if (imin > iaux) {
+                    String wordEmpty = sentence.getText().substring(iaux, imin);
+                    list.add(new ElementTag(wordEmpty, ""));
+                }
+                for (Label label : allLabels) {
+                    if (label.getInstantiationType().getId() != 1) {
+                        String word = label.getInstantiationType().getName();
+                        String tag = label.getLabelType().getFrameElement().getName();
+                        list.add(new ElementTag(word, tag));
+                    }
+                }
+                sentences.add(new SentenceOutput(list));
+            }
+        }
+        addColors(sentences, allFE);
+        return sentences;
+    }
+
+    private void addColors (List<SentenceOutput> list, List<String> allFE) {
+        List<String> colors = new ArrayList<String>();
+        colors.add("#4db6ac");
+        colors.add("#F7941E");
+        colors.add("#EA5753");
+        colors.add("#EF9A9A");
+
+
+        for (SentenceOutput sentenceOutput : list) {
+            for (ElementTag elementTag : sentenceOutput.getElements()) {
+                String tag = elementTag.getTag();
+                if (allFE.contains(tag)) {
+                    elementTag.setColor(colors.get(allFE.indexOf(tag)));
+                } else if (tag.equals("Target")) {
+                    elementTag.setColor("#546E7A");
+                } else {
+                    elementTag.setColor("#F5F5F5");
+                }
+            }
+        }
+    }
+
     public void orderLU () {
         List<LexUnit> allLU= new ArrayList<LexUnit>();
         for (LexUnit lu : lexUnitRepository.findAll()) {

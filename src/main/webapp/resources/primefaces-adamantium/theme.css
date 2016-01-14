@@ -904,7 +904,7 @@ label {
 }
 .ui-datatable table tbody td {
   font-family: 'latoregular';
-  padding: 10px 10px !important;
+  padding: 5px 3px !important;
 }
 .ui-datatable-fs .ui-datatable-frozenlayout-right,
 .ui-datatable-fs .ui-datatable-frozenlayout-left {

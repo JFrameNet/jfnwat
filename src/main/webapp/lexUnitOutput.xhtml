@@ -21,7 +21,7 @@
             </div>
             <p:accordionPanel multiple="true" activeIndex="0,1">
                 <p:tab title="#{text['lexicalEntry']}">
-                    <p:dataTable var="element" value="#{lexUnitController.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px"> 
+                    <p:dataTable var="element" value="#{lexUnitController.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px; text-align: center"> 
                         <p:column headerText="#{text['frameElement']}"> 
                             <h:outputText value="#{element.frameElement.name}" /> 
                         </p:column> 
@@ -35,23 +35,23 @@
                             </p:dataList> 
                         </p:column> 
                     </p:dataTable>
-                    <p:dataTable var="group" value="#{lexUnitController.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px"> 
+                    <p:dataTable var="group" value="#{lexUnitController.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px" rowStyleClass=""> 
                         <p:column headerText="#{text['valencePatterns']}">
-                            <p:dataTable var="realization" value="#{group.patterns}">
-                                <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent; border: none; padding-top: 0px; padding-bottom: 0px">
+                            <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto">
+                                <p:column headerText="#{text['total']} [#{group.totalOccurences}]" style="text-align: center; border: none; background-color: transparent">
+                                    <h:outputText value="#{realization.annoSet.size()}"/>
+                                </p:column>
+                                <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent; border: none; padding-bottom: 0; padding-top: 0; width: 160px">
                                     <f:facet name="header">
-                                        <div style="border: solid 1px #C1D5DF; padding: 5px; background-color: #C1D5DF">
+                                        <div style="border: solid 1px #C1D5DF; padding: 5px; background-color: #EEF2F7">
                                             <h:outputText value="#{fe.name}"/>
                                         </div>
 
                                     </f:facet>
-                                    <div class="borderbottom">
+                                    <div>
                                         <h:outputText value="#{realization.outputFE(fe)}" />
                                     </div>
                                 </p:columns>
-                                <p:column headerText="#{text['total']} [#{group.totalOccurences}] " style="text-align: center; border: none; background-color: transparent; width: 15%">
-                                    <h:outputText value="#{realization.annoSet.size()}"/>
-                                </p:column>
                             </p:dataTable>
                         </p:column>
                         <!--<p:column headerText="Total" style="width: 15%; text-align: center">-->
@@ -60,11 +60,23 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="#{text['annotation']}">
-                    <p:dataList var="sentence" type="definition" value="#{lexUnitController.annotatedSentence}" emptyMessage="#{text['emptyMessage']}">
-                        <div style="padding-top: 20px; padding-bottom: 10px">
-                            <h:outputText value="#{sentence.text}"/>
-                        </div>
+                    <p:dataList var="proc" value="#{lexUnitController.processSentences()}" type="definition">
+                        <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none; margin-bottom: 30px" rowStyleClass="annotation" >
+                            <p:columns var="tag" value="#{proc.elements}" style="text-align: center; border: none; padding: 0; background-color: transparent">
+                                <f:facet name="header">
+                                    <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
+                                </f:facet>
+                                <div class="bordertop" style="border-top: solid 1px #{tag.color}">
+                                    <h:outputText value="#{tag.tag}" style="color: #{tag.color}"/>
+                                </div>
+                            </p:columns>
+                        </p:dataTable>
                     </p:dataList>
+                    <!--<p:dataList var="sentence" type="definition" value="#{lexUnitController.annotatedSentence}" emptyMessage="#{text['emptyMessage']}">-->
+                        <!--<div style="padding-top: 20px; padding-bottom: 10px">-->
+                            <!--<h:outputText value="#{sentence.text}"/>-->
+                        <!--</div>-->
+                    <!--</p:dataList>-->
                 </p:tab>
             </p:accordionPanel>
         </div>
