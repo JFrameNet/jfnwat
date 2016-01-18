@@ -32,11 +32,11 @@
                 <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding: 10px 10px 10px"/>
             </p:column>
             <p:column headerText="#{text['frame']}">
-                <p:commandLink action="#{tabController.addFrame(lexUnit.frame.name)}" value="#{lexUnit.frame.name}"/>
+                <p:commandLink action="#{tabController.addFrame(lexUnit.frame)}" value="#{lexUnit.frame}"/>
             </p:column>
 
             <p:column headerText="#{text['LUStatus']}">
-                <p:dataList value="#{lexUnitController.getStatusForLU(lexUnit)}" var="status" type="definition" emptyMessage="">
+                <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" emptyMessage="">
                     <h:outputText class="horizontal tooltip-status" value="#{status.getStatusType().getName()}" />
                     <h:outputText class="horizontal" value="?" id="fade" style="font-size: x-small; padding-left: 3px; padding-right: 10px" />
                     <p:tooltip id="toolTipFade" for="fade" value="#{status.getStatusType().getDescription()}" style="font-size: smaller"/>

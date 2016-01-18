@@ -22,13 +22,13 @@ public class Label implements Serializable {
 
 	private Timestamp createdDate;
 
-	private int endChar;
+	private Integer endChar;
 
 	private Timestamp modifiedDate;
 
 	private String multi;
 
-	private int startChar;
+	private Integer startChar;
 
 	//bi-directional many-to-one association to InstantiationType
 	@ManyToOne

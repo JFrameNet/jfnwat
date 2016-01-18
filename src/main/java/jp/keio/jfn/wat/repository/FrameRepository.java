@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface FrameRepository extends CrudRepository<Frame, Long> {
 	List<Frame> findByName(String name);
+	Frame findById(Integer id);
 }

@@ -21,10 +21,12 @@ public class PatternEntry {
         int instantiationType = valence.getLabelFE().getInstantiationType().getId();
         if (instantiationType == 1) {
             for (LayerTriplet triplet : valenceUnits) {
-                if ((valence.getLabelFE().getLabelType().getFrameElement().getId() == triplet.getLabelFE().getLabelType().getFrameElement().getId())
-                        && (valence.getLabelPT().getLabelType().getMiscLabel().getId() == triplet.getLabelPT().getLabelType().getMiscLabel().getId())
-                        && (valence.getLabelGF().getLabelType().getMiscLabel().getId() == triplet.getLabelGF().getLabelType().getMiscLabel().getId())) {
-                    return  true;
+                if (triplet.getLabelFE().getInstantiationType().getId() == 1) {
+                    if ((valence.getLabelFE().getLabelType().getFrameElement().getId() == triplet.getLabelFE().getLabelType().getFrameElement().getId())
+                            && (valence.getLabelPT().getLabelType().getMiscLabel().getId() == triplet.getLabelPT().getLabelType().getMiscLabel().getId())
+                            && (valence.getLabelGF().getLabelType().getMiscLabel().getId() == triplet.getLabelGF().getLabelType().getMiscLabel().getId())) {
+                        return  true;
+                    }
                 }
             }
         } else  {

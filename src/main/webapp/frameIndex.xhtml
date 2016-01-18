@@ -20,7 +20,7 @@
 
     <ui:define name="indexList">
         <div>
-            <p:scrollPanel mode="native" style="height: 550px; border: none; padding: 0">
+            <p:scrollPanel mode="native" style="height: 600px; border: none; padding: 0">
                 <p:dataList  id="frameList" value="#{frameController.orderedFrames}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
                     <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px"/>
                 </p:dataList>

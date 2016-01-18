@@ -24,7 +24,7 @@ public class StatusType implements Serializable {
 
 	private String name;
 
-	private byte rank;
+	private int rank;
 
 	//bi-directional many-to-one association to Status
 	@OneToMany(mappedBy="statusType")
@@ -65,11 +65,11 @@ public class StatusType implements Serializable {
 		this.name = name;
 	}
 
-	public byte getRank() {
+	public int getRank() {
 		return this.rank;
 	}
 
-	public void setRank(byte rank) {
+	public void setRank(int rank) {
 		this.rank = rank;
 	}
 

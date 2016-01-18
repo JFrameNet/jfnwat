@@ -26,7 +26,7 @@ public class FrameRelation implements Serializable {
 
 	private String name;
 
-	private byte profiled;
+	private Byte profiled;
 
 	//bi-directional many-to-one association to FERelation
 	@OneToMany(mappedBy="frameRelation")
@@ -94,11 +94,11 @@ public class FrameRelation implements Serializable {
 		this.name = name;
 	}
 
-	public byte getProfiled() {
+	public Byte getProfiled() {
 		return this.profiled;
 	}
 
-	public void setProfiled(byte profiled) {
+	public void setProfiled(Byte profiled) {
 		this.profiled = profiled;
 	}
 

@@ -18,7 +18,7 @@ public class Sentence implements Serializable {
 	@Id
 	private int id;
 
-	private byte absolutePos;
+	private Byte absolutePos;
 
 	private String createdBy;
 
@@ -56,11 +56,11 @@ public class Sentence implements Serializable {
 		this.id = id;
 	}
 
-	public byte getAbsolutePos() {
+	public Byte getAbsolutePos() {
 		return this.absolutePos;
 	}
 
-	public void setAbsolutePos(byte absolutePos) {
+	public void setAbsolutePos(Byte absolutePos) {
 		this.absolutePos = absolutePos;
 	}
 

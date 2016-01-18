@@ -8,18 +8,17 @@
     <ui:define name="lexUnitOutput">
         <div class="ContainerIndent">
             <h:form>
-                <p:tabView value="#{tabController.currentLU}" var="lu" dynamic="true" cache="true" style="border: none">
+                <p:tabView value="#{tabController.loadedLUs}" var="lu" dynamic="false" cache="true" style="border: none">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}" update="output"/>
-                    <p:ajax event="tabChange" listener="#{tabController.onTabLUChange}" update="output"/>
-                    <p:tab id="a#{lu.id}" title="#{lu.name}" closable="true">
+                    <p:tab title="#{lu.lightLU.name}" closable="true">
                         <div class="ContainerIndent">
-                            <h:outputText value="#{lexUnitController.displayLexUnit(tabController.mainLU)}" /><br/>
+                            <h:outputText value="" /><br/>
                             <h:outputText value="#{text['frame']} : "/>
-                            <p:commandLink action="#{tabController.addFrame(lexUnitController.currentLU.getFrame().getName())}" value="#{lexUnitController.currentLU.getFrame().getName()}"/>
+                            <p:commandLink action="#{tabController.addFrame(lu.lightLU.frame)}" value="#{lu.lightLU.frame}"/>
                         </div>
                         <p:accordionPanel id="output" multiple="true" activeIndex="0,1">
                             <p:tab title="#{text['lexicalEntry']}">
-                                <p:dataTable var="element" value="#{lexUnitController.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px; text-align: center"> 
+                                <p:dataTable var="element" value="#{lu.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px; text-align: center"> 
                                     <p:column headerText="#{text['frameElement']}"> 
                                         <h:outputText value="#{element.frameElement.name}" /> 
                                     </p:column> 
@@ -33,13 +32,13 @@
                                         </p:dataList> 
                                     </p:column> 
                                 </p:dataTable>
-                                <p:dataTable var="group" value="#{lexUnitController.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px" rowStyleClass=""> 
+                                <p:dataTable var="group" value="#{lu.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px" rowStyleClass=""> 
                                     <p:column headerText="#{text['valencePatterns']}">
                                         <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto">
                                             <p:column headerText="#{text['total']} [#{group.totalOccurences}]" style="text-align: center; border: none; background-color: transparent">
                                                 <h:outputText value="#{realization.annoSet.size()}"/>
                                             </p:column>
-                                            <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent; border: none; padding-bottom: 0; padding-top: 0; width: 160px">
+                                            <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent ; border: none; padding-bottom: 0; padding-top: 0; width: 160px">
                                                 <f:facet name="header">
                                                     <div style="border: solid 1px #C1D5DF; padding: 5px; background-color: #EEF2F7">
                                                         <h:outputText value="#{fe.name}"/>
@@ -55,7 +54,7 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab title="#{text['annotation']}">
-                                <p:dataList var="proc" value="#{lexUnitController.processSentences()}" type="definition">
+                                <p:dataList var="proc" value="#{lu.sentences}" type="definition">
                                     <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none; margin-bottom: 30px" rowStyleClass="annotation" >
                                         <p:columns var="tag" value="#{proc.elements}" style="text-align: center; border: none; padding: 0; background-color: transparent">
                                             <f:facet name="header">

@@ -1,6 +1,7 @@
 package jp.keio.jfn.wat.controller;
 
 
+import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Scope;
 
 import jp.keio.jfn.wat.domain.Document;
@@ -18,6 +19,7 @@ import java.io.Serializable;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -28,7 +30,6 @@ import java.util.List;
 @ManagedBean
 @RestController
 @Scope("view")
-
 public class SearchViewController implements Serializable{
 
     @Autowired
@@ -83,14 +84,19 @@ public class SearchViewController implements Serializable{
         }
     }
 
-    public List<LexUnit> findLUKeyword () {
+    @Transactional
+    public List<LightLU> findLUKeyword () {
         if (search.isEmpty()) {
-            return new ArrayList<LexUnit>();
+            return new ArrayList<LightLU>();
         } else {
-            List<LexUnit> lexUnitList = new ArrayList<LexUnit>();
+            List<LightLU> lexUnitList = new ArrayList<LightLU>();
             for (LexUnit lu : lexUnitRepository.findAll()) {
                 if (matchSearch(search, lu.getName())) {
-                    lexUnitList.add(lu);
+                    Hibernate.initialize(lu.getStatuses());
+                    LightLU lightLU = new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName());
+                    lightLU.setStatuses(lu.getStatuses());
+                    lexUnitList.add(lightLU);
+
                 }
             }
             return lexUnitList;
