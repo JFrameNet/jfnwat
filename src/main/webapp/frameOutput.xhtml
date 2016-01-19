@@ -44,15 +44,30 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab title="#{text['frameRelations']}">
-                                <p:dataList var="rel" type="definition" value="#{frame.relations}" emptyMessage="#{text['emptyMessage']}">
-                                    <div style="padding-top: 5px">
-                                        #{rel.key} : <p:commandLink action="#{tabController.addFrame(rel.value.name)}" value="#{rel.value.name}"/>
-                                    </div>
-                                </p:dataList>
+                                <div>
+                                    <p:dataList var="coreSets" value="#{frame.coreSets}" emptyMessage="" type="definition">
+                                        <h:outputText value="#{coreSets}" class="horizontal" style="padding-left: 3px; padding-right: 10px"/>
+                                    </p:dataList>
+                                    <br/>
+                                </div>
+                                <div >
+                                    <p:dataList var="rel" type="definition" value="#{frame.relations}" emptyMessage="#{text['emptyMessage']}">
+                                        <div>
+                                            <div class="Wid20 Fleft OvHidden">
+                                                <h:outputText value="#{rel.key} :"/>
+                                            </div>
+                                            <div class="Wid70 OvHidden">
+                                                <p:dataList var="related" value="#{rel.value}" type="definition">
+                                                    <p:commandLink class="horizontal" action="#{tabController.addFrame(related.name)}" value="#{related.name}" style="padding-left: 3px; padding-right: 10px"/>
+                                                </p:dataList>
+                                            </div>
+                                        </div>
+                                    </p:dataList>
+                                </div>
                             </p:tab>
                             <p:tab title="#{text['lexUnits']}">
                                 <p:dataList var="lexUnit" type="definition" value="#{frame.allLexUnits}" emptyMessage="#{text['emptyMessage']}">
-                                    <p:commandLink class="horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding-left: 3px; padding-right: 10px"/>
+                                    <p:commandLink class="horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding-left: 5px; padding-right: 10px"/>
                                 </p:dataList>
                                 <div class="EmptyBox20"/>
                             </p:tab>

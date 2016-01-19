@@ -40,6 +40,9 @@ public class TabController {
         Hibernate.initialize(mainFrame.getLexUnits());
         Hibernate.initialize(mainFrame.getFrameElements());
         Hibernate.initialize(mainFrame.getFrameRelations1());
+        for (FrameRelation relation : mainFrame.getFrameRelations1()) {
+            Hibernate.initialize(relation.getFerelations());
+        }
         Hibernate.initialize(mainFrame.getFrameRelations2());
         loadedFrames.add(0,new FrameOutput(mainFrame));
         return "frameOutput?faces-redirect=true&i-0&frame=" + name;
