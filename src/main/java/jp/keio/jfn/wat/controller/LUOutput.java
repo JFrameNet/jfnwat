@@ -206,7 +206,7 @@ public class LUOutput {
                         list.add(elementTag);
                     }
                 }
-                sentences.add(new SentenceOutput(list));
+                sentences.add(new SentenceOutput(list, sentence.getText()));
             }
         }
         addColors(sentences, allFE);
@@ -246,10 +246,6 @@ public class LUOutput {
         }
     }
 
-    public List<AnnotationSet> getAnnotations() {
-        return annotations;
-    }
-
     public List<FEGroupRealization> getFeGroupRealizations() {
         return feGroupRealizations;
     }
@@ -260,10 +256,6 @@ public class LUOutput {
 
     public List<SentenceOutput> getSentences() {
         return sentences;
-    }
-
-    public void setAnnotations(List<AnnotationSet> annotations) {
-        this.annotations = annotations;
     }
 
     public void setFeGroupRealizations(List<FEGroupRealization> feGroupRealizations) {

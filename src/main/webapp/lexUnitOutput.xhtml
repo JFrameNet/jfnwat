@@ -54,21 +54,34 @@
                                 </p:dataTable>
                             </p:tab>
                             <p:tab title="#{text['annotation']}">
-                                <p:dataList var="proc" value="#{lu.sentences}" type="definition">
-                                    <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none; margin-bottom: 30px" rowStyleClass="annotation" >
-                                        <p:columns var="tag" value="#{proc.elements}" style="text-align: center; border: none; padding: 0; background-color: transparent">
-                                            <f:facet name="header">
-                                                <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
-                                            </f:facet>
-                                            <div class="bordertop" style="border-top: solid 1px #{tag.color}">
-                                                <h:outputText id="tagBtn" value="#{tag.tag}" style="color: #{tag.color}"/>
-                                                <p:overlayPanel id="imagePanel" for="tagBtn" hideEffect="fade">
-                                                    <h:outputText value="#{tag.frameElement.definition}" style="font-size: smaller" escape="false"/>
-                                                </p:overlayPanel>
-                                            </div>
-                                        </p:columns>
-                                    </p:dataTable>
-                                </p:dataList>
+                                <div>
+                                    <p:dataList var="proc" value="#{lu.sentences}" type="definition">
+                                        <div id="raw#{lu.sentences.indexOf(proc)}">
+                                            <p:commandButton type="button" icon="fa fa-arrows-v Green" onclick="toggle(#{lu.sentences.indexOf(proc)})" style="background-color: transparent"/>
+                                            <h:outputText value="#{proc.text}"/>
+                                        </div>
+                                        <div id="annotated#{lu.sentences.indexOf(proc)}" style="display: none">
+                                            <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none; margin-bottom: 30px" rowStyleClass="annotation" >
+                                                <p:column style="text-align: center; border: none; padding: 0; background-color: transparent">
+                                                    <f:facet name="header">
+                                                        <p:commandButton type="button" icon="fa fa-arrows-v Green" onclick="toggle(#{lu.sentences.indexOf(proc)})" style="background-color: transparent"/>
+                                                    </f:facet>
+                                                </p:column>
+                                                <p:columns var="tag" value="#{proc.elements}" style="text-align: center; border: none; padding: 0; background-color: transparent">
+                                                    <f:facet name="header">
+                                                        <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
+                                                    </f:facet>
+                                                    <div class="bordertop" style="border-top: solid 1px #{tag.color}">
+                                                        <h:outputText id="tagBtn" value="#{tag.tag}" style="color: #{tag.color}"/>
+                                                        <p:overlayPanel id="imagePanel" for="tagBtn" hideEffect="fade">
+                                                            <h:outputText value="#{tag.frameElement.definition}" style="font-size: smaller" escape="false"/>
+                                                        </p:overlayPanel>
+                                                    </div>
+                                                </p:columns>
+                                            </p:dataTable>
+                                        </div>
+                                    </p:dataList>
+                                </div>
                             </p:tab>
                         </p:accordionPanel>
                     </p:tab>

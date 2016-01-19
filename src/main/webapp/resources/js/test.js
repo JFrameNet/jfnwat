@@ -18,3 +18,16 @@ function toggle_login(id) {
         div.style.height = 'auto';
     }
 }
+
+function toggle(rowIndex) {
+    var div = document.getElementById('raw'+rowIndex);
+    var other = document.getElementById('annotated'+rowIndex);
+    if (div.style.display !== 'none') {
+        div.style.display = 'none';
+        other.style.display = 'block';
+    }
+    else {
+        div.style.display = 'block';
+        other.style.display = 'none';
+    }
+}
