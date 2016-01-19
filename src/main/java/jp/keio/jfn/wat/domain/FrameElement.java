@@ -113,7 +113,8 @@ public class FrameElement implements Serializable {
 	}
 
 	public String getDefinition() {
-		return this.definition;
+		String aux = this.definition.replaceAll("<ex>","\t");
+		return aux.replaceAll("\n\n", "\n");
 	}
 
 	public void setDefinition(String definition) {

@@ -95,7 +95,8 @@ public class Frame implements Serializable {
 	}
 
 	public String getDefinition() {
-		return this.definition;
+		String aux = this.definition.replaceAll("\n", "");
+		return aux.replaceAll("<ex>","\n\t");
 	}
 
 	public void setDefinition(String definition) {

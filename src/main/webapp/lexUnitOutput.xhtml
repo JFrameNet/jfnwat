@@ -19,22 +19,22 @@
                         <p:accordionPanel id="output" multiple="true" activeIndex="0,1">
                             <p:tab title="#{text['lexicalEntry']}">
                                 <p:dataTable var="element" value="#{lu.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px; text-align: center"> 
-                                    <p:column headerText="#{text['frameElement']}"> 
+                                    <p:column headerText="#{text['frameElement']}" style="border: solid 1px #C1D5DF"> 
                                         <h:outputText value="#{element.frameElement.name}" /> 
                                     </p:column> 
-                                    <p:column headerText="#{text['numberAnnotated']}"> 
+                                    <p:column headerText="#{text['numberAnnotated']}" style="border: solid 1px #C1D5DF"> 
                                         <h:outputText value="#{element.totalOccurences}" /> 
                                     </p:column> 
-                                    <p:column headerText="#{text['realization']}"> 
+                                    <p:column headerText="#{text['realization']}" style="border: solid 1px #C1D5DF"> 
                                         <p:dataList var="var" value="#{element.patterns}" type="definition" emptyMessage=""> 
                                             <h:outputText value="#{var.valenceUnits.get(0).outputString()}" style="margin-right: 10px"/> 
                                             [<h:outputText value="#{var.annoSet.size()}"/>]
                                         </p:dataList> 
                                     </p:column> 
                                 </p:dataTable>
-                                <p:dataTable var="group" value="#{lu.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px" rowStyleClass=""> 
+                                <p:dataTable var="group" value="#{lu.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px"> 
                                     <p:column headerText="#{text['valencePatterns']}">
-                                        <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto">
+                                        <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" style="border: solid 1px #D9E3E8">
                                             <p:column headerText="#{text['total']} [#{group.totalOccurences}]" style="text-align: center; border: none; background-color: transparent">
                                                 <h:outputText value="#{realization.annoSet.size()}"/>
                                             </p:column>

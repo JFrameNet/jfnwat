@@ -22,8 +22,10 @@
     <ui:define name="indexList">
         <p:scrollPanel mode="native" style="height: 550px; border: none; padding: 0">
             <p:dataList id="list" value="#{lexUnitController.orderedLU}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}">
-                <p:commandLink action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px"/>
-                <h:outputText value="[#{lu.frame}]" style="margin-left: 10px; font-size: smaller"/>
+                <h:form>
+                    <p:commandLink action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false"/>
+                    <h:outputText value="[#{lu.frame}]" style="margin-left: 10px; font-size: smaller"/>
+                </h:form>
             </p:dataList>
         </p:scrollPanel>
     </ui:define>

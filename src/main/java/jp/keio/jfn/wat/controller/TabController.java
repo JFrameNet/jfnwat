@@ -80,12 +80,26 @@ public class TabController {
         }
     }
 
-    public String backToIndex() {
+    public String toFrame() {
+        clear();
+        return "frameIndex?faces-redirect=true&i=0";
+    }
+
+    public String toLexUnit() {
+        clear();
+        return "lexUnitIndex?faces-redirect=true&i=1";
+    }
+
+    public String toDocuments() {
+        clear();
+        return "";
+    }
+
+    private void clear() {
         loadedFrames = new ArrayList<FrameOutput>();
         loadedLUs = new ArrayList<LUOutput>();
         mainFrame = null;
         mainLU = null;
-        return "index?faces-redirect=true";
     }
 
     public List<FrameOutput> getLoadedFrames() {

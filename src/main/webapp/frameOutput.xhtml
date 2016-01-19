@@ -13,25 +13,33 @@
                     <p:scrollPanel id="output" mode="native" style="height: 580px; border: none; padding: 0">
                         <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
                             <p:tab title="#{text['definition']}">
-                                <h:outputText value="#{frame.definition}" escape="false"/>
+                                <h:outputText value="#{frame.definition}" escape="false" style="white-space: pre-wrap; "/>
                             </p:tab>
                             <p:tab title="#{text['frameElements']}">
                                 <p:dataTable var="fe" value="#{frame.coreFrameEl}" emptyMessage="">
-                                    <p:column style="background-color: transparent; border: none; width: 20%" headerText="#{text['core']}">
-                                        <h:outputText value="#{fe.name}"/><br/>
-                                        <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                    <p:column style="background-color: transparent; border: none; width: 20%; vertical-align: top" headerText="#{text['core']}">
+                                        <div class="ContainerIndent">
+                                            <h:outputText value="#{fe.name}" style="margin-right: 10px;"/>
+                                            <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                        </div>
                                     </p:column >
                                     <p:column style="background-color: transparent; border: none">
-                                        <h:outputText value="#{fe.definition}" escape="false"/>
+                                        <div class="ContainerIndent">
+                                            <h:outputText value="#{fe.definition}" escape="false" style="white-space: pre-wrap; "/>
+                                        </div>
                                     </p:column>
                                 </p:dataTable>
                                 <p:dataTable var="fe" value="#{frame.nonCoreFrameEl}" emptyMessage="">
-                                    <p:column style="background-color: transparent; border: none; width: 20%" headerText="#{text['non-core']}">
-                                        <h:outputText value="#{fe.name}"/><br/>
-                                        <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                    <p:column style="background-color: transparent; border: none; width: 20%; vertical-align: top" headerText="#{text['non-core']}">
+                                        <div class="ContainerIndent">
+                                            <h:outputText value="#{fe.name}" style="margin-right: 10px;"/>
+                                            <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                        </div>
                                     </p:column >
                                     <p:column style="background-color: transparent; border: none">
-                                        <h:outputText value="#{fe.definition}" escape="false"/>
+                                        <div class="ContainerIndent">
+                                            <h:outputText value="#{fe.definition}" escape="false" style="white-space: pre-wrap; "/>
+                                        </div>
                                     </p:column>
                                 </p:dataTable>
                             </p:tab>

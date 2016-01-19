@@ -23,7 +23,10 @@
     </ui:define>
     <ui:define name="frame">
         <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}" style="font-size: small">
-            <p:commandLink class="horizontal" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" style="padding: 10px 10px 0px 3px"/>
+            <h:form>
+                <p:commandLink class="horizontal" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" style="padding: 10px 10px 0px 3px" ajax="false"/>
+            </h:form>
+
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">

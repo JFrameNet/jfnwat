@@ -953,7 +953,7 @@ label {
 }
 .ui-datatable table tbody tr td {
   color: #546e7a;
-  border: solid 1px #d9e3e8;
+  border: solid 0px #d9e3e8;
   font-size: 14px;
   font-family: 'latoregular';
   -webkit-transition: all 0.5s ease;
@@ -4977,6 +4977,9 @@ hr.ui-widget-header {
 /*Style For UI CommandLink --------------------------------------------------------------------------------------*/
 .ui-commandlink {
   color: #546E7A !important;
+}
+.ui-commandlink:hover {
+  text-decoration: underline !important;
 }
 /*Style For UI Link --------------------------------------------------------------------------------------*/
 .ui-link {

@@ -176,6 +176,8 @@ public class LUOutput {
                                     }
                                     elementTag.setTag(tag);
                                     elementTag.setFrameElement(label.getLabelType().getFrameElement());
+                                } else {
+                                    elementTag.setColor("#546E7A");
                                 }
                                 list.add(elementTag);
 
@@ -232,13 +234,14 @@ public class LUOutput {
         for (SentenceOutput sentenceOutput : list) {
             for (ElementTag elementTag : sentenceOutput.getElements()) {
                 String tag = elementTag.getTag();
-                if (allFE.contains(tag)) {
-                    elementTag.setColor(colors.get(allFE.indexOf(tag)));
-                } else if (tag.equals("Target")) {
-                    elementTag.setColor("#546E7A");
-                } else {
-                    elementTag.setColor("#F5F5F5");
+                if (elementTag.getColor() == null) {
+                    if (allFE.contains(tag)) {
+                        elementTag.setColor(colors.get(allFE.indexOf(tag)));
+                    } else {
+                        elementTag.setColor("#F5F5F5");
+                    }
                 }
+
             }
         }
     }

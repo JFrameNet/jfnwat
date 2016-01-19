@@ -22,7 +22,9 @@
         <div>
             <p:scrollPanel mode="native" style="height: 600px; border: none; padding: 0">
                 <p:dataList  id="frameList" value="#{frameController.orderedFrames}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
-                    <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px"/>
+                    <h:form>
+                        <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px" ajax="false"/>
+                    </h:form>
                 </p:dataList>
             </p:scrollPanel>
         </div>
