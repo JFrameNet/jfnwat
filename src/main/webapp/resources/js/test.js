@@ -31,3 +31,13 @@ function toggle(rowIndex) {
         other.style.display = 'none';
     }
 }
+
+function displayDef(tag,row) {
+    var div = document.getElementById('def'+row);
+    div.innerHTML = tag;
+    if (div.style.display == 'none'){
+        div.style.display = 'block';
+    } else {
+        div.style.display = 'none';
+    }
+}

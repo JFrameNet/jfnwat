@@ -102,34 +102,36 @@ public class LUOutput {
                 }
             }
             List<Label> labelsFE = layerFE.getLabels();
-            List<Label> labelsPT = layerPT.getLabels();
-            List<Label> labelsGF = layerGF.getLabels();
-            List<FrameElement> groupFE = new ArrayList<FrameElement>();
-            List<LayerTriplet> valenceGroup = new ArrayList<LayerTriplet>();
-            for (Label label : labelsFE) {
-                FrameElement fe = label.getLabelType().getFrameElement();
-                groupFE.add(fe);
-                LayerTriplet valenceUnit = new LayerTriplet(label);
-                if (label.getInstantiationType().getId() == 1) {
-                    int start = label.getStartChar();
-                    int end = label.getEndChar();
-                    for (Label labelPT : labelsPT) {
-                        if ((labelPT.getStartChar() == start) && (labelPT.getEndChar() == end)) {
-                            valenceUnit.setLabelPT(labelPT);
-                            break;
+            if (labelsFE.size() != 0) {
+                List<Label> labelsPT = layerPT.getLabels();
+                List<Label> labelsGF = layerGF.getLabels();
+                List<FrameElement> groupFE = new ArrayList<FrameElement>();
+                List<LayerTriplet> valenceGroup = new ArrayList<LayerTriplet>();
+                for (Label label : labelsFE) {
+                    FrameElement fe = label.getLabelType().getFrameElement();
+                    groupFE.add(fe);
+                    LayerTriplet valenceUnit = new LayerTriplet(label);
+                    if (label.getInstantiationType().getId() == 1) {
+                        int start = label.getStartChar();
+                        int end = label.getEndChar();
+                        for (Label labelPT : labelsPT) {
+                            if ((labelPT.getStartChar() == start) && (labelPT.getEndChar() == end)) {
+                                valenceUnit.setLabelPT(labelPT);
+                                break;
+                            }
+                        }
+                        for (Label labelGF : labelsGF) {
+                            if ((labelGF.getStartChar() == start) && (labelGF.getEndChar() == end)) {
+                                valenceUnit.setLabelGF(labelGF);
+                                break;
+                            }
                         }
                     }
-                    for (Label labelGF : labelsGF) {
-                        if ((labelGF.getStartChar() == start) && (labelGF.getEndChar() == end)) {
-                            valenceUnit.setLabelGF(labelGF);
-                            break;
-                        }
-                    }
+                    valenceGroup.add(valenceUnit);
+                    findFrameElements(annoSet, fe, valenceUnit);
                 }
-                valenceGroup.add(valenceUnit);
-                findFrameElements(annoSet, fe, valenceUnit);
+                findGroupRealizations(annoSet, groupFE, valenceGroup);
             }
-            findGroupRealizations(annoSet, groupFE, valenceGroup);
         }
     }
 

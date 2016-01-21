@@ -16,7 +16,7 @@
                             <h:outputText value="#{text['frame']} : "/>
                             <p:commandLink action="#{tabController.addFrame(lu.lightLU.frame)}" value="#{lu.lightLU.frame}"/>
                         </div>
-                        <p:accordionPanel id="output" multiple="true" activeIndex="0,1">
+                        <p:accordionPanel id="output" multiple="true" activeIndex="0,1,2">
                             <p:tab title="#{text['lexicalEntry']}">
                                 <p:dataTable var="element" value="#{lu.feRealizations}" emptyMessage="" style="padding-top: 10px; padding-bottom: 10px; text-align: center"> 
                                     <p:column headerText="#{text['frameElement']}" style="border: solid 1px #C1D5DF"> 
@@ -32,8 +32,10 @@
                                         </p:dataList> 
                                     </p:column> 
                                 </p:dataTable>
-                                <p:dataTable var="group" value="#{lu.feGroupRealizations}" emptyMessage="" style="padding-top: 15px; padding-bottom: 10px"> 
-                                    <p:column headerText="#{text['valencePatterns']}">
+                            </p:tab>
+                            <p:tab title="#{text['valencePatterns']}">
+                                <p:dataTable var="group" value="#{lu.feGroupRealizations}" emptyMessage="" style="padding-bottom: 10px">
+                                    <p:column style="background-color: transparent; border: none">
                                         <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" style="border: solid 1px #D9E3E8">
                                             <p:column headerText="#{text['total']} [#{group.totalOccurences}]" style="text-align: center; border: none; background-color: transparent">
                                                 <h:outputText value="#{realization.annoSet.size()}"/>
@@ -61,8 +63,8 @@
                                             <h:outputText value="#{proc.text}"/>
                                         </div>
                                         <div id="annotated#{lu.sentences.indexOf(proc)}" style="display: none">
-                                            <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none; margin-bottom: 30px" rowStyleClass="annotation" >
-                                                <p:column style="text-align: center; border: none; padding: 0; background-color: transparent">
+                                            <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation">
+                                            <p:column style="text-align: center; border: none; padding: 0; background-color: transparent">
                                                     <f:facet name="header">
                                                         <p:commandButton type="button" icon="fa fa-arrows-v Green" onclick="toggle(#{lu.sentences.indexOf(proc)})" style="background-color: transparent"/>
                                                     </f:facet>
@@ -72,13 +74,15 @@
                                                         <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
                                                     </f:facet>
                                                     <div class="bordertop" style="border-top: solid 1px #{tag.color}">
-                                                        <h:outputText id="tagBtn" value="#{tag.tag}" style="color: #{tag.color}"/>
-                                                        <p:overlayPanel id="imagePanel" for="tagBtn" hideEffect="fade">
-                                                            <h:outputText value="#{tag.frameElement.definition}" style="font-size: smaller" escape="false"/>
-                                                        </p:overlayPanel>
+                                                        <p:commandButton type="button" value="#{tag.tag}" onclick="displayDef('#{tag.frameElement.definition}',#{lu.sentences.indexOf(proc)})" style="background-color: transparent; color: #{tag.color}"/>
                                                     </div>
                                                 </p:columns>
                                             </p:dataTable>
+                                            <div id="def#{lu.sentences.indexOf(proc)}" style="display: none; text-align:center; vertical-align: top; background-color: #F5F5F5">
+                                                <h:outputText value="" escape="false"/>
+                                            </div>
+                                            <div class="EmptyBox30"/>
+
                                         </div>
                                     </p:dataList>
                                 </div>
