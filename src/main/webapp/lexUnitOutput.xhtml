@@ -8,7 +8,7 @@
     <ui:define name="lexUnitOutput">
         <div class="ContainerIndent">
             <h:form>
-                <p:tabView value="#{tabController.loadedLUs}" var="lu" dynamic="false" cache="true" style="border: none">
+                <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" style="border: none">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}" update="output"/>
                     <p:tab title="#{lu.lightLU.name}" closable="true">
                         <div class="ContainerIndent">
@@ -63,27 +63,24 @@
                                             <h:outputText value="#{proc.text}"/>
                                         </div>
                                         <div id="annotated#{lu.sentences.indexOf(proc)}" style="display: none">
-                                            <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation">
-                                            <p:column style="text-align: center; border: none; padding: 0; background-color: transparent">
-                                                    <f:facet name="header">
-                                                        <p:commandButton type="button" icon="fa fa-arrows-v Green" onclick="toggle(#{lu.sentences.indexOf(proc)})" style="background-color: transparent"/>
-                                                    </f:facet>
-                                                </p:column>
-                                                <p:columns var="tag" value="#{proc.elements}" style="text-align: center; border: none; padding: 0; background-color: transparent">
-                                                    <f:facet name="header">
-                                                        <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
-                                                    </f:facet>
-                                                    <div class="bordertop" style="border-top: solid 1px #{tag.color}">
-                                                        <p:commandButton type="button" value="#{tag.tag}" onclick="displayDef('#{tag.frameElement.definition}',#{lu.sentences.indexOf(proc)})" style="background-color: transparent; color: #{tag.color}"/>
-                                                    </div>
-                                                </p:columns>
-                                            </p:dataTable>
-                                            <div id="def#{lu.sentences.indexOf(proc)}" style="display: none; text-align:center; vertical-align: top; background-color: #F5F5F5">
+                                            <p:commandButton class="horizontal" type="button" icon="fa fa-arrows-v Green" onclick="toggle(#{lu.sentences.indexOf(proc)})" style="background-color: transparent"/>
+                                            <p:dataList value="#{proc.elements}" var="line" type="definition">
+                                                <p:dataTable var="output" value="" tableStyle="width:auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation">
+                                                    <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent">
+                                                        <f:facet name="header">
+                                                            <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap"/>
+                                                        </f:facet>
+                                                        <div class="bordertop" style="border-top: solid 1px #{tag.color}">
+                                                            <p:commandLink value="#{tag.tag}" onclick="displayDef('#{tag.frameElement.definition}',#{lu.sentences.indexOf(proc)})" style="color: #{tag.color} !important"/>
+                                                        </div>
+                                                    </p:columns>
+                                                </p:dataTable>
+                                            </p:dataList>
+                                            <div id="def#{lu.sentences.indexOf(proc)}" style="display: none; text-align:center; vertical-align: top; border: solid 1px #C1D5DF;">
                                                 <h:outputText value="" escape="false"/>
                                             </div>
-                                            <div class="EmptyBox30"/>
-
                                         </div>
+                                        <div class="EmptyBox20"/>
                                     </p:dataList>
                                 </div>
                             </p:tab>

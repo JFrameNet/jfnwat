@@ -28,6 +28,8 @@ public class TabController {
 
     private Frame mainFrame;
 
+    private int index = 0;
+
     @Autowired
     FrameRepository frameRepository;
 
@@ -44,7 +46,8 @@ public class TabController {
             Hibernate.initialize(relation.getFerelations());
         }
         Hibernate.initialize(mainFrame.getFrameRelations2());
-        loadedFrames.add(0,new FrameOutput(mainFrame));
+        loadedFrames.add(new FrameOutput(mainFrame));
+        index = loadedFrames.size() -1;
         return "frameOutput?faces-redirect=true&i-0&frame=" + name;
     }
 
@@ -59,7 +62,8 @@ public class TabController {
                 Hibernate.initialize(layer.getLabels());
             }
         }
-        loadedLUs.add(0, new LUOutput(mainLU));
+        loadedLUs.add(new LUOutput(mainLU));
+        index = loadedLUs.size() -1;
         return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
     }
 
@@ -112,5 +116,13 @@ public class TabController {
 
     public List<LUOutput> getLoadedLUs() {
         return loadedLUs;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

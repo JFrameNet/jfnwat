@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,18 +8,22 @@ import java.util.List;
  */
 public class SentenceOutput {
 
-    private List<ElementTag> elements;
+    private List<List<ElementTag>> elements;
 
-    public SentenceOutput(List<ElementTag> list, String text) {
+    private String text;
+
+    public SentenceOutput(List<List<ElementTag>> list, String text) {
         this.elements = list;
         this.text = text;
     }
 
-    public List<ElementTag> getElements () {
-        return elements;
+    public void newLine (List<ElementTag> list) {
+        this.elements.add(list);
     }
 
-    private String text;
+    public List<List<ElementTag>> getElements() {
+        return elements;
+    }
 
     public String getText() {
         return text;

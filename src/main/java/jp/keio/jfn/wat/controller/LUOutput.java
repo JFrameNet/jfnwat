@@ -136,10 +136,8 @@ public class LUOutput {
     }
 
     public void processSentences () {
-        List<SentenceOutput> sentences = new ArrayList<SentenceOutput>();
         List<String> allFE = new ArrayList<String>();
         for (AnnotationSet annoSet : this.annotations) {
-            Sentence sentence = annoSet.getSentence();
             Layer layerFE = null;
             Layer layerTarget = null;
             for (Layer layer : annoSet.getLayers()){
@@ -152,67 +150,123 @@ public class LUOutput {
                     break;
                 }
             }
-            List<ElementTag> list = new ArrayList<ElementTag>();
             if (layerFE != null) {
                 List<Label> allLabels = layerFE.getLabels();
                 allLabels.addAll(layerTarget.getLabels());
-                int imin = 0;
-                int iaux = 0;
-                int imax = sentence.getText().length();
-
-                while (imin < imax) {
-                    for (Label label : allLabels) {
-                        if (label.getInstantiationType().getId() == 1){
-                            if (imin == label.getStartChar()) {
-                                if (imin > iaux) {
-                                    String wordEmpty = sentence.getText().substring(iaux, imin);
-                                    list.add(new ElementTag(wordEmpty, ""));
-                                }
-                                String word = sentence.getText().substring(label.getStartChar(), label.getEndChar() + 1);
-                                String tag = "Target";
-                                ElementTag elementTag = new ElementTag(word, tag);
-                                if (label.getLabelType().getLayerType().getId() == 1) {
-                                    tag = label.getLabelType().getFrameElement().getName();
-                                    if (! allFE.contains(tag)) {
-                                        allFE.add(tag);
-                                    }
-                                    elementTag.setTag(tag);
-                                    elementTag.setFrameElement(label.getLabelType().getFrameElement());
-                                } else {
-                                    elementTag.setColor("#546E7A");
-                                }
-                                list.add(elementTag);
-
-                                imin = label.getEndChar();
-                                iaux = imin + 1;
-                                break;
-                            }
-                        }
-                    }
-                    imin ++;
-
-                }
-                if (imin > iaux) {
-                    String wordEmpty = sentence.getText().substring(iaux, imin);
-                    list.add(new ElementTag(wordEmpty, ""));
-                }
-                for (Label label : allLabels) {
-                    if (label.getInstantiationType().getId() != 1) {
-                        String word = label.getInstantiationType().getName();
-                        FrameElement el = label.getLabelType().getFrameElement();
-                        ElementTag elementTag = new ElementTag(word, el.getName());
-                        elementTag.setFrameElement(el);
-                        if (! allFE.contains(el.getName())) {
-                            allFE.add(el.getName());
-                        }
-                        list.add(elementTag);
-                    }
-                }
-                sentences.add(new SentenceOutput(list, sentence.getText()));
+                auxFun(annoSet, allFE, allLabels);
             }
         }
         addColors(sentences, allFE);
-        this.sentences = sentences;
+    }
+
+    private void auxFun (AnnotationSet annoSet, List<String> allFE, List<Label> allLabels) {
+        Sentence sentence = annoSet.getSentence();
+        List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
+        int rank = 0;
+        int breakLine = 70;
+        int imin = 0;
+        int iaux =0;
+        Label newStart = null;
+        int imax = sentence.getText().length();
+        List<ElementTag> line;
+
+        while (imin + rank*breakLine < imax) {
+            line = new ArrayList<ElementTag>();
+            if (newStart != null) {
+                int offset = (rank == 1) ? 5 : 0;
+                String word = sentence.getText().substring(rank*breakLine - offset, newStart.getEndChar() + 1);
+                String tag = "Target";
+                ElementTag elementTag = new ElementTag(word, tag);
+                if (newStart.getLabelType().getLayerType().getId() == 1) {
+                    elementTag.setTag(newStart.getLabelType().getFrameElement().getName());
+                    elementTag.setFrameElement(newStart.getLabelType().getFrameElement());
+                } else {
+                    elementTag.setColor("#546E7A");
+                }
+                line.add(elementTag);
+                imin = newStart.getEndChar() - rank*breakLine + offset;
+                iaux = imin;
+                newStart = null;
+            }
+            while ((imin + rank*breakLine < imax)&& (imin < breakLine)) {
+                for (Label label : allLabels) {
+                    if (label.getInstantiationType().getId() == 1){
+                        if (imin + rank*breakLine == label.getStartChar()) {
+                            if (imin > iaux) {
+                                String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imin + rank*breakLine);
+                                line.add(new ElementTag(wordEmpty, ""));
+                            }
+                            int border = label.getEndChar() + 1;
+                            if (border > (rank +1)*breakLine) {
+                                border = (rank +1)*breakLine;
+                                newStart =  label;
+                            }
+                            String word = sentence.getText().substring(label.getStartChar(), border);
+                            String tag = "Target";
+                            ElementTag elementTag = new ElementTag(word, tag);
+                            if (label.getLabelType().getLayerType().getId() == 1) {
+                                tag = label.getLabelType().getFrameElement().getName();
+                                if (! allFE.contains(tag)) {
+                                    allFE.add(tag);
+                                }
+                                elementTag.setTag(tag);
+                                elementTag.setFrameElement(label.getLabelType().getFrameElement());
+                            } else {
+                                elementTag.setColor("#546E7A");
+                            }
+                            line.add(elementTag);
+
+                            imin = border - 1 - rank*breakLine;
+                            iaux = imin + 1;
+                            break;
+                        }
+                    }
+                }
+                imin ++;
+            }
+            if (imin > iaux) {
+                if (imin + rank*breakLine < imax) {
+                    String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imin + rank*breakLine);
+                    line.add(new ElementTag(wordEmpty, ""));
+                } else {
+                    String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imax);
+                    line.add(new ElementTag(wordEmpty, ""));
+                }
+
+            }
+            list.add(line);
+            if (rank == 0) {
+                breakLine += 5;
+            }
+            rank ++;
+            imin = 0;
+            iaux = 0;
+        }
+        for (Label label : allLabels) {
+            if (label.getInstantiationType().getId() != 1) {
+                String word = label.getInstantiationType().getName();
+                FrameElement el = label.getLabelType().getFrameElement();
+                ElementTag elementTag = new ElementTag(word, el.getName());
+                elementTag.setFrameElement(el);
+                if (! allFE.contains(el.getName())) {
+                    allFE.add(el.getName());
+                }
+                List<ElementTag> lastLine = list.get(list.size() -1);
+                int size = 0;
+                for (ElementTag elementTag1 : lastLine) {
+                    size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
+                }
+                if (size < breakLine - Math.max(word.length(), el.getName().length()/2)) {
+                    list.get(list.size() -1).add(elementTag);
+                } else {
+                    List<ElementTag> newLine = new ArrayList<ElementTag>();
+                    newLine.add(elementTag);
+                    list.add(newLine);
+                }
+
+            }
+        }
+        sentences.add(new SentenceOutput(list, sentence.getText()));
     }
 
     private void addColors (List<SentenceOutput> list, List<String> allFE) {
@@ -234,17 +288,20 @@ public class LUOutput {
         colors.add("firebrick");
 
         for (SentenceOutput sentenceOutput : list) {
-            for (ElementTag elementTag : sentenceOutput.getElements()) {
-                String tag = elementTag.getTag();
-                if (elementTag.getColor() == null) {
-                    if (allFE.contains(tag)) {
-                        elementTag.setColor(colors.get(allFE.indexOf(tag)));
-                    } else {
-                        elementTag.setColor("#F5F5F5");
+            for (List<ElementTag> elementTagList : sentenceOutput.getElements()) {
+                for (ElementTag elementTag : elementTagList) {
+                    String tag = elementTag.getTag();
+                    if (elementTag.getColor() == null) {
+                        if (allFE.contains(tag)) {
+                            elementTag.setColor(colors.get(allFE.indexOf(tag)));
+                        } else {
+                            elementTag.setColor("#F5F5F5");
+                        }
                     }
-                }
 
+                }
             }
+
         }
     }
 
