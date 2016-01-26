@@ -63,8 +63,8 @@ body {
 .searchBar {
   width: 450px !important;
 }
-.ui-accordion .ui-accordion-header .ui-icon {
-  display: none;
+.ui-lightbox-content {
+  background-color: #FFFFFF !important;
 }
 .ui-accordion .ui-accordion-content {
   overflow: visible !important;
@@ -74,6 +74,15 @@ body {
 }
 .annotation {
   background-color: #F5F5F5 !important;
+}
+.myTestClass {
+  background-color: transparent!important;
+}
+.display-sent {
+  background-color: transparent!important;
+}
+.hide-column-names table thead tr {
+  display: none;
 }
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */

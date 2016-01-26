@@ -32,12 +32,53 @@ function toggle(rowIndex) {
     }
 }
 
+function toggleGroup(groupIndex, rowIndex) {
+    var div = document.getElementById('raw'+groupIndex+rowIndex);
+    var other = document.getElementById('annotated'+groupIndex+rowIndex);
+    if (div.style.display !== 'none') {
+        div.style.display = 'none';
+        other.style.display = 'block';
+    }
+    else {
+        div.style.display = 'block';
+        other.style.display = 'none';
+    }
+}
+
 function displayDef(tag,row) {
     var div = document.getElementById('def'+row);
     div.innerHTML = tag;
-    if (div.style.display == 'none'){
-        div.style.display = 'block';
-    } else {
+    div.style.display = 'block';
+}
+
+function displayDefGroup(tag,group,row) {
+    var div = document.getElementById('def'+group+row);
+    div.innerHTML = tag;
+    div.style.display = 'block';
+}
+
+function hideMe(row) {
+    var div = document.getElementById('def'+row);
+    div.style.display = 'none';
+}
+
+function displayAnnotation (group)  {
+    var div = document.getElementById('annotation-group'+group);
+    if (div.style.display !== 'none') {
         div.style.display = 'none';
     }
+    else {
+        div.style.display = 'block';
+    }
+}
+
+$(document).click(function(e){
+
+    if (e.target.id.contains('modal')) {
+        PF('dlg').hide();
+    }
+});
+
+function hideFilter(div){
+    div.display = 'none';
 }

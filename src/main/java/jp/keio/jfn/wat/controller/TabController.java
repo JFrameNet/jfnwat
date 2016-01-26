@@ -30,6 +30,9 @@ public class TabController {
 
     private int index = 0;
 
+    private List<LightLU> lightLUs = new ArrayList<LightLU>();
+    private List<String> frameName = new ArrayList<String>();
+
     @Autowired
     FrameRepository frameRepository;
 
@@ -89,12 +92,12 @@ public class TabController {
 
     public String toFrame() {
         clear();
-        return "frameIndex?faces-redirect=true&i=0";
+        return "frameOutput?faces-redirect=true&i=0";
     }
 
     public String toLexUnit() {
         clear();
-        return "lexUnitIndex?faces-redirect=true&i=1";
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     public String toDocuments() {
@@ -124,5 +127,25 @@ public class TabController {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public List<LightLU> getLightLUs() {
+        if (lightLUs.isEmpty()) {
+            for (LexUnit lu : lexUnitRepository.findAll()) {
+                lightLUs.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+            }
+        }
+        return lightLUs;
+    }
+
+    public List<String> getFrameName() {
+        if (frameName.isEmpty()) {
+            for (Frame frame : frameRepository.findAll()) {
+                frameName.add(frame.getName());
+            }
+
+        }
+        Collections.sort(frameName);
+        return frameName;
     }
 }

@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.controller;
 
+import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.FrameElement;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class FERealization {
         patterns.add(patternEntry);
 
     }
+
+    private List<AnnotationSet> allAnnotations = new ArrayList<AnnotationSet>();
 
     public int getTotalOccurences () {
         int result = 0;
@@ -47,5 +50,13 @@ public class FERealization {
 
     public void setPatterns(List<PatternEntry> list) {
         patterns = list;
+    }
+
+    public List<AnnotationSet> getAllAnnotations() {
+        allAnnotations = new ArrayList<AnnotationSet>();
+        for (PatternEntry patternEntry : patterns) {
+            allAnnotations.addAll(patternEntry.getAnnoSet());
+        }
+        return allAnnotations;
     }
 }

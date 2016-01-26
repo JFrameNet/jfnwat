@@ -21,9 +21,11 @@
     <ui:define name="indexList">
         <div>
             <p:scrollPanel mode="native" style="height: 600px; border: none; padding: 0">
-                <p:dataList  id="frameList" value="#{frameController.orderedFrames}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
+                <p:dataList  id="frameList" value="#{tabController.frameName}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
                     <h:form>
-                        <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px" ajax="false"/>
+                        <p:commandLink global="false" action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px">
+                            <f:ajax execute="@form" render="form2"/>
+                        </p:commandLink>
                     </h:form>
                 </p:dataList>
             </p:scrollPanel>
@@ -31,7 +33,9 @@
     </ui:define>
 
     <ui:define name="indexOutput">
-        <ui:insert name="frameOutput"/>
+            <h:form id="form2">
+                <ui:insert id="output-index" name="frameOutput"/>
+            </h:form>
     </ui:define>
 
 </ui:composition>

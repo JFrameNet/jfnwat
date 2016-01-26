@@ -20,10 +20,12 @@
     </ui:define>
 
     <ui:define name="indexList">
-        <p:scrollPanel mode="native" style="height: 550px; border: none; padding: 0">
-            <p:dataList id="list" value="#{lexUnitController.orderedLU}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}">
+        <p:scrollPanel mode="native" style="border: none; padding: 0">
+            <p:dataList id="list" value="#{tabController.lightLUs}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}" lazy="true">
                 <h:form>
-                    <p:commandLink action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false"/>
+                    <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false">
+                        <f:ajax execute="@form" render="form2"/>
+                    </p:commandLink>
                     <h:outputText value="[#{lu.frame}]" style="margin-left: 10px; font-size: smaller"/>
                 </h:form>
             </p:dataList>
@@ -31,7 +33,9 @@
     </ui:define>
 
     <ui:define name="indexOutput">
-        <ui:insert name="lexUnitOutput"/>
+        <h:form id="form2">
+            <ui:insert id="output" name="lexUnitOutput"/>
+        </h:form>
     </ui:define>
-
+ac
 </ui:composition>

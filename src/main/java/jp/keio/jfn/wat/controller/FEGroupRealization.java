@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.controller;
 
+import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.FrameElement;
 
 import java.util.ArrayList;
@@ -63,5 +64,13 @@ public class FEGroupRealization {
 
     public void setPatterns(List<PatternEntry> list) {
         patterns = list;
+    }
+
+    public List<AnnotationSet> getAllAnnotations() {
+        List<AnnotationSet> allAnnotations = new ArrayList<AnnotationSet>();
+        for (PatternEntry patternEntry : patterns) {
+            allAnnotations.addAll(patternEntry.getAnnoSet());
+        }
+        return allAnnotations;
     }
 }

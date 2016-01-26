@@ -12,7 +12,10 @@ public class SentenceOutput {
 
     private String text;
 
-    public SentenceOutput(List<List<ElementTag>> list, String text) {
+    private int id;
+
+    public SentenceOutput(int index, List<List<ElementTag>> list, String text) {
+        this.id = index;
         this.elements = list;
         this.text = text;
     }
@@ -27,5 +30,9 @@ public class SentenceOutput {
 
     public String getText() {
         return text;
+    }
+
+    public int getId() {
+        return id;
     }
 }

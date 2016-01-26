@@ -10,7 +10,9 @@ import java.util.List;
  */
 public class LUOutput {
 
-    private List<FERealization> feRealizations = new ArrayList<FERealization>();
+    private List<FERealization> feCoreRealizations = new ArrayList<FERealization>();
+
+    private List<FERealization> feNonCoreRealizations = new ArrayList<FERealization>();
 
     private List<FEGroupRealization> feGroupRealizations = new ArrayList<FEGroupRealization>();
 
@@ -24,7 +26,7 @@ public class LUOutput {
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
         this.annotations = lexUnit.getAnnotationSets();
         findRealizations();
-        processSentences();
+//        this.sentences = processSentences(this.annotations, 68, true);
     }
 
     public void findFrameElements (AnnotationSet annotationSet, FrameElement fe, LayerTriplet valenceUnit) {
@@ -34,7 +36,8 @@ public class LUOutput {
         newPattern.setValenceUnits(unit);
         newPattern.addOccurence(annotationSet);
         boolean insert = true;
-        for (FERealization realization : this.feRealizations) {
+        List<FERealization> list = fe.getType().equals("Core") ? this.feCoreRealizations : this.feNonCoreRealizations;
+        for (FERealization realization : list) {
             if (realization.getFrameElement().getId() == fe.getId()) {
                 insert = false;
                 boolean insertPattern = true;
@@ -51,7 +54,7 @@ public class LUOutput {
             }
         }
         if (insert) {
-            this.feRealizations.add(new FERealization(fe, newPattern));
+            list.add(new FERealization(fe, newPattern));
         }
     }
 
@@ -135,9 +138,11 @@ public class LUOutput {
         }
     }
 
-    public void processSentences () {
+
+    public List<SentenceOutput> processSentences (List<AnnotationSet> annotationSetList, int breakLine, boolean btn) {
         List<String> allFE = new ArrayList<String>();
-        for (AnnotationSet annoSet : this.annotations) {
+        List<SentenceOutput> result = new ArrayList<SentenceOutput>();
+        for (AnnotationSet annoSet : annotationSetList) {
             Layer layerFE = null;
             Layer layerTarget = null;
             for (Layer layer : annoSet.getLayers()){
@@ -153,27 +158,26 @@ public class LUOutput {
             if (layerFE != null) {
                 List<Label> allLabels = layerFE.getLabels();
                 allLabels.addAll(layerTarget.getLabels());
-                auxFun(annoSet, allFE, allLabels);
+                auxFun(result, annoSet, allFE, allLabels, breakLine, btn);
             }
         }
-        addColors(sentences, allFE);
+        addColors(result, allFE);
+        return result;
     }
 
-    private void auxFun (AnnotationSet annoSet, List<String> allFE, List<Label> allLabels) {
+    private void auxFun (List<SentenceOutput> sentenceOutputs, AnnotationSet annoSet, List<String> allFE, List<Label> allLabels, int breakLine, boolean btn) {
         Sentence sentence = annoSet.getSentence();
         List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
         int rank = 0;
-        int breakLine = 70;
         int imin = 0;
         int iaux =0;
         Label newStart = null;
         int imax = sentence.getText().length();
         List<ElementTag> line;
-
         while (imin + rank*breakLine < imax) {
             line = new ArrayList<ElementTag>();
             if (newStart != null) {
-                int offset = (rank == 1) ? 5 : 0;
+                int offset = (btn && (rank == 1)) ? 5 : 0;
                 String word = sentence.getText().substring(rank*breakLine - offset, newStart.getEndChar() + 1);
                 String tag = "Target";
                 ElementTag elementTag = new ElementTag(word, tag);
@@ -232,7 +236,6 @@ public class LUOutput {
                     String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imax);
                     line.add(new ElementTag(wordEmpty, ""));
                 }
-
             }
             list.add(line);
             if (rank == 0) {
@@ -266,7 +269,18 @@ public class LUOutput {
 
             }
         }
-        sentences.add(new SentenceOutput(list, sentence.getText()));
+        List<ElementTag> lastLine = list.get(list.size() -1);
+        int size = 0;
+        for (ElementTag elementTag1 : lastLine) {
+            size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
+        }
+        int complete = breakLine - size;
+        String space = "&#160;&#160;&#160;&#160;";
+        for (int x = 0; x < complete; x ++ ) {
+            space = space.concat("&#160;&#160;&#160;&#160;");
+        }
+        lastLine.add(new ElementTag(space, ""));
+        sentenceOutputs.add(new SentenceOutput(sentenceOutputs.size(),list, sentence.getText()));
     }
 
     private void addColors (List<SentenceOutput> list, List<String> allFE) {
@@ -309,8 +323,12 @@ public class LUOutput {
         return feGroupRealizations;
     }
 
-    public List<FERealization> getFeRealizations() {
-        return feRealizations;
+    public List<FERealization> getFeCoreRealizations() {
+        return feCoreRealizations;
+    }
+
+    public List<FERealization> getFeNonCoreRealizations() {
+        return feNonCoreRealizations;
     }
 
     public List<SentenceOutput> getSentences() {
@@ -321,8 +339,12 @@ public class LUOutput {
         this.feGroupRealizations = feGroupRealizations;
     }
 
-    public void setFeRealizations(List<FERealization> feRealizations) {
-        this.feRealizations = feRealizations;
+    public void setFeCorRealizations(List<FERealization> feRealizations) {
+        this.feCoreRealizations = feRealizations;
+    }
+
+    public void setFeNonCoreRealizations(List<FERealization> feRealizations) {
+        this.feNonCoreRealizations = feRealizations;
     }
 
     public void setSentences(List<SentenceOutput> sentences) {
@@ -331,5 +353,12 @@ public class LUOutput {
 
     public LightLU getLightLU() {
         return lightLU;
+    }
+
+    public List<FERealization> getAllFERealizations () {
+        List<FERealization> list = new ArrayList<FERealization>();
+        list.addAll(feCoreRealizations);
+        list.addAll(feNonCoreRealizations);
+        return list;
     }
 }

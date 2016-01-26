@@ -22,7 +22,7 @@ public class LayerTriplet {
 
             return pt + "." + gf;
         } else {
-            return labelFE.getInstantiationType().getName() + ".--";
+            return labelFE.getInstantiationType().getName();
         }
 
     }

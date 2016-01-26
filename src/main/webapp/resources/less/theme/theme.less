@@ -935,9 +935,12 @@ hr.ui-widget-header{background-color: #E5EBF0; border-width:0px;}
     .ui-accordion-header{border-radius:0px; -webkit-border-radius:0px; -moz-border-radius:0px; font-size:@accordionpanel-tab-header-font-size !important; color:@accordionpanel-tab-header-color; background-color:@accordionpanel-tab-header-bg-color;
                          padding:13px 5px 13px 30px !important; margin-bottom:1px !important; font-weight:normal !important; font-family:'latoregular';}
     .ui-accordion .ui-accordion-header.ui-state-hover, .ui-accordion .ui-accordion-header.ui-state-active{background-color:@accordionpanel-tab-header-bg-color-hover-active; color:@accordionpanel-tab-header-color-hover-active;}
-        .ui-accordion-header
-        .ui-accordion-header
-    .ui-accordion-content{padding:5px!important; font-size:@accordionpanel-tab-content-font-size !important; color:@accordionpanel-tab-content-color;}
+        .ui-accordion-header .ui-icon-triangle-1-s{background-image:url("#{resource['primefaces-adamantium:images/downarrow.svg']}"); background-position: center !important;
+                          background-repeat: no-repeat; background-size: 110%;}
+        .ui-accordion-header .ui-icon-triangle-1-e{background-image:url("#{resource['primefaces-adamantium:images/right-arrow.svg']}"); background-position: center !important;
+                          background-repeat: no-repeat; background-size: 100%;}
+
+.ui-accordion-content{padding:5px!important; font-size:@accordionpanel-tab-content-font-size !important; color:@accordionpanel-tab-content-color;}
     
 
 /*Style For UI PanelGrid --------------------------------------------------------------------------------------*/
@@ -1983,7 +1986,7 @@ color: #fff; border-radius: 3px; -webkit-border-radius: 3px; -moz-border-radius:
 
 /*Style For UI LayoutContainer --------------------------------------------------------------------------------------*/
 
-.ui-layout-container .ui-layout-unit{border: solid 1px @layout-unit-border-color; background-color:@layout-unit-bg-color; color:@layout-unit-color; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px;
+.ui-layout-container .ui-layout-unit{background-color:@layout-unit-bg-color; color:@layout-unit-color; border-radius:2px; -webkit-border-radius:2px; -moz-border-radius:2px;
         font-family: 'latoregular';}
 
 

@@ -45,7 +45,7 @@ public class LexUnit implements Serializable {
 	private FrameElement frameElement;
 
 	//bi-directional many-to-one association to Lemma
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="Lemma_Ref")
 	private Lemma lemma;
 
