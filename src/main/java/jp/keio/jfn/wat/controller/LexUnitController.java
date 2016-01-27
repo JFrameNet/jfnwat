@@ -27,15 +27,8 @@ public class LexUnitController implements Serializable {
 
     private LazyDataModel<LightLU> model;
 
-//    private List<AnnotationSet> annotationSetsDialog = new ArrayList<AnnotationSet>();
-
     private List<LightLU> orderedLU = new ArrayList<LightLU>();
 
-    private List<String> selectedEl = new ArrayList<String>();
-
-    private List<FEGroupRealization> valencePatterns = new ArrayList<FEGroupRealization>();
-
-    private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
 
     public void orderLU () {
         List<LightLU> allLU= new ArrayList<LightLU>();
@@ -76,34 +69,56 @@ public class LexUnitController implements Serializable {
                 ||(query.toLowerCase().contains(name.toLowerCase())));
     }
 
-    public List<SentenceOutput> showAnnotation () {
-        return selectedSentences;
+    public List<SentenceOutput> showAnnotation (LUOutput lu) {
+        return lu.getSelectedSentences();
     }
 
 
     public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
-        selectedSentences.addAll(lu.processSentences(patternEntry.getAnnoSet(), 78, false));
+        for (SentenceOutput sentence : lu.processSentences(patternEntry.getAnnoSet(), 75, false)) {
+            boolean insert = true;
+            for (SentenceOutput in : lu.getSelectedSentences()) {
+                if (sentence.getText().equals(in.getText())) {
+                    insert = false;
+                    break;
+                }
+            }
+            if (insert) {
+                lu.getSelectedSentences().add(sentence);
+            }
+        }
     }
 
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
-        selectedSentences.addAll(lu.processSentences(group.getAllAnnotations(), 78, false));
+        for (SentenceOutput sentence : lu.processSentences(group.getAllAnnotations(), 75, false)) {
+            boolean insert = true;
+            for (SentenceOutput in : lu.getSelectedSentences()) {
+                if (sentence.getText().equals(in.getText())) {
+                    insert = false;
+                    break;
+                }
+            }
+            if (insert) {
+                lu.getSelectedSentences().add(sentence);
+            }
+        }
     }
 
-    public void removeSentence (SentenceOutput sentenceOutput) {
-        selectedSentences.remove(sentenceOutput);
+    public void removeSentence (LUOutput lu, SentenceOutput sentenceOutput) {
+        lu.getSelectedSentences().remove(sentenceOutput);
     }
 
 
     private void filterValencePatterns (LUOutput lu) {
         List<FEGroupRealization> result = new ArrayList<FEGroupRealization>();
-        if (selectedEl.contains("All")) {
-            valencePatterns = sortGroupRealizations(lu.getFeGroupRealizations());
+        if (lu.getSelectedEl().contains("All")) {
+            lu.setValencePatterns(sortGroupRealizations(lu.getFeGroupRealizations()));
             return;
         }
         for (FEGroupRealization group : lu.getFeGroupRealizations()) {
             boolean in = false;
             for (FrameElement frameElement : group.getFrameElements()) {
-                if ((selectedEl.contains(frameElement.getType()))||(selectedEl.contains("Non-Core")&&(!frameElement.getType().equals("Core")))||(selectedEl.contains(frameElement.getName()))) {
+                if ((lu.getSelectedEl().contains(frameElement.getType()))||(lu.getSelectedEl().contains("Non-Core")&&(!frameElement.getType().equals("Core")))||(lu.getSelectedEl().contains(frameElement.getName()))) {
                     result.add(group);
                     in = true;
                     break;
@@ -114,7 +129,7 @@ public class LexUnitController implements Serializable {
                     if (!in) {
                         for (LayerTriplet layerTriplet : patternEntry.getValenceUnits()) {
                             String aux = layerTriplet.getLabelFE().getLabelType().getFrameElement().getName() + "." +layerTriplet.outputString();
-                            if (selectedEl.contains(aux)) {
+                            if (lu.getSelectedEl().contains(aux)) {
                                 result.add(group);
                                 in = true;
                                 break;
@@ -124,7 +139,7 @@ public class LexUnitController implements Serializable {
                 }
             }
         }
-        valencePatterns = sortGroupRealizations(result);
+        lu.setValencePatterns( sortGroupRealizations(result));
     }
 
     private List<FEGroupRealization> sortGroupRealizations (List<FEGroupRealization> list) {
@@ -143,56 +158,57 @@ public class LexUnitController implements Serializable {
         return sortedList;
     }
 
-    public List<String> getSelectedEl() {
-        return selectedEl;
+    public List<String> getSelectedEl(LUOutput lu) {
+        return lu.getSelectedEl();
+    }
+
+    public List<FEGroupRealization> getValencePatterns(LUOutput lu) {
+        return lu.getValencePatterns();
     }
 
     public void addFilter (LUOutput lu,String string) {
         if (string.equals("Core") || string.equals("Non-Core") ||string.equals("All")) {
-            selectedEl = new ArrayList<String>();
+            List<String> selectedEl = new ArrayList<String>();
             selectedEl.add(string);
+            lu.setSelectedEl(selectedEl);
             filterValencePatterns(lu);
             return;
         }
-        if (!selectedEl.contains(string)) {
+        if (!lu.getSelectedEl().contains(string)) {
             List<String> toRemove = new ArrayList<String>();
             toRemove.add("All");
             toRemove.add("Core");
             toRemove.add("Non-Core");
-            for (String filters : selectedEl) {
+            for (String filters : lu.getSelectedEl()) {
                 if (filters.contains(string)) {
                     toRemove.add(filters);
                 }
             }
             for (String delete : toRemove) {
-                selectedEl.remove(delete);
+                lu.getSelectedEl().remove(delete);
             }
-            selectedEl.add(string);
+            lu.getSelectedEl().add(string);
         }
         filterValencePatterns(lu);
     }
 
     public void addFilterReal (LUOutput lu, FrameElement el, String string) {
         String output = el.getName() + "." + string;
-        if (!selectedEl.contains(output)) {
-            selectedEl.add(output);
+        if (!lu.getSelectedEl().contains(output)) {
+            lu.getSelectedEl().add(output);
         }
-        selectedEl.remove(el.getName());
-        selectedEl.remove("All");
-        selectedEl.remove("Core");
-        selectedEl.remove("Non-Core");
+        lu.getSelectedEl().remove(el.getName());
+        lu.getSelectedEl().remove("All");
+        lu.getSelectedEl().remove("Core");
+        lu.getSelectedEl().remove("Non-Core");
         filterValencePatterns(lu);
     }
 
     public void removeFilter(LUOutput lu, String string) {
-        if (selectedEl.contains(string)) {
-            selectedEl.remove(string);
+        if (lu.getSelectedEl().contains(string)) {
+            lu.getSelectedEl().remove(string);
         }
         filterValencePatterns(lu);
-    }
-
-    public List<FEGroupRealization> getValencePatterns() {
-        return valencePatterns;
     }
 
     //    public LazyDataModel<LightLU> getModel() {

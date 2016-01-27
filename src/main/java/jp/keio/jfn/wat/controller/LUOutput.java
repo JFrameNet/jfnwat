@@ -18,7 +18,11 @@ public class LUOutput {
 
     private List<AnnotationSet> annotations = new ArrayList<AnnotationSet>();
 
-    private List<SentenceOutput> sentences = new ArrayList<SentenceOutput>();
+    private List<FEGroupRealization> valencePatterns = new ArrayList<FEGroupRealization>();
+
+    private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
+
+    private List<String> selectedEl = new ArrayList<String>();
 
     private LightLU lightLU;
 
@@ -26,7 +30,6 @@ public class LUOutput {
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
         this.annotations = lexUnit.getAnnotationSets();
         findRealizations();
-//        this.sentences = processSentences(this.annotations, 68, true);
     }
 
     public void findFrameElements (AnnotationSet annotationSet, FrameElement fe, LayerTriplet valenceUnit) {
@@ -274,7 +277,7 @@ public class LUOutput {
         for (ElementTag elementTag1 : lastLine) {
             size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
         }
-        int complete = breakLine - size;
+        int complete = breakLine - size -2;
         String space = "&#160;&#160;&#160;&#160;";
         for (int x = 0; x < complete; x ++ ) {
             space = space.concat("&#160;&#160;&#160;&#160;");
@@ -331,34 +334,32 @@ public class LUOutput {
         return feNonCoreRealizations;
     }
 
-    public List<SentenceOutput> getSentences() {
-        return sentences;
-    }
-
-    public void setFeGroupRealizations(List<FEGroupRealization> feGroupRealizations) {
-        this.feGroupRealizations = feGroupRealizations;
-    }
-
-    public void setFeCorRealizations(List<FERealization> feRealizations) {
-        this.feCoreRealizations = feRealizations;
-    }
-
     public void setFeNonCoreRealizations(List<FERealization> feRealizations) {
         this.feNonCoreRealizations = feRealizations;
-    }
-
-    public void setSentences(List<SentenceOutput> sentences) {
-        this.sentences = sentences;
     }
 
     public LightLU getLightLU() {
         return lightLU;
     }
 
-    public List<FERealization> getAllFERealizations () {
-        List<FERealization> list = new ArrayList<FERealization>();
-        list.addAll(feCoreRealizations);
-        list.addAll(feNonCoreRealizations);
-        return list;
+
+    public List<FEGroupRealization> getValencePatterns() {
+        return valencePatterns;
+    }
+
+    public List<SentenceOutput> getSelectedSentences() {
+        return selectedSentences;
+    }
+
+    public List<String> getSelectedEl() {
+        return selectedEl;
+    }
+
+    public void setValencePatterns(List<FEGroupRealization> valencePatterns) {
+        this.valencePatterns = valencePatterns;
+    }
+
+    public void setSelectedEl(List<String> selectedEl) {
+        this.selectedEl = selectedEl;
     }
 }
