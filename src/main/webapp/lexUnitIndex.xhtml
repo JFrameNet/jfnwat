@@ -14,14 +14,14 @@
     <ui:define name="filter">
         <h:form>
             <p:inputText placeholder="#{text['luFilter']}" value="#{lexUnitController.filter}">
-                <p:ajax event="keyup" listener="#{lexUnitController.orderLU()}" update="list"/>
+                <p:ajax event="keyup" listener="#{tabController.orderLU(lexUnitController.filter)}" update="list"/>
             </p:inputText>
         </h:form>
     </ui:define>
 
     <ui:define name="indexList">
         <p:scrollPanel mode="native" style="border: none; padding: 0">
-            <p:dataList id="list" value="#{tabController.lightLUs}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}" lazy="true">
+            <p:dataList id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}" lazy="true">
                 <h:form>
                     <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false">
                         <f:ajax execute="@form" render="form2"/>

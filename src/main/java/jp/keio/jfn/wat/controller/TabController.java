@@ -24,6 +24,8 @@ public class TabController {
 
     private List<LUOutput> loadedLUs = new ArrayList<LUOutput>();
 
+    private List<LightLU> orderedLU = new ArrayList<LightLU>();
+
     private LexUnit mainLU;
 
     private Frame mainFrame;
@@ -147,5 +149,37 @@ public class TabController {
         }
         Collections.sort(frameName);
         return frameName;
+    }
+
+    public void orderLU (String filter) {
+        List<LightLU> allLU= new ArrayList<LightLU>();
+        for (LexUnit lu : lexUnitRepository.findAll()) {
+            if (matchSearch(filter, lu.getName())) {
+                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+            } else if (matchSearch(filter, lu.getFrame().getName())) {
+                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+            }
+        }
+        orderedLU = allLU;
+    }
+
+    public List<LightLU> getOrderedLU (String filter) {
+        if (orderedLU.isEmpty() ) {
+            List <LightLU> allLu = new ArrayList<LightLU>();
+            for (LexUnit lu : lexUnitRepository.findAll()) {
+                allLu.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+            }
+            lightLUs = allLu;
+            orderedLU = allLu;
+        } else if (filter.isEmpty()) {
+            orderedLU = lightLUs;
+        }
+        return orderedLU;
+    }
+
+    private boolean matchSearch (String query, String name) {
+        return ((name.equalsIgnoreCase(query))
+                ||(name.toLowerCase().contains(query.toLowerCase()))
+                ||(query.toLowerCase().contains(name.toLowerCase())));
     }
 }

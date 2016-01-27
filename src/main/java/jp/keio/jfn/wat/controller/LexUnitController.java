@@ -30,17 +30,17 @@ public class LexUnitController implements Serializable {
     private List<LightLU> orderedLU = new ArrayList<LightLU>();
 
 
-    public void orderLU () {
-        List<LightLU> allLU= new ArrayList<LightLU>();
-        for (LexUnit lu : lexUnitRepository.findAll()) {
-            if (matchSearch(filter, lu.getName())) {
-                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-            } else if (matchSearch(filter, lu.getFrame().getName())) {
-                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-            }
-        }
-        orderedLU = allLU;
-    }
+//    public void orderLU () {
+//        List<LightLU> allLU= new ArrayList<LightLU>();
+//        for (LexUnit lu : lexUnitRepository.findAll()) {
+//            if (matchSearch(filter, lu.getName())) {
+//                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+//            } else if (matchSearch(filter, lu.getFrame().getName())) {
+//                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+//            }
+//        }
+//        orderedLU = allLU;
+//    }
 
     public void setFilter (String f) {
         filter = f;
@@ -51,23 +51,18 @@ public class LexUnitController implements Serializable {
     }
 
 
-    public List<LightLU> getOrderedLU () {
-        if (orderedLU.isEmpty() && filter.isEmpty()) {
-            List <LightLU> allLu = new ArrayList<LightLU>();
-            for (LexUnit lu : lexUnitRepository.findAll()) {
-                allLu.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-            }
-            return allLu;
-        } else {
-            return orderedLU;
-        }
-    }
+//    public List<LightLU> getOrderedLU () {
+//        if (orderedLU.isEmpty() && filter.isEmpty()) {
+//            List <LightLU> allLu = new ArrayList<LightLU>();
+//            for (LexUnit lu : lexUnitRepository.findAll()) {
+//                allLu.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
+//            }
+//            return allLu;
+//        } else {
+//            return orderedLU;
+//        }
+//    }
 
-    private boolean matchSearch (String query, String name) {
-        return ((name.equalsIgnoreCase(query))
-                ||(name.toLowerCase().contains(query.toLowerCase()))
-                ||(query.toLowerCase().contains(name.toLowerCase())));
-    }
 
     public List<SentenceOutput> showAnnotation (LUOutput lu) {
         return lu.getSelectedSentences();

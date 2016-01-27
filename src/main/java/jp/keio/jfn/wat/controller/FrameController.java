@@ -69,6 +69,7 @@ public class FrameController implements Serializable {
                 sortedNames.add(frame.getName());
             }
             Collections.sort(sortedNames);
+            orderedFrames = sortedNames;
             return sortedNames;
         } else {
             return orderedFrames;
