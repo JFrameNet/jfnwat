@@ -14,8 +14,7 @@ public class SentenceOutput {
 
     private int id;
 
-    public SentenceOutput(int index, List<List<ElementTag>> list, String text) {
-        this.id = index;
+    public SentenceOutput(List<List<ElementTag>> list, String text) {
         this.elements = list;
         this.text = text;
     }
@@ -34,5 +33,9 @@ public class SentenceOutput {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

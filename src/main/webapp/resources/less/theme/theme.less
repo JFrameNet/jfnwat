@@ -69,6 +69,12 @@
 	text-decoration: none;
 }
 
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited:hover{
+  text-decoration: underline!important;
+}
+
 .ui-state-hover {
     //.medium-transition;
     .no-transition;
@@ -138,9 +144,14 @@ label.ui-state-error{color:@state-error-color !important;}
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-	opacity: .50;
-	filter:Alpha(Opacity=50);
+	/*opacity: .50;
+	filter:Alpha(Opacity=50);*/
 	background-image: none;
+}
+.ui-state-disabled,
+.ui-widget-content .ui-state-disabled,
+.ui-widget-header .ui-state-disabled:hover {
+  text-decoration: none!important;
 }
 .ui-state-disabled .ui-icon {
 	filter:Alpha(Opacity=50); /* For IE8 - See #6059 */
@@ -1800,8 +1811,8 @@ hr.ui-widget-header{background-color: #E5EBF0; border-width:0px;}
 
 /*Style For UI CommandLink --------------------------------------------------------------------------------------*/
 
-.ui-commandlink{color:#546E7A !important;}
-.ui-commandlink:hover{text-decoration: underline !important;}
+.ui-commandlink{color:#546E7A}
+.ui-commandlink:hover{text-decoration: underline}
 
 /*Style For UI Link --------------------------------------------------------------------------------------*/
 

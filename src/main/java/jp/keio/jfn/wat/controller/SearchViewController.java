@@ -1,13 +1,10 @@
 package jp.keio.jfn.wat.controller;
 
 
+import jp.keio.jfn.wat.domain.*;
 import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Scope;
 
-import jp.keio.jfn.wat.domain.Document;
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.domain.LexUnit;
-import jp.keio.jfn.wat.domain.Corpus;
 import jp.keio.jfn.wat.repository.CorpusRepository;
 import jp.keio.jfn.wat.repository.DocumentRepository;
 import jp.keio.jfn.wat.repository.FrameRepository;
@@ -103,6 +100,7 @@ public class SearchViewController implements Serializable{
         }
     }
 
+    @Transactional
     public List<Corpus> findCorpusKeyword () {
         if (search.isEmpty()) {
             return new ArrayList<Corpus>();
@@ -110,6 +108,12 @@ public class SearchViewController implements Serializable{
             List<Corpus> corpusList = new ArrayList<Corpus>();
             for (Corpus cp : corpusRepository.findAll()) {
                 if (matchSearch(search, cp.getName())) {
+                    for (Document document : cp.getDocuments()) {
+                        Hibernate.initialize(document.getParagraphs());
+                        for (Paragraph paragraph : document.getParagraphs()) {
+                            Hibernate.initialize(paragraph.getSentences());
+                        }
+                    }
                     corpusList.add(cp);
                 }
             }
@@ -117,36 +121,25 @@ public class SearchViewController implements Serializable{
         }
     }
 
-    public TreeNode getDocTree () {
-        return createTree(findCorpusKeyword());
-    }
+//    public TreeNode getDocTree () {
+//        return createTree(findCorpusKeyword());
+//    }
 
-    private TreeNode createTree(List<Corpus> corpusList) {
-        TreeNode docRoot = new DefaultTreeNode("Root", null);
-        if (corpusList.isEmpty()) {
-            TreeNode empty = new DefaultTreeNode("empty", "empty tree", docRoot);
-            docRoot.getChildren().add(empty);
-        } else {
-            for (Corpus cp : corpusList) {
-                TreeNode node = new DefaultTreeNode("head",cp.getName(), docRoot);
-                for (Document doc : findDocForCorpus(cp)) {
-                    node.getChildren().add(new DefaultTreeNode(doc.getName()));
-                }
-            }
-        }
-        return docRoot;
-    }
-
-    private List<Document> findDocForCorpus (Corpus corpus) {
-        Iterable<Document> allDocs = documentRepository.findAll();
-        List<Document> myList = new ArrayList<Document>();
-        for (Document document : allDocs) {
-            if (document.getCorpus().getId() == corpus.getId()) {
-                myList.add(document);
-            }
-        }
-        return myList;
-    }
+//    private TreeNode createTree(List<Corpus> corpusList) {
+//        TreeNode docRoot = new DefaultTreeNode("Root", null);
+//        if (corpusList.isEmpty()) {
+//            TreeNode empty = new DefaultTreeNode("empty", "empty tree", docRoot);
+//            docRoot.getChildren().add(empty);
+//        } else {
+//            for (Corpus cp : corpusList) {
+//                TreeNode node = new DefaultTreeNode("head",cp.getName(), docRoot);
+//                for (Document doc : cp.getDocuments()) {
+//                    node.getChildren().add(new DefaultTreeNode(doc.getName()));
+//                }
+//            }
+//        }
+//        return docRoot;
+//    }
 
     private boolean matchSearch (String query, String name) {
         return ((name.equalsIgnoreCase(query))

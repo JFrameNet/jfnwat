@@ -1,0 +1,50 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/docIndex.xhtml">
+    <ui:define name="frameOutput">
+        <h:form>
+            <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" style="border: none">
+                <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
+                <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
+                    <p:dataList id="output" styleClass="display-sent" var="proc" value="#{documentController.showAnnotatedLU(doc)}" type="definition" emptyMessage="">  
+                        <div id="ab#{proc.id}">
+                            <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
+                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="myTestClass"> 
+                                    <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
+                                        <f:facet name="header"> 
+                                            <p:commandLink disabled="#{!tag.isLU()}" action="#{documentController.selectLU(tag.tag)}" value="#{tag.element}" style="font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.myTestClass#{proc.id})" onclick="displayAnnotation(#{proc.id})"/> 
+                                        </f:facet> 
+                                    </p:columns> 
+                                </p:dataTable> 
+                            </p:dataList> 
+                        </div>
+                        <div id="at#{proc.id}" style="display: none">
+                            <p:commandButton style="background-color: transparent; color: #4C626D" onclick="displayAnnotation(#{proc.id})" value="x" styleClass="horizontal"/>
+                            <p:dataList styleClass="myTestClass#{proc.id}" value="#{documentController.getAnnotationLUSentence().elements}" var="line" type="definition" emptyMessage=""> 
+                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation"> 
+                                    <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
+                                        <f:facet name="header"> 
+                                            <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
+                                        </f:facet> 
+                                        <p:lightBox style="border-top: solid 1px #{tag.color}">
+                                            <h:outputLink value="#">
+                                                <h:outputText value="#{tag.tag}" style="color: #{tag.color} !important"/>
+                                            </h:outputLink>
+                                            <f:facet name="inline">
+                                                <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                                            </f:facet>
+                                        </p:lightBox>
+                                    </p:columns> 
+                                </p:dataTable> 
+                            </p:dataList> 
+                        </div>
+                    </p:dataList> 
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+</ui:composition>

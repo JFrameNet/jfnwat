@@ -22,9 +22,9 @@
         </h:form>
     </ui:define>
     <ui:define name="indexes">
-        <p:commandButton value="#{text['frameIndex']}" action="#{tabController.toFrame()}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
+        <p:commandButton value="#{text['frameIndex']}" action="#{tabController.toFrame}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
         <p:commandButton value="#{text['lexUnitIndex']}"  action="#{tabController.toLexUnit}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
-        <p:button value="#{text['documentIndex']}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
+        <p:commandButton value="#{text['documentIndex']}" action="#{tabController.toDocuments}" styleClass="GreenButton FloatNoneOnMobile" style="margin: 1px"/>
     </ui:define>
 
 </ui:composition>

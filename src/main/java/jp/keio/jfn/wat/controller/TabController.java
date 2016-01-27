@@ -1,6 +1,7 @@
 package jp.keio.jfn.wat.controller;
 
 import java.util.*;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.domain.*;
@@ -24,13 +25,40 @@ public class TabController {
 
     private List<LUOutput> loadedLUs = new ArrayList<LUOutput>();
 
+    private List<DocumentOutput> loadedDocs = new ArrayList<DocumentOutput>();
+
     private List<LightLU> orderedLU = new ArrayList<LightLU>();
 
     private LexUnit mainLU;
 
     private Frame mainFrame;
 
+    private Document mainDocument;
+
     private int index = 0;
+
+    public static List<String> allColors = new ArrayList<String>();
+
+    @PostConstruct
+    void initColors () {
+        List<String> colors = new ArrayList<String>();
+        colors.add("#4db6ac");
+        colors.add("#F7941E");
+        colors.add("#EA5753");
+        colors.add("#EF9A9A");
+        colors.add("#F7D100");
+        colors.add("darkblue");
+        colors.add("darkmagenta");
+        colors.add("peru");
+        colors.add("sandybrown");
+        colors.add("steelblue");
+        colors.add("tomato");
+        colors.add("plum");
+        colors.add("olive");
+        colors.add("darkgoldenrod");
+        colors.add("firebrick");
+        allColors = colors;
+    }
 
     private List<LightLU> lightLUs = new ArrayList<LightLU>();
     private List<String> frameName = new ArrayList<String>();
@@ -41,8 +69,17 @@ public class TabController {
     @Autowired
     LexUnitRepository lexUnitRepository;
 
+    @Autowired
+    DocumentRepository documentRepository;
+
     @Transactional
     public String addFrame(String name) {
+        for (FrameOutput frameOutput : loadedFrames) {
+            if (frameOutput.getName().equals(name)) {
+                index = loadedFrames.indexOf(frameOutput);
+                return "frameOutput?faces-redirect=true&i-0&frame=" + name;
+            }
+        }
         mainFrame = frameRepository.findByName(name).get(0);
         Hibernate.initialize(mainFrame.getLexUnits());
         Hibernate.initialize(mainFrame.getFrameElements());
@@ -58,7 +95,12 @@ public class TabController {
 
     @Transactional
     public String addLU(LightLU lu) {
-        System.out.print("added");
+        for (LUOutput luOutput : loadedLUs) {
+            if (luOutput.getLightLU().getName().equals(lu.getName())) {
+                index = loadedLUs.indexOf(luOutput);
+                return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
+            }
+        }
         mainLU = lexUnitRepository.findById(lu.getId());
         Hibernate.initialize(mainLU.getAnnotationSets());
         for (AnnotationSet annotationSet : mainLU.getAnnotationSets()) {
@@ -67,9 +109,36 @@ public class TabController {
                 Hibernate.initialize(layer.getLabels());
             }
         }
-        loadedLUs.add(new LUOutput(mainLU));
+        loadedLUs.add(new LUOutput(mainLU, true));
         index = loadedLUs.size() -1;
         return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
+    }
+
+    @Transactional
+    public String addDoc(Document document) {
+        for (DocumentOutput documentOutput : loadedDocs) {
+            if (documentOutput.getName().equals(document.getName())) {
+                index = loadedDocs.indexOf(documentOutput);
+                return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
+            }
+        }
+        mainDocument = documentRepository.findById(document.getId());
+        Hibernate.initialize(mainDocument.getParagraphs());
+        for (Paragraph paragraph : mainDocument.getParagraphs()) {
+            Hibernate.initialize(paragraph.getSentences());
+            for (Sentence sentence : paragraph.getSentences()) {
+                Hibernate.initialize(sentence.getAnnotationSets());
+                for (AnnotationSet annotationSet : sentence.getAnnotationSets()) {
+                    Hibernate.initialize(annotationSet.getLayers());
+                    for (Layer layer : annotationSet.getLayers()){
+                        Hibernate.initialize(layer.getLabels());
+                    }
+                }
+            }
+        }
+        loadedDocs.add(new DocumentOutput(mainDocument));
+        index = loadedDocs.size() -1;
+        return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
     }
 
     public void onTabClose(TabCloseEvent event) {
@@ -92,6 +161,17 @@ public class TabController {
         }
     }
 
+    public void onTabDocClose(TabCloseEvent event) {
+        String id = event.getTab().getTitle(); {
+            for (DocumentOutput output : loadedDocs) {
+                if (output.getName().equals(id)) {
+                    loadedDocs.remove(output);
+                    break;
+                }
+            }
+        }
+    }
+
     public String toFrame() {
         clear();
         return "frameOutput?faces-redirect=true&i=0";
@@ -104,14 +184,16 @@ public class TabController {
 
     public String toDocuments() {
         clear();
-        return "";
+        return "documentOutput?faces-redirect=true&i=2";
     }
 
     private void clear() {
         loadedFrames = new ArrayList<FrameOutput>();
         loadedLUs = new ArrayList<LUOutput>();
+        loadedDocs = new ArrayList<DocumentOutput>();
         mainFrame = null;
         mainLU = null;
+        mainDocument = null;
     }
 
     public List<FrameOutput> getLoadedFrames() {
@@ -181,5 +263,9 @@ public class TabController {
         return ((name.equalsIgnoreCase(query))
                 ||(name.toLowerCase().contains(query.toLowerCase()))
                 ||(query.toLowerCase().contains(name.toLowerCase())));
+    }
+
+    public List<DocumentOutput> getLoadedDocs() {
+        return loadedDocs;
     }
 }

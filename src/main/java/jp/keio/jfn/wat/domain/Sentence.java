@@ -28,7 +28,7 @@ public class Sentence implements Serializable {
 
 	private Timestamp modifiedDate;
 
-	private byte paragraphOrder;
+	private int paragraphOrder;
 
 	private String text;
 
@@ -96,11 +96,11 @@ public class Sentence implements Serializable {
 		this.modifiedDate = modifiedDate;
 	}
 
-	public byte getParagraphOrder() {
+	public int getParagraphOrder() {
 		return this.paragraphOrder;
 	}
 
-	public void setParagraphOrder(byte paragraphOrder) {
+	public void setParagraphOrder(int paragraphOrder) {
 		this.paragraphOrder = paragraphOrder;
 	}
 

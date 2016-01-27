@@ -29,7 +29,7 @@ public class Corpus implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Document
-	@OneToMany(mappedBy="corpus")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy="corpus")
 	private List<Document> documents;
 
 	//bi-directional many-to-one association to NoteLink

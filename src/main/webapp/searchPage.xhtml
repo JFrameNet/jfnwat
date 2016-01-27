@@ -48,17 +48,16 @@
         </p:dataTable>
     </ui:define>
     <ui:define name="docs">
-        <p:tree value="#{searchViewController.getDocTree()}" var="node" dynamic="true">
-            <p:treeNode type="empty">
-                <h:outputText value="#{text['emptyMessage']}" />
-            </p:treeNode>
-            <p:treeNode type="head">
-                <h:outputText value="#{node}" />
-            </p:treeNode>
-            <p:treeNode type="default">
-                <p:link outcome="index" value="#{node}" />
-            </p:treeNode>
-        </p:tree>
+        <p:accordionPanel value="#{searchViewController.findCorpusKeyword()}" activeIndex="-1" var="corpus">
+            <p:tab title="#{corpus.name}">
+                <p:dataTable value="#{corpus.documents}" var="doc" styleClass="hide-column-names">
+                    <p:column>
+                        <p:commandLink action="#{tabController.addDoc(doc)}" value="#{doc.name}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:tab>
+        </p:accordionPanel>
+
     </ui:define>
 
 </ui:composition>
