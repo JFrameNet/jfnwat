@@ -79,11 +79,11 @@
                                     <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation"> 
                                         <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
                                             <f:facet name="header"> 
-                                                <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
+                                                <h:outputText value="#{tag.word}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
                                             </f:facet> 
-                                            <p:lightBox style="border-top: solid 1px #{tag.color}">
+                                            <p:lightBox style="border-top: solid 1px #{tag.tagColor}">
                                                 <h:outputLink value="#">
-                                                    <h:outputText value="#{tag.tag}" style="color: #{tag.color} !important"/>
+                                                    <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor} !important"/>
                                                 </h:outputLink>
                                                 <f:facet name="inline">
                                                     <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  

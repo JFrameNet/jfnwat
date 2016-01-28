@@ -32,9 +32,6 @@ public class DocumentController implements Serializable {
     AnnotationSetRepository annotationSetRepository;
 
     private String filter = "";
-
-    private SentenceOutput processed;
-
     private List<Document> allDocs = new ArrayList<Document>();
 
     public void setFilter (String f) {
@@ -81,13 +78,18 @@ public class DocumentController implements Serializable {
 
     }
 
-    public SentenceOutput getAnnotationLUSentence () {
-        return processed;
+
+    public List<SentenceOutput> showAnnotation(DocumentOutput doc) {
+        return doc.getSelectedSentences();
+    }
+
+    public void removeSentence (DocumentOutput doc, SentenceOutput sentenceOutput) {
+        doc.getSelectedSentences().remove(sentenceOutput);
     }
 
     @Transactional
-    public void selectLU(String annoID) {
-        AnnotationSet annotationSet = annotationSetRepository.findById(Integer.parseInt(annoID));
+    public void selectLU(DocumentOutput doc, AnnotationSet a) {
+        AnnotationSet annotationSet = annotationSetRepository.findById((a.getId()));
         if (annotationSet != null) {
             Hibernate.initialize(annotationSet.getLayers());
             for (Layer layer : annotationSet.getLayers()){
@@ -109,24 +111,25 @@ public class DocumentController implements Serializable {
             List<Label> allLabels = layerFE.getLabels();
             allLabels.addAll(layerTarget.getLabels());
             List<String> allFE = new ArrayList<String>();
-            processed = lu.auxFun(annotationSet.getSentence().getText(), allFE, allLabels, 75, false);
+            SentenceOutput processed = lu.auxFun(annotationSet.getSentence().getText(), allFE, allLabels, 75, false);
             for (List<ElementTag> elementTagList : processed.getElements()) {
                 for (ElementTag elementTag : elementTagList) {
-                    if (elementTag.getColor()== null) {
+                    if (elementTag.getTagColor().equals("#FFFFFF")) {
                         String tag = elementTag.getTag();
                         if (tag.equals("")) {
-                            elementTag.setColor("#F5F5F5");
+                            elementTag.setTagColor("#F5F5F5");
                         } else {
                             if (!allFE.contains(tag)) {
                                 allFE.add(tag);
                             }
-                            elementTag.setColor(TabController.allColors.get(allFE.indexOf(tag)));
+                            elementTag.setTagColor(TabController.allColors.get(allFE.indexOf(tag)));
                         }
                     }
 
 
                 }
             }
+            doc.getSelectedSentences().add(processed);
         }
 
     }

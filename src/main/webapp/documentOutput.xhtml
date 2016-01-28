@@ -10,29 +10,38 @@
             <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" style="border: none">
                 <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                    <p:dataList id="output" styleClass="display-sent" var="proc" value="#{documentController.showAnnotatedLU(doc)}" type="definition" emptyMessage="">  
-                        <div id="ab#{proc.id}">
-                            <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="myTestClass"> 
-                                    <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
-                                        <f:facet name="header"> 
-                                            <p:commandLink disabled="#{!tag.isLU()}" action="#{documentController.selectLU(tag.tag)}" value="#{tag.element}" style="font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.myTestClass#{proc.id})" onclick="displayAnnotation(#{proc.id})"/> 
-                                        </f:facet> 
-                                    </p:columns> 
-                                </p:dataTable> 
+                    <p:panel style="border: none">
+                        <div >
+                            <p:dataList id="output" styleClass="display-sent" var="proc" value="#{documentController.showAnnotatedLU(doc)}" type="definition" emptyMessage="">  
+                                <div>
+                                    <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
+                                        <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none"> 
+                                            <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
+                                                <f:facet name="header"> 
+                                                    <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet)}" value="#{tag.word}" style="text-decoration: underline; font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.display-sent)"/> 
+                                                    <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
+                                                        <h:outputText value="#{tag.tag}" style="font-size: smaller"/>
+                                                    </p:tooltip>
+                                                </f:facet> 
+                                            </p:columns> 
+                                        </p:dataTable> 
+                                    </p:dataList> 
+                                </div>
                             </p:dataList> 
                         </div>
-                        <div id="at#{proc.id}" style="display: none">
-                            <p:commandButton style="background-color: transparent; color: #4C626D" onclick="displayAnnotation(#{proc.id})" value="x" styleClass="horizontal"/>
-                            <p:dataList styleClass="myTestClass#{proc.id}" value="#{documentController.getAnnotationLUSentence().elements}" var="line" type="definition" emptyMessage=""> 
+                    </p:panel>
+                    <p:panel style="border: none; position: relative; bottom: 0">
+                        <p:dataList styleClass="display-sent" var="proc" value="#{documentController.showAnnotation(doc)}" type="definition" emptyMessage="">  
+                            <p:commandLink value="x" style="color: #2b2b2b; font-weight: bold" update="@(.display-sent)" action="#{documentController.removeSentence(doc,proc)}"/>
+                            <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
                                 <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation"> 
                                     <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
                                         <f:facet name="header"> 
-                                            <h:outputText value="#{tag.element}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
+                                            <h:outputText value="#{tag.word}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
                                         </f:facet> 
-                                        <p:lightBox style="border-top: solid 1px #{tag.color}">
+                                        <p:lightBox style="border-top: solid 1px #{tag.tagColor}">
                                             <h:outputLink value="#">
-                                                <h:outputText value="#{tag.tag}" style="color: #{tag.color} !important"/>
+                                                <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor}"/>
                                             </h:outputLink>
                                             <f:facet name="inline">
                                                 <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
@@ -41,8 +50,10 @@
                                     </p:columns> 
                                 </p:dataTable> 
                             </p:dataList> 
-                        </div>
-                    </p:dataList> 
+                            <div class="EmptyBox20"/> 
+                        </p:dataList> 
+                    </p:panel>
+
                 </p:tab>
             </p:tabView>
         </h:form>

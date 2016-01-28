@@ -189,7 +189,7 @@ public class LUOutput {
                     elementTag.setTag(newStart.getLabelType().getFrameElement().getName());
                     elementTag.setFrameElement(newStart.getLabelType().getFrameElement());
                 } else {
-                    elementTag.setColor("#546E7A");
+                    elementTag.setTagColor("#546E7A");
                 }
                 line.add(elementTag);
                 imin = newStart.getEndChar() - rank*breakLine + offset;
@@ -220,7 +220,7 @@ public class LUOutput {
                                 elementTag.setTag(tag);
                                 elementTag.setFrameElement(label.getLabelType().getFrameElement());
                             } else {
-                                elementTag.setColor("#546E7A");
+                                elementTag.setTagColor("#546E7A");
                             }
                             line.add(elementTag);
 
@@ -261,7 +261,7 @@ public class LUOutput {
                 List<ElementTag> lastLine = list.get(list.size() -1);
                 int size = 0;
                 for (ElementTag elementTag1 : lastLine) {
-                    size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
+                    size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
                 }
                 if (size < breakLine - Math.max(word.length(), el.getName().length()/2)) {
                     list.get(list.size() -1).add(elementTag);
@@ -276,7 +276,7 @@ public class LUOutput {
         List<ElementTag> lastLine = list.get(list.size() -1);
         int size = 0;
         for (ElementTag elementTag1 : lastLine) {
-            size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
+            size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
         }
         int complete = breakLine - size -2;
         String space = "&#160;&#160;&#160;&#160;";
@@ -292,11 +292,11 @@ public class LUOutput {
             for (List<ElementTag> elementTagList : sentenceOutput.getElements()) {
                 for (ElementTag elementTag : elementTagList) {
                     String tag = elementTag.getTag();
-                    if (elementTag.getColor() == null) {
+                    if (elementTag.getTagColor() == null) {
                         if (allFE.contains(tag)) {
-                            elementTag.setColor(TabController.allColors.get(allFE.indexOf(tag)));
+                            elementTag.setTagColor(TabController.allColors.get(allFE.indexOf(tag)));
                         } else {
-                            elementTag.setColor("#F5F5F5");
+                            elementTag.setTagColor("#F5F5F5");
                         }
                     }
 

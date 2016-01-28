@@ -12,6 +12,8 @@ import java.util.List;
 public class DocumentOutput {
     private List<Sentence> sentences  = new ArrayList<Sentence>();
 
+    private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
+
     private String name;
 
     public DocumentOutput(Document document) {
@@ -64,8 +66,10 @@ public class DocumentOutput {
                                 }
                                 int border = label.getEndChar() + 1;
                                 String word = sentence.getText().substring(label.getStartChar(), border);
-                                ElementTag el = new ElementTag(word, ""+label.getLayer().getAnnotationSet().getId());
+                                ElementTag el = new ElementTag(word, label.getLayer().getAnnotationSet().getLexUnit().getFrame().getName());
+                                el.setAnnotationSet(label.getLayer().getAnnotationSet());
                                 el.setLU(true);
+                                el.setTagColor("#66BB6A");
                                 line.add(el);
 
                                 imin = border - 1 - rank*breakLine;
@@ -97,7 +101,7 @@ public class DocumentOutput {
             List<ElementTag> lastLine = list.get(list.size() -1);
             int size = 0;
             for (ElementTag elementTag1 : lastLine) {
-                size +=  Math.max(elementTag1.getElement().length(), elementTag1.getTag().length());
+                size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
             }
             int complete = breakLine - size;
             String space = "__";
@@ -113,5 +117,9 @@ public class DocumentOutput {
             sentenceOutputs.add(output);
         }
         return sentenceOutputs;
+    }
+
+    public List<SentenceOutput> getSelectedSentences() {
+        return selectedSentences;
     }
 }
