@@ -12,34 +12,33 @@
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
                     <p:panel style="border: none">
                         <div >
-                            <p:dataList id="output" styleClass="display-sent" var="proc" value="#{documentController.showAnnotatedLU(doc)}" type="definition" emptyMessage="">  
-                                <div>
-                                    <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                        <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none"> 
-                                            <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
-                                                <f:facet name="header"> 
-                                                    <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet)}" value="#{tag.word}" style="text-decoration: underline; font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.display-sent)"/> 
-                                                    <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
-                                                        <h:outputText value="#{tag.tag}" style="font-size: smaller"/>
-                                                    </p:tooltip>
-                                                </f:facet> 
-                                            </p:columns> 
-                                        </p:dataTable> 
-                                    </p:dataList> 
-                                </div>
+                            <p:dataList id="output" value="#{documentController.showAnnotatedLU(doc).elements}" var="line" type="definition" emptyMessage=""> 
+                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none"> 
+                                    <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
+                                        <f:facet name="header"> 
+                                            <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet)}" value="#{tag.word}" style="text-decoration: underline; font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.display-sent)"/> 
+                                            <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
+                                                <h:outputText value="#{tag.tag}" style="font-size: smaller"/>
+                                            </p:tooltip>
+                                        </f:facet> 
+                                    </p:columns> 
+                                </p:dataTable> 
                             </p:dataList> 
                         </div>
                     </p:panel>
                     <p:panel style="border: none; position: relative; bottom: 0">
                         <p:dataList styleClass="display-sent" var="proc" value="#{documentController.showAnnotation(doc)}" type="definition" emptyMessage="">  
-                            <p:commandLink value="x" style="color: #2b2b2b; font-weight: bold" update="@(.display-sent)" action="#{documentController.removeSentence(doc,proc)}"/>
+                            <p:commandLink styleClass="horizontal" value="x" style="color: #2b2b2b; font-weight: bold; margin-right: 10px" update="@(.display-sent)" action="#{documentController.removeSentence(doc,proc)}"/>
+                            <h:outputText styleClass="horizontal" value="#{proc.annotationSet.lexUnit.name}" style="margin-right: 10px; font-size: smaller"/>
+                            <h:outputText value="#{proc.annotationSet.lexUnit.frame.name}" style="font-size: smaller"/>
                             <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
                                 <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation"> 
                                     <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
                                         <f:facet name="header"> 
-                                            <h:outputText value="#{tag.word}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
+                                            <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" style="font-weight: bold"/>
+                                            <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
                                         </f:facet> 
-                                        <p:lightBox style="border-top: solid 1px #{tag.tagColor}">
+                                        <p:lightBox rendered="#{!tag.isLU()}" style="border-top: solid 1px #{tag.tagColor}">
                                             <h:outputLink value="#">
                                                 <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor}"/>
                                             </h:outputLink>

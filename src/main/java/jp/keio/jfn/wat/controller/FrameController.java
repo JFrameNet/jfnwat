@@ -75,4 +75,34 @@ public class FrameController implements Serializable {
             return orderedFrames;
         }
     }
+
+    public List<ElementTag> processDef (FrameOutput frameOutput, String def) {
+        return auxFun(def, "<fen>", "</fen", frameOutput);
+    }
+
+    private List<ElementTag> auxFun (String def, String a, String c, FrameOutput frameOutput){
+        String b = a;
+        List<ElementTag> result =new ArrayList<ElementTag>();
+        int imax = def.length();
+        int i = 0;
+        while (i < imax) {
+            int index = def.substring(i,imax).indexOf(b);
+            if (index != -1) {
+                String word = def.substring(i,i+index);
+                ElementTag el = new ElementTag(word, "");
+                i += index + b.length();
+                if (b.equals(a)) {
+                    b = c;
+                } else {
+                    el.setWordColor(TabController.allColors.get(frameOutput.getAllFENames().indexOf(word)));
+                    b = a;
+                }
+                result.add(el);
+            } else {
+                break;
+            }
+        }
+        result.add(new ElementTag(def.substring(i,imax), ""));
+        return result;
+    }
 }

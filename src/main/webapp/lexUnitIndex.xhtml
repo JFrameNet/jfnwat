@@ -20,7 +20,7 @@
     </ui:define>
 
     <ui:define name="indexList">
-        <p:scrollPanel mode="native" style="border: none; padding: 0">
+        <p:scrollPanel mode="native" style="height:2000px;border: none; padding: 0">
             <p:dataList id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}" lazy="true">
                 <h:form>
                     <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false">

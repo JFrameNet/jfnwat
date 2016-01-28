@@ -1,5 +1,7 @@
 package jp.keio.jfn.wat.controller;
 
+import jp.keio.jfn.wat.domain.AnnotationSet;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,15 +14,11 @@ public class SentenceOutput {
 
     private String text;
 
-    private int id;
+    private AnnotationSet annotationSet;
 
     public SentenceOutput(List<List<ElementTag>> list, String text) {
         this.elements = list;
         this.text = text;
-    }
-
-    public void newLine (List<ElementTag> list) {
-        this.elements.add(list);
     }
 
     public List<List<ElementTag>> getElements() {
@@ -31,11 +29,11 @@ public class SentenceOutput {
         return text;
     }
 
-    public int getId() {
-        return id;
+    public AnnotationSet getAnnotationSet() {
+        return annotationSet;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setAnnotationSet(AnnotationSet annotationSet) {
+        this.annotationSet = annotationSet;
     }
 }

@@ -69,11 +69,11 @@ public class DocumentController implements Serializable {
         return allDocs;
     }
 
-    public List<SentenceOutput> showAnnotatedLU (DocumentOutput doc) {
+    public SentenceOutput showAnnotatedLU (DocumentOutput doc) {
         if (doc != null) {
             return doc.processSentences();
         } else {
-            return  new ArrayList<SentenceOutput>();
+            return  null;
         }
 
     }
@@ -89,48 +89,42 @@ public class DocumentController implements Serializable {
 
     @Transactional
     public void selectLU(DocumentOutput doc, AnnotationSet a) {
-        AnnotationSet annotationSet = annotationSetRepository.findById((a.getId()));
-        if (annotationSet != null) {
-            Hibernate.initialize(annotationSet.getLayers());
-            for (Layer layer : annotationSet.getLayers()){
-                Hibernate.initialize(layer.getLabels());
+        for (SentenceOutput sentenceOutput : doc.getSelectedSentences()) {
+            if (a.getId() == sentenceOutput.getAnnotationSet().getId()) {
+                return;
             }
-            LUOutput lu = new LUOutput(annotationSet.getLexUnit(), false);
-            Layer layerFE = null;
-            Layer layerTarget = null;
-            for (Layer layer : annotationSet.getLayers()){
-                if (layer.getLayerType().getId() == 1) {
-                    layerFE = layer;
-                } else  if (layer.getLayerType().getId() == 2) {
-                    layerTarget = layer;
-                }
-                if ((layerFE != null) && (layerTarget != null)) {
-                    break;
-                }
-            }
-            List<Label> allLabels = layerFE.getLabels();
-            allLabels.addAll(layerTarget.getLabels());
-            List<String> allFE = new ArrayList<String>();
-            SentenceOutput processed = lu.auxFun(annotationSet.getSentence().getText(), allFE, allLabels, 75, false);
-            for (List<ElementTag> elementTagList : processed.getElements()) {
-                for (ElementTag elementTag : elementTagList) {
-                    if (elementTag.getTagColor().equals("#FFFFFF")) {
-                        String tag = elementTag.getTag();
-                        if (tag.equals("")) {
-                            elementTag.setTagColor("#F5F5F5");
-                        } else {
-                            if (!allFE.contains(tag)) {
-                                allFE.add(tag);
-                            }
-                            elementTag.setTagColor(TabController.allColors.get(allFE.indexOf(tag)));
-                        }
-                    }
-
-
-                }
-            }
-            doc.getSelectedSentences().add(processed);
         }
-
+        AnnotationSet annotationSet = annotationSetRepository.findById(a.getId());
+        Hibernate.initialize(annotationSet.getLayers());
+        for (Layer layer : annotationSet.getLayers()){
+            Hibernate.initialize(layer.getLabels());
+        }
+        LUOutput lu = new LUOutput(annotationSet.getLexUnit(), false);
+        Layer layerFE = null;
+        Layer layerTarget = null;
+        for (Layer layer : annotationSet.getLayers()){
+            if (layer.getLayerType().getId() == 1) {
+                layerFE = layer;
+            } else  if (layer.getLayerType().getId() == 2) {
+                layerTarget = layer;
+            }
+            if ((layerFE != null) && (layerTarget != null)) {
+                break;
+            }
+        }
+        List<Label> allLabels = layerFE.getLabels();
+        allLabels.addAll(layerTarget.getLabels());
+        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 75, false);
+        for (List<ElementTag> elementTagList : processed.getElements()) {
+            for (ElementTag elementTag : elementTagList) {
+                String tag = elementTag.getTag();
+                if (tag.equals("")) {
+                    elementTag.setTagColor("#F5F5F5");
+                } else {
+                    elementTag.setTagColor(TabController.allColors.get(doc.getAllFE().indexOf(tag)));
+                }
+            }
+        }
+        doc.getSelectedSentences().add(processed);
     }
 }

@@ -12,7 +12,7 @@
 
     <ui:define name="filter">
         <h:form>
-            <p:inputText placeholder="docs.." value="#{documentController.filter}">
+            <p:inputText value="#{documentController.filter}">
                 <p:ajax event="keyup" listener="#{documentController.filterCorpora()}" update="docList"/>
             </p:inputText>
         </h:form>
@@ -20,7 +20,7 @@
 
     <ui:define name="indexList">
         <div>
-            <p:scrollPanel mode="native" style="height: 600px; border: none; padding: 0">
+            <p:scrollPanel mode="native" style="height:2000px;border: none; padding: 0">
                 <p:dataList  id="docList" value="#{documentController.allDocs}" var="doc" type="definition" emptyMessage="#{text['emptyMessage']}">
                     <h:form>
                         <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" style="line-height: 20px; padding-left: 5px">

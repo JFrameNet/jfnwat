@@ -21,20 +21,65 @@ public class PatternEntry {
         int instantiationType = valence.getLabelFE().getInstantiationType().getId();
         if (instantiationType == 1) {
             for (LayerTriplet triplet : valenceUnits) {
-                if (triplet.getLabelFE().getInstantiationType().getId() == 1) {
-                    if ((valence.getLabelFE().getLabelType().getFrameElement().getId() == triplet.getLabelFE().getLabelType().getFrameElement().getId())
-                            && (valence.getLabelPT().getLabelType().getMiscLabel().getId() == triplet.getLabelPT().getLabelType().getMiscLabel().getId())
-                            && (valence.getLabelGF().getLabelType().getMiscLabel().getId() == triplet.getLabelGF().getLabelType().getMiscLabel().getId())) {
-                        return  true;
+                if (triplet.getLabelFE().getInstantiationType().getId() == instantiationType) {
+                    boolean fe = sameLabel(valence.getLabelFE(), triplet.getLabelFE(), true);
+                    boolean pt = sameLabel(valence.getLabelPT(), triplet.getLabelPT(), false);
+                    boolean gf = sameLabel(valence.getLabelGF(), triplet.getLabelGF(), false);
+                    if (fe && pt && gf) {
+                        return true;
                     }
                 }
             }
-        } else  {
+        } else if (instantiationType == 6){
+            for (LayerTriplet triplet : valenceUnits) {
+                if (triplet.getLabelFE().getInstantiationType().getId() == instantiationType) {
+                    boolean fe = sameLabel(valence.getLabelFE(), triplet.getLabelFE(), true);
+                    boolean pt = false;
+                    boolean gf = sameLabel(valence.getLabelGF(), triplet.getLabelGF(), false);
+                    if (valence.getLabelPT() == null) {
+                        if (triplet.getLabelPT() == null) {
+                            pt = true;
+                        }
+                    } else {
+                        if (triplet.getLabelPT() != null) {
+                            if (valence.getLabelFE().getInstantiationType().getId() == triplet.getLabelFE().getInstantiationType().getId()) {
+                                pt = true;
+                            }
+                        }
+                    }
+                    if (fe && pt && gf) {
+                        return true;
+                    }
+                }
+            }
+        } else {
             for (LayerTriplet triplet : valenceUnits) {
                 if ((valence.getLabelFE().getLabelType().getFrameElement().getId()) == triplet.getLabelFE().getLabelType().getFrameElement().getId()
                         && (triplet.getLabelFE().getInstantiationType().getId() == instantiationType)) {
                     return true;
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean sameLabel (Label label1, Label label2, boolean fe) {
+        if (label1 == null) {
+            if (label2 == null) {
+                return true;
+            }
+        } else {
+            if (label2 != null) {
+                if (fe) {
+                    if (label1.getLabelType().getFrameElement().getId() == label2.getLabelType().getFrameElement().getId()) {
+                        return true;
+                    }
+                } else {
+                    if (label1.getLabelType().getMiscLabel().getId() == label2.getLabelType().getMiscLabel().getId()) {
+                        return true;
+                    }
+                }
+
             }
         }
         return false;

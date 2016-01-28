@@ -13,7 +13,10 @@
                     <p:scrollPanel id="output" mode="native" style="height: 580px; border: none; padding: 0">
                         <p:accordionPanel multiple="true" activeIndex="0,1,2,3">
                             <p:tab title="#{text['definition']}" >
-                                <h:outputText value="#{frame.definition}" escape="false" style="white-space: pre-wrap; "/>
+                                <p:dataList type="definition" value="#{frameController.processDef(frame,frame.definition)}" var="str">
+                                    <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
+                                </p:dataList>
+                                <div class="EmptyBox10"/>
                             </p:tab>
                             <p:tab title="#{text['frameElements']}">
                                 <p:dataTable var="fe" value="#{frame.coreFrameEl}" emptyMessage="">
@@ -25,7 +28,10 @@
                                     </p:column >
                                     <p:column style="background-color: transparent; border: none">
                                         <div class="ContainerIndent">
-                                            <h:outputText value="#{fe.definition}" escape="false" style="white-space: pre-wrap; "/>
+                                            <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
+                                                <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
+                                            </p:dataList>
+                                            <div class="EmptyBox10"/>
                                         </div>
                                     </p:column>
                                 </p:dataTable>
@@ -38,7 +44,10 @@
                                     </p:column >
                                     <p:column style="background-color: transparent; border: none">
                                         <div class="ContainerIndent">
-                                            <h:outputText value="#{fe.definition}" escape="false" style="white-space: pre-wrap; "/>
+                                            <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
+                                                <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
+                                            </p:dataList>
+                                            <div class="EmptyBox10"/>
                                         </div>
                                     </p:column>
                                 </p:dataTable>

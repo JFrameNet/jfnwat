@@ -17,19 +17,20 @@ public class LayerTriplet {
 
     public String outputString () {
         if (labelFE.getInstantiationType().getId() == 1) {
-            String pt = labelPT.getLabelType().getMiscLabel().getName();
-            String gf = labelGF.getLabelType().getMiscLabel().getName();
+            String pt = (labelPT == null) ? "" : labelPT.getLabelType().getMiscLabel().getName();
+            String gf = (labelGF == null) ? "" :labelGF.getLabelType().getMiscLabel().getName();
 
             return pt + "." + gf;
+        } else if (labelFE.getInstantiationType().getId() == 6){
+            String ini = labelFE.getInstantiationType().getName();
+            String gf = (labelGF == null) ? "" :labelGF.getLabelType().getMiscLabel().getName();
+            return ini + "." + gf;
         } else {
             return labelFE.getInstantiationType().getName();
         }
 
     }
 
-    public void setLabelFE (Label label) {
-        labelFE = label;
-    }
     public void setLabelPT (Label label) {
         labelPT = label;
     }

@@ -21,6 +21,7 @@ public class ElementTag {
         this.tag = t;
         this.wordColor = "#546E7A";
         this.tagColor = "#FFFFFF";
+        this.isLU = false;
     }
 
     public void setFrameElement(FrameElement fe){

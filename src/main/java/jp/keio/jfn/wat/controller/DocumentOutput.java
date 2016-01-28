@@ -22,22 +22,37 @@ public class DocumentOutput {
         }
         this.name = document.getName();
     }
-    public List<Sentence> getSentences() {
-        return sentences;
-    }
 
-    public void setSentences(List<Sentence> sentences) {
-        this.sentences = sentences;
-    }
+    private List<String> allFE = new ArrayList<String>();
 
     public String getName() {
         return name;
     }
 
-    public List<SentenceOutput> processSentences () {
-        List<SentenceOutput> sentenceOutputs = new ArrayList<SentenceOutput>();
+    private void findALlFESentences() {
         for (Sentence sentence : this.sentences) {
-            List<Label> allLabels = new ArrayList<Label>();
+            for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
+                for (Layer layer : annoSet.getLayers()){
+                    if (layer.getLayerType().getId() == 1) {
+                        for (Label label : layer.getLabels()) {
+                            String fe = label.getLabelType().getFrameElement().getName();
+                            if (!this.allFE.contains(fe)) {
+                                this.allFE.add(fe);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public SentenceOutput processSentences () {
+        findALlFESentences();
+        String allText = "";
+        List<Label> allLabels = new ArrayList<Label>();
+        List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
+        for (Sentence sentence : this.sentences) {
+            allText = allText + sentence.getText();
             for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
                 for (Layer layer : annoSet.getLayers()){
                     if (layer.getLayerType().getId() == 2) {
@@ -45,81 +60,85 @@ public class DocumentOutput {
                     }
                 }
             }
-            List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
-            int breakLine = 85;
-            int rank = 0;
-            int imin = 0;
-            int iaux =0;
-            int imax = sentence.getText().length();
-            List<ElementTag> line;
-            while (imin + rank*breakLine < imax) {
-                line = new ArrayList<ElementTag>();
-                while ((imin + rank*breakLine < imax)&& (imin < breakLine)) {
-                    for (Label label : allLabels) {
-                        if (label.getInstantiationType().getId() == 1){
-                            if (imin + rank*breakLine == label.getStartChar()) {
-                                if (imin > iaux) {
-                                    String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imin + rank*breakLine);
-                                    ElementTag el = new ElementTag(wordEmpty, "");
-                                    el.setLU(false);
-                                    line.add(el);
-                                }
-                                int border = label.getEndChar() + 1;
-                                String word = sentence.getText().substring(label.getStartChar(), border);
-                                ElementTag el = new ElementTag(word, label.getLayer().getAnnotationSet().getLexUnit().getFrame().getName());
-                                el.setAnnotationSet(label.getLayer().getAnnotationSet());
-                                el.setLU(true);
-                                el.setTagColor("#66BB6A");
+        }
+        int breakLine = 85;
+        int rank = 0;
+        int imin = 0;
+        int iaux =0;
+        int imax = allText.length();
+        List<ElementTag> line;
+        while (imin + rank*breakLine < imax) {
+            line = new ArrayList<ElementTag>();
+            while ((imin + rank*breakLine < imax)&& (imin < breakLine)) {
+                for (Label label : allLabels) {
+                    if (label.getInstantiationType().getId() == 1){
+                        int index = this.sentences.indexOf(label.getLayer().getAnnotationSet().getSentence());
+                        int previousSentence = 0;
+                        for (int i = 0; i < index; i ++) {
+                            previousSentence += this.sentences.get(i).getText().length();
+                        }
+                        if (imin + rank*breakLine == label.getStartChar() + previousSentence) {
+                            if (imin > iaux) {
+                                String wordEmpty = allText.substring(iaux + rank*breakLine, imin + rank*breakLine);
+                                ElementTag el = new ElementTag(wordEmpty, "");
+                                el.setLU(false);
                                 line.add(el);
-
-                                imin = border - 1 - rank*breakLine;
-                                iaux = imin + 1;
-                                break;
                             }
+                            int border = label.getEndChar() + previousSentence+ 1;
+                            String word = allText.substring(label.getStartChar() + previousSentence, border);
+                            ElementTag el = new ElementTag(word, label.getLayer().getAnnotationSet().getLexUnit().getFrame().getName());
+                            el.setAnnotationSet(label.getLayer().getAnnotationSet());
+                            el.setLU(true);
+                            line.add(el);
+
+                            imin = border - 1 - rank*breakLine;
+                            iaux = imin + 1;
+                            break;
                         }
                     }
-                    imin ++;
                 }
-                if (imin > iaux) {
-                    if (imin + rank*breakLine < imax) {
-                        String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imin + rank*breakLine);
-                        ElementTag el = new ElementTag(wordEmpty, "");
-                        el.setLU(false);
-                        line.add(el);
-                    } else {
-                        String wordEmpty = sentence.getText().substring(iaux + rank*breakLine, imax);
-                        ElementTag el = new ElementTag(wordEmpty, "");
-                        el.setLU(false);
-                        line.add(el);
-                    }
+                imin ++;
+            }
+            if (imin > iaux) {
+                if (imin + rank*breakLine < imax) {
+                    String wordEmpty = allText.substring(iaux + rank*breakLine, imin + rank*breakLine);
+                    ElementTag el = new ElementTag(wordEmpty, "");
+                    el.setLU(false);
+                    line.add(el);
+                } else {
+                    String wordEmpty = allText.substring(iaux + rank*breakLine, imax);
+                    ElementTag el = new ElementTag(wordEmpty, "");
+                    el.setLU(false);
+                    line.add(el);
                 }
-                list.add(line);
-                rank ++;
-                imin = 0;
-                iaux = 0;
             }
-            List<ElementTag> lastLine = list.get(list.size() -1);
-            int size = 0;
-            for (ElementTag elementTag1 : lastLine) {
-                size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
-            }
-            int complete = breakLine - size;
-            String space = "__";
-            for (int x = 0; x < complete; x ++ ) {
-                space = space.concat("_");
-            }
-            ElementTag el = new ElementTag(space, "");
-            el.setWordColor("white");
-            el.setLU(false);
-            lastLine.add(el);
-            SentenceOutput output = new SentenceOutput(list, sentence.getText());
-            output.setId(sentenceOutputs.size());
-            sentenceOutputs.add(output);
+            list.add(line);
+            rank ++;
+            imin = 0;
+            iaux = 0;
         }
-        return sentenceOutputs;
+        List<ElementTag> lastLine = list.get(list.size() -1);
+        int size = 0;
+        for (ElementTag elementTag1 : lastLine) {
+            size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
+        }
+        int complete = breakLine - size;
+        String space = "__";
+        for (int x = 0; x < complete; x ++ ) {
+            space = space.concat("_");
+        }
+        ElementTag el = new ElementTag(space, "");
+        el.setWordColor("white");
+        el.setLU(false);
+        lastLine.add(el);
+        return new SentenceOutput(list,allText);
     }
 
     public List<SentenceOutput> getSelectedSentences() {
         return selectedSentences;
+    }
+
+    public List<String> getAllFE() {
+        return allFE;
     }
 }

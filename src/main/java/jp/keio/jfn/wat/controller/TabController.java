@@ -54,10 +54,16 @@ public class TabController {
         colors.add("steelblue");
         colors.add("tomato");
         colors.add("plum");
-        colors.add("olive");
+        colors.add("#43BF9C");
         colors.add("darkgoldenrod");
         colors.add("firebrick");
+        colors.add("#F700A2");
+        colors.add("#25A1A1");
+        colors.add("#E08D8D");
+        colors.add("#E08D8D");
+        colors.add("#43BF64");
         allColors = colors;
+        allColors.addAll(colors);
     }
 
     private List<LightLU> lightLUs = new ArrayList<LightLU>();

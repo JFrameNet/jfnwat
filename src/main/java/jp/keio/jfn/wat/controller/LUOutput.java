@@ -145,7 +145,6 @@ public class LUOutput {
 
 
     public List<SentenceOutput> processSentences (List<AnnotationSet> annotationSetList, int breakLine, boolean btn) {
-        List<String> allFE = new ArrayList<String>();
         List<SentenceOutput> result = new ArrayList<SentenceOutput>();
         for (AnnotationSet annoSet : annotationSetList) {
             Layer layerFE = null;
@@ -163,14 +162,15 @@ public class LUOutput {
             if (layerFE != null) {
                 List<Label> allLabels = layerFE.getLabels();
                 allLabels.addAll(layerTarget.getLabels());
-                result.add(auxFun(annoSet.getSentence().getText(), allFE, allLabels, breakLine, btn));
+                result.add(auxFun(annoSet, allLabels, breakLine, btn));
             }
         }
-        addColors(result, allFE);
+        addColors(result);
         return result;
     }
 
-    public SentenceOutput auxFun (String text, List<String> allFE, List<Label> allLabels, int breakLine, boolean btn) {
+    public SentenceOutput auxFun (AnnotationSet annotationSet, List<Label> allLabels, int breakLine, boolean btn) {
+        String text = annotationSet.getSentence().getText();
         List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
         int rank = 0;
         int imin = 0;
@@ -183,13 +183,13 @@ public class LUOutput {
             if (newStart != null) {
                 int offset = (btn && (rank == 1)) ? 5 : 0;
                 String word = text.substring(rank*breakLine - offset, newStart.getEndChar() + 1);
-                String tag = "Target";
+                String tag = "";
                 ElementTag elementTag = new ElementTag(word, tag);
                 if (newStart.getLabelType().getLayerType().getId() == 1) {
                     elementTag.setTag(newStart.getLabelType().getFrameElement().getName());
                     elementTag.setFrameElement(newStart.getLabelType().getFrameElement());
                 } else {
-                    elementTag.setTagColor("#546E7A");
+                    elementTag.setLU(true);
                 }
                 line.add(elementTag);
                 imin = newStart.getEndChar() - rank*breakLine + offset;
@@ -210,17 +210,14 @@ public class LUOutput {
                                 newStart =  label;
                             }
                             String word = text.substring(label.getStartChar(), border);
-                            String tag = "Target";
+                            String tag = "";
                             ElementTag elementTag = new ElementTag(word, tag);
                             if (label.getLabelType().getLayerType().getId() == 1) {
                                 tag = label.getLabelType().getFrameElement().getName();
-                                if (! allFE.contains(tag)) {
-                                    allFE.add(tag);
-                                }
                                 elementTag.setTag(tag);
                                 elementTag.setFrameElement(label.getLabelType().getFrameElement());
                             } else {
-                                elementTag.setTagColor("#546E7A");
+                                elementTag.setLU(true);
                             }
                             line.add(elementTag);
 
@@ -255,9 +252,6 @@ public class LUOutput {
                 FrameElement el = label.getLabelType().getFrameElement();
                 ElementTag elementTag = new ElementTag(word, el.getName());
                 elementTag.setFrameElement(el);
-                if (! allFE.contains(el.getName())) {
-                    allFE.add(el.getName());
-                }
                 List<ElementTag> lastLine = list.get(list.size() -1);
                 int size = 0;
                 for (ElementTag elementTag1 : lastLine) {
@@ -284,20 +278,24 @@ public class LUOutput {
             space = space.concat("&#160;&#160;&#160;&#160;");
         }
         lastLine.add(new ElementTag(space, ""));
-        return new SentenceOutput(list, text);
+        SentenceOutput sentenceOutput = new SentenceOutput(list, text);
+        sentenceOutput.setAnnotationSet(annotationSet);
+        return sentenceOutput;
     }
 
-    private void addColors (List<SentenceOutput> list, List<String> allFE) {
+    private void addColors (List<SentenceOutput> list) {
+        List<String> allFE = new ArrayList<String>();
         for (SentenceOutput sentenceOutput : list) {
             for (List<ElementTag> elementTagList : sentenceOutput.getElements()) {
                 for (ElementTag elementTag : elementTagList) {
                     String tag = elementTag.getTag();
-                    if (elementTag.getTagColor() == null) {
-                        if (allFE.contains(tag)) {
-                            elementTag.setTagColor(TabController.allColors.get(allFE.indexOf(tag)));
-                        } else {
-                            elementTag.setTagColor("#F5F5F5");
+                    if (elementTag.getTag().equals("")) {
+                        elementTag.setTagColor("#F5F5F5");
+                    } else {
+                        if (!allFE.contains(tag)) {
+                            allFE.add(tag);
                         }
+                        elementTag.setTagColor(TabController.allColors.get(allFE.indexOf(tag)));
                     }
 
                 }

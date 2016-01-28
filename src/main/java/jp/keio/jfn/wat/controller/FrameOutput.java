@@ -16,6 +16,8 @@ public class FrameOutput {
 
     private String definition;
 
+    private List<String> allFENames = new ArrayList<String>();
+
     private List<FrameElement> coreFrameEl = new ArrayList<FrameElement>();
 
     private List<FrameElement> nonCoreFrameEl = new ArrayList<FrameElement>();
@@ -40,8 +42,10 @@ public class FrameOutput {
         for (FrameElement fe : currentFrame.getFrameElements()) {
             if (fe.getType().equals("Core")) {
                 coreFrameEl.add(fe);
+                allFENames.add(fe.getName());
             } else {
                 nonCoreFrameEl.add(fe);
+                allFENames.add(fe.getName());
             }
         }
     }
@@ -161,5 +165,9 @@ public class FrameOutput {
             }
         }
         return coreSets;
+    }
+
+    public List<String> getAllFENames() {
+        return allFENames;
     }
 }
