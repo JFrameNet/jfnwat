@@ -889,6 +889,7 @@ label {
   transition: all 0.5s ease;
 }
 .ui-datatable .ui-datatable-scrollable-header {
+  display: none;
   border-radius: 1px 1px 0px 0px;
   -moz-border-radius: 1px 1px 0px 0px;
   -webkit-border-radius: 1px 1px 0px 0px;

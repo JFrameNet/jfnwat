@@ -252,7 +252,7 @@ public class TabController {
     }
 
     public List<LightLU> getOrderedLU (String filter) {
-        if (orderedLU.isEmpty() ) {
+        if (orderedLU.isEmpty() && filter.isEmpty()) {
             List <LightLU> allLu = new ArrayList<LightLU>();
             for (LexUnit lu : lexUnitRepository.findAll()) {
                 allLu.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));

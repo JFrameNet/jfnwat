@@ -77,7 +77,7 @@ public class FrameController implements Serializable {
     }
 
     public List<ElementTag> processDef (FrameOutput frameOutput, String def) {
-        return auxFun(def, "<fen>", "</fen", frameOutput);
+        return auxFun(def, "<fen>", "</fen>", frameOutput);
     }
 
     private List<ElementTag> auxFun (String def, String a, String c, FrameOutput frameOutput){

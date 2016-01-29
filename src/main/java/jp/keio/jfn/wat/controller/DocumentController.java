@@ -59,7 +59,7 @@ public class DocumentController implements Serializable {
     }
 
     public List<Document> getAllDocs () {
-        if (filter.isEmpty() || allDocs.isEmpty()) {
+        if (filter.isEmpty() && allDocs.isEmpty()) {
             List <Document> documentList = new ArrayList<Document>();
             for (Document lu : documentRepository.findAll()) {
                 documentList.add(lu);

@@ -20,16 +20,16 @@
 
     <ui:define name="indexList">
         <div>
-            <p:scrollPanel mode="native" style="height:2000px;border: none; padding: 0">
-                <p:dataList  id="docList" value="#{documentController.allDocs}" var="doc" type="definition" emptyMessage="#{text['emptyMessage']}">
+            <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}">
+                <p:column>
                     <h:form>
                         <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" style="line-height: 20px; padding-left: 5px">
                             <f:ajax execute="@form" render="form2"/>
                         </p:commandLink><br/>
                         <h:outputText value="[#{doc.corpus.name}]" style="margin-left: 10px; font-size: smaller"/>
                     </h:form>
-                </p:dataList>
-            </p:scrollPanel>
+                </p:column>
+            </p:dataTable>
         </div>
     </ui:define>
 

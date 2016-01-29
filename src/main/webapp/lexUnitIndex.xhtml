@@ -20,16 +20,18 @@
     </ui:define>
 
     <ui:define name="indexList">
-        <p:scrollPanel mode="native" style="height:2000px;border: none; padding: 0">
-            <p:dataList id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" type="definition" emptyMessage="#{text['emptyMessage']}" lazy="true">
-                <h:form>
-                    <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false">
-                        <f:ajax execute="@form" render="form2"/>
-                    </p:commandLink>
-                    <h:outputText value="[#{lu.frame}]" style="margin-left: 10px; font-size: smaller"/>
-                </h:form>
-            </p:dataList>
-        </p:scrollPanel>
+        <div>
+            <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}">
+                <p:column>
+                    <h:form>
+                        <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" style="line-height: 20px; padding-left: 5px" ajax="false">
+                            <f:ajax execute="@form" render="form2"/>
+                        </p:commandLink>
+                        <h:outputText value="[#{lu.frame}]" style="margin-left: 10px; font-size: smaller"/>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
     </ui:define>
 
     <ui:define name="indexOutput">
