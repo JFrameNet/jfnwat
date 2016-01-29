@@ -9,7 +9,7 @@
         <div class="ContainerIndent">
             <h:form id="form3">
                 <h:inputText id="w1" value="#{lexUnitController.screenWidth}" style="display: none"/>
-                <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" style="border: none">
+                <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" styleClass="tab-layout">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}"/>
                     <p:tab title="#{lu.lightLU.name}" closable="true">
                         <div class="ContainerIndent">
@@ -17,54 +17,54 @@
                             <h:outputText value="#{text['frame']} : "/>
                             <p:commandLink action="#{tabController.addFrame(lu.lightLU.frame)}" value="#{lu.lightLU.frame}"/>
                         </div>
-                        <p:commandButton value="All" style="background-color: #FCF2F2;border: solid 1px #E0E0E0; color: #546E7A; width: 20%" action="#{lexUnitController.addFilter(lu,'All')}" update="@(.myTestClass)"/> 
-                        <p:commandButton value="Core" style="background-color: #EDF2F5; border: solid 1px #E0E0E0;color: #546E7A; width: 20%" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.myTestClass)"/> 
-                        <p:commandButton value="Non-Core" style="background-color: #EEF5ED; border: solid 1px #E0E0E0;color: #546E7A; width: 20%" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.myTestClass)"/> 
-                        <p:dataTable var="element" styleClass="hide-column-names" value="#{lu.feCoreRealizations}" emptyMessage="" style="text-align: center"> 
-                            <p:column style="border:none; background-color: transparent; text-align: left; width: 20%"> 
-                                <p:commandButton value="#{element.frameElement.name}" style="background-color: #EDF2F5;border: solid 1px #E0E0E0; color: #546E7A; width: 90%" action="#{lexUnitController.addFilter(lu,element.frameElement.name)}" update="@(.myTestClass)"/> 
+                        <p:commandButton value="All"  styleClass="main-btn all-btn filter-btn" action="#{lexUnitController.addFilter(lu,'All')}" update="@(.allReal)"/> 
+                        <p:commandButton value="Core" styleClass="main-btn core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.allReal)"/> 
+                        <p:commandButton value="Non-Core" styleClass="main-btn non-core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.allReal)"/> 
+                        <p:dataTable var="element" styleClass="hide-column-names texalcenter" value="#{lu.feCoreRealizations}" emptyMessage=""> 
+                            <p:column styleClass="element-column"> 
+                                <p:commandButton value="#{element.frameElement.name}" styleClass="core-btn filter-btn element-btn" action="#{lexUnitController.addFilter(lu,element.frameElement.name)}" update="@(.allReal)"/> 
                             </p:column> 
-                            <p:column style="border: none; background-color: transparent; text-align: left"> 
+                            <p:column styleClass="real-column"> 
                                 <p:dataList var="var" value="#{element.patterns}" emptyMessage="" type="definition"> 
                                     <h:form>
-                                        <p:commandButton process="@this" styleClass="horizontal" value="#{var.valenceUnits.get(0).outputString()}" style="background-color: #EDF2F5;border: solid 1px #E0E0E0;color: #546E7A;" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.myTestClass)"/> 
+                                        <p:commandButton process="@this" styleClass="horizontal filter-btn core-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
                                     </h:form>
                                 </p:dataList> 
                             </p:column> 
                         </p:dataTable>
-                        <p:dataTable var="element" styleClass="hide-column-names" value="#{lu.feNonCoreRealizations}" emptyMessage="" style="text-align: center"> 
-                            <p:column style="border:none; background-color: transparent; text-align: left; width: 20%"> 
-                                <p:commandButton value="#{element.frameElement.name}" style="background-color: #EEF5ED;border: solid 1px #E0E0E0; color: #546E7A; width: 90%" action="#{lexUnitController.addFilter(lu, element.frameElement.name)}" update="@(.myTestClass)"/> 
+                        <p:dataTable var="element" styleClass="hide-column-names texalcenter" value="#{lu.feNonCoreRealizations}" emptyMessage=""> 
+                            <p:column styleClass="element-column"> 
+                                <p:commandButton value="#{element.frameElement.name}" styleClass="filter-btn non-core-btn element-btn" action="#{lexUnitController.addFilter(lu, element.frameElement.name)}" update="@(.allReal)"/> 
                             </p:column> 
-                            <p:column style="border: none; background-color: transparent; text-align: left"> 
+                            <p:column styleClass="real-column"> 
                                 <p:dataList var="var" value="#{element.patterns}" emptyMessage="" type="definition"> 
                                     <h:form>
-                                        <p:commandButton process="@this" styleClass="horizontal" value="#{var.valenceUnits.get(0).outputString()}" style="background-color: #EEF5ED;border: solid 1px #E0E0E0;color: #546E7A;" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.myTestClass)"/> 
+                                        <p:commandButton process="@this" styleClass="horizontal filter-btn non-core-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
                                     </h:form>
                                 </p:dataList> 
                             </p:column> 
                         </p:dataTable>
                         <div id="filter-selection" class="ContainerIndent">
                             <p:fieldset>
-                                <p:dataList styleClass="myTestClass" var="elements" value="#{lexUnitController.getSelectedEl(lu)}" type="definition" emptyMessage="">
-                                    <p:commandButton styleClass="horizontal" action="#{lexUnitController.removeFilter(lu, elements)}" value="#{elements}" style="margin: 2px" icon="ui-icon-close" onclick="hideFilter(this)" update="@(.myTestClass)"/>
+                                <p:dataList styleClass="allReal" var="elements" value="#{lexUnitController.getSelectedEl(lu)}" type="definition" emptyMessage="">
+                                    <p:commandButton styleClass="horizontal selected-filter" action="#{lexUnitController.removeFilter(lu, elements)}" value="#{elements}" icon="ui-icon-close" onclick="hideFilter(this)" update="@(.allReal)"/>
                                 </p:dataList>
                             </p:fieldset>
                         </div>
-                        <p:panel style="border: none">
+                        <p:panel styleClass="tab-layout">
                             <div >
-                                <p:dataTable id="patterns" styleClass="myTestClass" var="group" value="#{lexUnitController.getValencePatterns(lu)}" emptyMessage="" style="padding-bottom: 10px"> 
-                                    <p:column style="background-color: transparent; border: none"> 
-                                        <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" style="border-top: solid 1px #D9E3E8" emptyMessage=""> 
-                                            <p:column style="text-align: center; border: none; background-color: transparent; width: 30px"> 
+                                <p:dataTable id="patterns" styleClass="allReal" var="group" value="#{lexUnitController.getValencePatterns(lu)}" emptyMessage=""> 
+                                    <p:column styleClass="valence-pattern-column"> 
+                                        <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" styleClass="valence-pattern" emptyMessage=""> 
+                                            <p:column styleClass="total-vp-column"> 
                                                 <f:facet name="header"> 
-                                                    <p:commandLink value="#{group.totalOccurences}" update="@(.display-sent)" action="#{lexUnitController.totalGroup(lu,group)}" style="color: #546E7A"/> 
+                                                    <p:commandLink value="#{group.totalOccurences}" update="@(.display-sent)" action="#{lexUnitController.totalGroup(lu,group)}" styleClass="total-vp"/> 
                                                 </f:facet> 
                                                 <p:commandLink id="imageBtn" value="[#{realization.annoSet.size()}]" action="#{lexUnitController.realPatterEntry(lu,realization)}" update="@(.display-sent)"/> 
                                             </p:column> 
-                                            <p:columns var="fe" value="#{group.frameElements}" style="text-align: center; background-color: transparent ; border: none; width: 120px; padding: 0"> 
+                                            <p:columns var="fe" value="#{group.frameElements}" styleClass="list-fe-vp"> 
                                                 <f:facet name="header"> 
-                                                    <h:outputText value="#{fe.name}" style="font-weight: bold"/> 
+                                                    <h:outputText value="#{fe.name}" styleClass="total-vp"/> 
                                                 </f:facet> 
                                                 <h:outputText value="#{realization.outputFE(fe)}" />  
                                             </p:columns> 
@@ -73,15 +73,15 @@
                                 </p:dataTable>
                             </div>
                         </p:panel>
-                        <p:panel style="border: none; position: relative; bottom: 0">
+                        <p:panel styleClass="bottom-panel tab-layout">
                             <p:dataList styleClass="display-sent" var="proc" value="#{lexUnitController.showAnnotation(lu)}" type="definition" emptyMessage="">  
-                                <p:commandLink value="x" style="color: #2b2b2b; font-weight: bold" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>
+                                <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>
                                 <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                    <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none" rowStyleClass="annotation"> 
-                                        <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
+                                    <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="annotation-table" rowStyleClass="annotation"> 
+                                        <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
                                             <f:facet name="header"> 
-                                                <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" style="font-weight: bold"/>
-                                                <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" style="font-weight: normal; white-space: nowrap" escape="false"/> 
+                                                <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" styleClass="word lu-el"/>
+                                                <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" styleClass="word normal-el" escape="false"/> 
                                             </f:facet> 
                                             <p:lightBox rendered="#{!tag.isLU()}" style="border-top: solid 1px #{tag.tagColor}">
                                                 <h:outputLink value="#">

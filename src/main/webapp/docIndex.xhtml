@@ -20,13 +20,13 @@
 
     <ui:define name="indexList">
         <div>
-            <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}">
+            <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="">
                 <p:column>
                     <h:form>
-                        <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" style="line-height: 20px; padding-left: 5px">
+                        <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" styleClass="element-index">
                             <f:ajax execute="@form" render="form2"/>
                         </p:commandLink><br/>
-                        <h:outputText value="[#{doc.corpus.name}]" style="margin-left: 10px; font-size: smaller"/>
+                        <h:outputText value="[#{doc.corpus.name}]" styleClass="sub-element-index"/>
                     </h:form>
                 </p:column>
             </p:dataTable>

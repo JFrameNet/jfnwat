@@ -7,7 +7,7 @@
                 template="/frameIndex.xhtml">
     <ui:define name="frameOutput">
         <h:form>
-            <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" style="border: none">
+            <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" styleClass="tab-layout">
                 <p:ajax event="tabClose" listener="#{tabController.onTabClose}" update="output"/>
                 <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
                     <p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="output">
@@ -19,13 +19,13 @@
                         </p:tab>
                         <p:tab title="#{text['frameElements']}">
                             <p:dataTable var="fe" value="#{frame.coreFrameEl}" emptyMessage="">
-                                <p:column style="background-color: transparent; border: none; width: 20%; vertical-align: top" headerText="#{text['core']}">
+                                <p:column styleClass="frame-element" headerText="#{text['core']}">
                                     <div class="ContainerIndent">
-                                        <h:outputText value="#{fe.name}" style="margin-right: 10px;"/>
-                                        <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                        <h:outputText value="#{fe.name}" styleClass="marright10"/>
+                                        <h:outputText value=" [#{fe.abbrev}]" styleClass="general-tooltip"/>
                                     </div>
                                 </p:column >
-                                <p:column style="background-color: transparent; border: none">
+                                <p:column styleClass="frame-element-def">
                                     <div class="ContainerIndent">
                                         <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
                                             <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
@@ -35,13 +35,13 @@
                                 </p:column>
                             </p:dataTable>
                             <p:dataTable var="fe" value="#{frame.nonCoreFrameEl}" emptyMessage="">
-                                <p:column style="background-color: transparent; border: none; width: 20%; vertical-align: top" headerText="#{text['non-core']}">
+                                <p:column styleClass="frame-element" headerText="#{text['non-core']}">
                                     <div class="ContainerIndent">
-                                        <h:outputText value="#{fe.name}" style="margin-right: 10px;"/>
-                                        <h:outputText value=" [#{fe.abbrev}]" style="font-size: smaller"/>
+                                        <h:outputText value="#{fe.name}" styleClass="marright10"/>
+                                        <h:outputText value=" [#{fe.abbrev}]" styleClass="general-tooltip"/>
                                     </div>
                                 </p:column >
-                                <p:column style="background-color: transparent; border: none">
+                                <p:column styleClass="frame-element-def">
                                     <div class="ContainerIndent">
                                         <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
                                             <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
@@ -54,7 +54,7 @@
                         <p:tab title="#{text['frameRelations']}">
                             <div>
                                 <p:dataList var="coreSets" value="#{frame.coreSets}" emptyMessage="" type="definition">
-                                    <h:outputText value="#{coreSets}" class="horizontal" style="padding-left: 3px; padding-right: 10px"/>
+                                    <h:outputText value="#{coreSets}" styleClass="horizontal core-set"/>
                                 </p:dataList>
                                 <br/>
                             </div>
@@ -66,7 +66,7 @@
                                         </div>
                                         <div class="Wid70 OvHidden">
                                             <p:dataList var="related" value="#{rel.value}" type="definition">
-                                                <p:commandLink class="horizontal" action="#{tabController.addFrame(related.name)}" value="#{related.name}" style="padding-left: 3px; padding-right: 10px"/>
+                                                <p:commandLink styleClass="horizontal core-set" action="#{tabController.addFrame(related.name)}" value="#{related.name}"/>
                                             </p:dataList>
                                         </div>
                                     </div>
@@ -75,7 +75,7 @@
                         </p:tab>
                         <p:tab title="#{text['lexUnits']}">
                             <p:dataList var="lexUnit" type="definition" value="#{frame.allLexUnits}" emptyMessage="#{text['emptyMessage']}">
-                                <p:commandLink class="horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding-left: 5px; padding-right: 10px"/>
+                                <p:commandLink styleClass="horizontal list-lu" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}"/>
                             </p:dataList>
                             <div class="EmptyBox20"/>
                         </p:tab>

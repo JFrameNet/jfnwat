@@ -11,28 +11,27 @@
     <ui:define name="search">
         <div class="Fleft OvHidden">
             <p:link outcome="index">
-                <h:graphicImage id="small-logo" name="logo/jfn_logo_only.jpg" width="60" style="margin-right: 20px"/>
+                <h:graphicImage id="small-logo" name="logo/jfn_logo_only.jpg" width="60" styleClass="toolbar-jfn"/>
             </p:link>
         </div>
         <div class="Fleft OvHidden">
             <h:form>
-                <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" style="padding: 10px 0px;" onfocus="this.select()" value="#{searchViewController.search}"/>
-                <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton" style="margin-top: 5px"/>
+                <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" styleClass="autocomplete-jfn" onfocus="this.select()" value="#{searchViewController.search}"/>
+                <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton toolbar-btn-search"/>
             </h:form>
         </div>
     </ui:define>
     <ui:define name="frame">
-        <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}" style="font-size: small">
+        <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
             <h:form>
-                <p:commandLink class="horizontal" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" style="padding: 10px 10px 0px 3px" ajax="false"/>
+                <p:commandLink styleClass="horizontal frame-list" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" ajax="false"/>
             </h:form>
-
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">
         <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
-                <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="padding: 10px 10px 10px"/>
+                <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" styleClass="result-lu"/>
             </p:column>
             <p:column headerText="#{text['frame']}">
                 <p:commandLink action="#{tabController.addFrame(lexUnit.frame)}" value="#{lexUnit.frame}"/>
@@ -40,9 +39,9 @@
 
             <p:column headerText="#{text['LUStatus']}">
                 <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" emptyMessage="">
-                    <h:outputText class="horizontal tooltip-status" value="#{status.getStatusType().getName()}" />
-                    <h:outputText class="horizontal" value="?" id="fade" style="font-size: x-small; padding-left: 3px; padding-right: 10px" />
-                    <p:tooltip id="toolTipFade" for="fade" value="#{status.getStatusType().getDescription()}" style="font-size: smaller"/>
+                    <h:outputText styleClass="horizontal tooltip-status" value="#{status.getStatusType().getName()}" />
+                    <h:outputText styleClass="horizontal tooltip-status-mark" value="?" id="fade" />
+                    <p:tooltip id="toolTipFade" for="fade" value="#{status.getStatusType().getDescription()}" styleClass="general-tooltip"/>
                 </p:dataList>
             </p:column>
         </p:dataTable>

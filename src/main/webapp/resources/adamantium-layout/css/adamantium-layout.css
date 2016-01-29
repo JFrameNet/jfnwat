@@ -48,66 +48,6 @@ body {
   line-height: 20px;
   overflow: hidden;
 }
-.horizontal {
-  display: inline;
-  float: left;
-  width: auto;
-  padding-top: 0px !important;
-}
-.tooltip-status {
-  border-bottom: 1px dashed #999;
-}
-.ui-datalist-empty-message {
-  font-size: 14px !important;
-}
-.searchBar {
-  width: 450px !important;
-}
-.ui-lightbox-content {
-  background-color: #FFFFFF !important;
-}
-.ui-accordion .ui-accordion-content {
-  overflow: visible !important;
-}
-.ui-datalist .ui-datalist-empty-message {
-  padding: 0px !important;
-}
-.annotation {
-  background-color: #F5F5F5 !important;
-}
-.myTestClass {
-  background-color: transparent!important;
-}
-.myTestClass0 {
-  background-color: transparent!important;
-}
-.myTestClass1 {
-  background-color: transparent!important;
-}
-.myTestClass2 {
-  background-color: transparent!important;
-}
-.myTestClass3 {
-  background-color: transparent!important;
-}
-.myTestClass4 {
-  background-color: transparent!important;
-}
-.myTestClass5 {
-  background-color: transparent!important;
-}
-.myTestClass6 {
-  background-color: transparent!important;
-}
-.myTestClass7 {
-  background-color: transparent!important;
-}
-.display-sent {
-  background-color: transparent!important;
-}
-.hide-column-names table thead tr {
-  display: none;
-}
 /* TOPBAR --------------------------------------------------------------------------------*/
 /* topbar */
 #layout-topbar {

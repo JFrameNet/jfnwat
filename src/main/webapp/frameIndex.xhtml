@@ -23,7 +23,7 @@
             <p:dataTable id="frameList" value="#{frameController.orderedFrames}" var="frame" scrollable="true" scrollRows="60" scrollHeight="70%" emptyMessage="#{text['emptyMessage']}" liveScroll="true">
                 <p:column>
                     <h:form>
-                        <p:commandLink global="false" action="#{tabController.addFrame(frame)}" value="#{frame}" style="line-height: 20px; padding-left: 5px">
+                        <p:commandLink global="false" action="#{tabController.addFrame(frame)}" value="#{frame}" styleClass="element-index">
                             <f:ajax execute="@form" render="form2"/>
                         </p:commandLink>
                     </h:form>
