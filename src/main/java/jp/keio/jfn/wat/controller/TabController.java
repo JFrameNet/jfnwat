@@ -37,6 +37,8 @@ public class TabController {
 
     private int index = 0;
 
+    private String screenWidth = "";
+
     public static List<String> allColors = new ArrayList<String>();
 
     @PostConstruct
@@ -273,5 +275,13 @@ public class TabController {
 
     public List<DocumentOutput> getLoadedDocs() {
         return loadedDocs;
+    }
+
+    public String getScreenWidth() {
+        return screenWidth;
+    }
+
+    public void setScreenWidth(String screenWidth) {
+        this.screenWidth = screenWidth;
     }
 }

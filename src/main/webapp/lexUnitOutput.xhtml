@@ -7,7 +7,8 @@
                 template="/lexUnitIndex.xhtml">
     <ui:define name="lexUnitOutput">
         <div class="ContainerIndent">
-            <h:form>
+            <h:form id="form3">
+                <h:inputText id="w1" value="#{lexUnitController.screenWidth}" style="display: none"/>
                 <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" style="border: none">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}"/>
                     <p:tab title="#{lu.lightLU.name}" closable="true">
@@ -57,7 +58,7 @@
                                         <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" style="border-top: solid 1px #D9E3E8" emptyMessage=""> 
                                             <p:column style="text-align: center; border: none; background-color: transparent; width: 30px"> 
                                                 <f:facet name="header"> 
-                                                    <p:commandLink value="#{group.totalOccurences}" update="@(.display-sent)" action="#{lexUnitController.totalGroup(lu,group)}" style="color: #546E7A" /> 
+                                                    <p:commandLink value="#{group.totalOccurences}" update="@(.display-sent)" action="#{lexUnitController.totalGroup(lu,group)}" style="color: #546E7A"/> 
                                                 </f:facet> 
                                                 <p:commandLink id="imageBtn" value="[#{realization.annoSet.size()}]" action="#{lexUnitController.realPatterEntry(lu,realization)}" update="@(.display-sent)"/> 
                                             </p:column> 

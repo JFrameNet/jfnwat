@@ -47,12 +47,46 @@ function displayAnnotation (sentence)  {
 }
 
 
-$(document).click(function(e){
-
-    if (e.target.id.contains('modal')) {
-        PF('dlg').hide();
+window.addEventListener('load', mExternalJsLoadFunc, false);
+function mExternalJsLoadFunc()
+{
+    var a = $(window).width();
+    var div = document.getElementById('form2:form3:w1');
+    var other = document.getElementById('form2:form3:w2');
+    if (div != null) {
+        div.value=a;
     }
+    if (other != null) {
+        other.value=a;
+    }
+}
+
+var addEvent = function(object, type, callback) {
+    if (object == null || typeof(object) == 'undefined') return;
+    if (object.addEventListener) {
+        object.addEventListener(type, callback, false);
+    } else if (object.attachEvent) {
+        object.attachEvent("on" + type, callback);
+    } else {
+        object["on"+type] = callback;
+    }
+};
+
+addEvent(window, "resize", function(event) {
+    var a = $(window).width();
+    var div = document.getElementById('form2:form3:w1');
+    var other = document.getElementById('form2:form3:w2');
+    if (div != null) {
+        div.value=a;
+    }
+    if (other != null) {
+        other.value=a;
+    }
+    return true;
 });
+
+
+
 
 function hideFilter(div){
     div.display = 'none';

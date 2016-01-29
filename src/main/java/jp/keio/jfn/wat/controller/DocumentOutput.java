@@ -46,7 +46,7 @@ public class DocumentOutput {
         }
     }
 
-    public SentenceOutput processSentences () {
+    public SentenceOutput processSentences (int breakLine) {
         findALlFESentences();
         String allText = "";
         List<Label> allLabels = new ArrayList<Label>();
@@ -61,7 +61,6 @@ public class DocumentOutput {
                 }
             }
         }
-        int breakLine = 85;
         int rank = 0;
         int imin = 0;
         int iaux =0;

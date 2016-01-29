@@ -32,6 +32,7 @@ public class DocumentController implements Serializable {
     AnnotationSetRepository annotationSetRepository;
 
     private String filter = "";
+
     private List<Document> allDocs = new ArrayList<Document>();
 
     public void setFilter (String f) {
@@ -69,9 +70,10 @@ public class DocumentController implements Serializable {
         return allDocs;
     }
 
-    public SentenceOutput showAnnotatedLU (DocumentOutput doc) {
+    public SentenceOutput showAnnotatedLU (String screenWidth, DocumentOutput doc) {
         if (doc != null) {
-            return doc.processSentences();
+//            double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
+            return doc.processSentences(85);
         } else {
             return  null;
         }
@@ -88,7 +90,7 @@ public class DocumentController implements Serializable {
     }
 
     @Transactional
-    public void selectLU(DocumentOutput doc, AnnotationSet a) {
+    public void selectLU(DocumentOutput doc, AnnotationSet a, String screenWidth) {
         for (SentenceOutput sentenceOutput : doc.getSelectedSentences()) {
             if (a.getId() == sentenceOutput.getAnnotationSet().getId()) {
                 return;
@@ -114,7 +116,8 @@ public class DocumentController implements Serializable {
         }
         List<Label> allLabels = layerFE.getLabels();
         allLabels.addAll(layerTarget.getLabels());
-        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 75, false);
+//        double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
+        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 80, false);
         for (List<ElementTag> elementTagList : processed.getElements()) {
             for (ElementTag elementTag : elementTagList) {
                 String tag = elementTag.getTag();

@@ -25,22 +25,9 @@ public class LexUnitController implements Serializable {
 
     private String filter = "";
 
+    private String screenWidth = "";
+
     private LazyDataModel<LightLU> model;
-
-    private List<LightLU> orderedLU = new ArrayList<LightLU>();
-
-
-//    public void orderLU () {
-//        List<LightLU> allLU= new ArrayList<LightLU>();
-//        for (LexUnit lu : lexUnitRepository.findAll()) {
-//            if (matchSearch(filter, lu.getName())) {
-//                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-//            } else if (matchSearch(filter, lu.getFrame().getName())) {
-//                allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-//            }
-//        }
-//        orderedLU = allLU;
-//    }
 
     public void setFilter (String f) {
         filter = f;
@@ -50,27 +37,14 @@ public class LexUnitController implements Serializable {
         return filter;
     }
 
-
-//    public List<LightLU> getOrderedLU () {
-//        if (orderedLU.isEmpty() && filter.isEmpty()) {
-//            List <LightLU> allLu = new ArrayList<LightLU>();
-//            for (LexUnit lu : lexUnitRepository.findAll()) {
-//                allLu.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-//            }
-//            return allLu;
-//        } else {
-//            return orderedLU;
-//        }
-//    }
-
-
     public List<SentenceOutput> showAnnotation (LUOutput lu) {
         return lu.getSelectedSentences();
     }
 
 
     public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
-        for (SentenceOutput sentence : lu.processSentences(patternEntry.getAnnoSet(), 75, false)) {
+        double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
+        for (SentenceOutput sentence : lu.processSentences(patternEntry.getAnnoSet(), (int) breakline, false)) {
             boolean insert = true;
             for (SentenceOutput in : lu.getSelectedSentences()) {
                 if (sentence.getText().equals(in.getText())) {
@@ -85,7 +59,8 @@ public class LexUnitController implements Serializable {
     }
 
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
-        for (SentenceOutput sentence : lu.processSentences(group.getAllAnnotations(), 75, false)) {
+        double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
+        for (SentenceOutput sentence : lu.processSentences(group.getAllAnnotations(), (int)breakline, false)) {
             boolean insert = true;
             for (SentenceOutput in : lu.getSelectedSentences()) {
                 if (sentence.getText().equals(in.getText())) {
@@ -204,6 +179,14 @@ public class LexUnitController implements Serializable {
             lu.getSelectedEl().remove(string);
         }
         filterValencePatterns(lu);
+    }
+
+    public void setScreenWidth(String screenWidth) {
+        this.screenWidth = screenWidth;
+    }
+
+    public String getScreenWidth() {
+        return screenWidth;
     }
 
     //    public LazyDataModel<LightLU> getModel() {

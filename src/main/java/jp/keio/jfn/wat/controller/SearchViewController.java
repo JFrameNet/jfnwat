@@ -88,7 +88,7 @@ public class SearchViewController implements Serializable{
         } else {
             List<LightLU> lexUnitList = new ArrayList<LightLU>();
             for (LexUnit lu : lexUnitRepository.findAll()) {
-                if (matchSearch(search, lu.getName())) {
+                if ((matchSearch(search, lu.getName())) || (matchSearch(search, lu.getFrame().getName()))) {
                     Hibernate.initialize(lu.getStatuses());
                     LightLU lightLU = new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName());
                     lightLU.setStatuses(lu.getStatuses());
@@ -108,13 +108,21 @@ public class SearchViewController implements Serializable{
             List<Corpus> corpusList = new ArrayList<Corpus>();
             for (Corpus cp : corpusRepository.findAll()) {
                 if (matchSearch(search, cp.getName())) {
-                    for (Document document : cp.getDocuments()) {
-                        Hibernate.initialize(document.getParagraphs());
-                        for (Paragraph paragraph : document.getParagraphs()) {
-                            Hibernate.initialize(paragraph.getSentences());
+                    corpusList.add(cp);
+                }
+            }
+            for (Document document : documentRepository.findAll()) {
+                if (matchSearch(search, document.getName())) {
+                    boolean in = false;
+                    for (Corpus corpus : corpusList) {
+                        if (corpus.getId() == document.getCorpus().getId()) {
+                            in = true;
+                            break;
                         }
                     }
-                    corpusList.add(cp);
+                    if  (!in) {
+                        corpusList.add(document.getCorpus());
+                    }
                 }
             }
             return corpusList;

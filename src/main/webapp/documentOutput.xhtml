@@ -12,11 +12,11 @@
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
                     <p:panel style="border: none">
                         <div >
-                            <p:dataList id="output" value="#{documentController.showAnnotatedLU(doc).elements}" var="line" type="definition" emptyMessage=""> 
+                            <p:dataList id="output" value="#{documentController.showAnnotatedLU(tabController.screenWidth, doc).elements}" var="line" type="definition" emptyMessage=""> 
                                 <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" style="width: auto; text-align: center; border: none"> 
                                     <p:columns var="tag" value="#{line}" style="text-align: center; border: none; padding: 0; background-color: transparent; width: auto"> 
                                         <f:facet name="header"> 
-                                            <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet)}" value="#{tag.word}" style="text-decoration: underline; font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.display-sent)"/> 
+                                            <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet, tabController.screenWidth)}" value="#{tag.word}" style="text-decoration: underline; font-weight: normal; white-space: nowrap; color: #{tag.wordColor}" update="@(.display-sent)"/> 
                                             <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
                                                 <h:outputText value="#{tag.tag}" style="font-size: smaller"/>
                                             </p:tooltip>
