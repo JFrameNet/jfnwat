@@ -1,6 +1,8 @@
 package jp.keio.jfn.wat.controller;
 
 import jp.keio.jfn.wat.domain.*;
+import org.hibernate.Hibernate;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,17 +24,12 @@ public class FrameOutput {
 
     private List<FrameElement> nonCoreFrameEl = new ArrayList<FrameElement>();
 
-    private List<LightLU> allLexUnits = new ArrayList<LightLU>();
-
     private List<String> coreSets = new ArrayList<String>();
 
     private List<Map.Entry<String, Frame>> relations = new ArrayList<Map.Entry<String, Frame>>();
 
     public FrameOutput (Frame mainFrame) {
         findFrameElements(mainFrame);
-        for (LexUnit lu : mainFrame.getLexUnits()) {
-            allLexUnits.add(new LightLU(lu.getId(), lu.getName(), mainFrame.getName()));
-        }
         displayFrameRelations(mainFrame);
         name = mainFrame.getName();
         definition = mainFrame.getDefinition();
@@ -140,10 +137,6 @@ public class FrameOutput {
 
     public List<FrameElement> getNonCoreFrameEl () {
         return nonCoreFrameEl;
-    }
-
-    public List<LightLU> getAllLexUnits () {
-        return allLexUnits;
     }
 
     public String getName() {

@@ -28,7 +28,10 @@ public class LUOutput {
 
     private List<String> frameElements = new ArrayList<String>();
 
+    private String def = "";
+
     public LUOutput(LexUnit lexUnit, boolean real) {
+        this.def = lexUnit.getSenseDesc();
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
         this.annotations = lexUnit.getAnnotationSets();
         if (real) {
@@ -356,5 +359,13 @@ public class LUOutput {
 
     public void setSelectedEl(List<String> selectedEl) {
         this.selectedEl = selectedEl;
+    }
+
+    public String getDef() {
+        return def;
+    }
+
+    public void setSelectedSentences(List<SentenceOutput> selectedSentences) {
+        this.selectedSentences = selectedSentences;
     }
 }

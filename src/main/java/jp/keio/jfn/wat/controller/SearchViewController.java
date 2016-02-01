@@ -129,26 +129,6 @@ public class SearchViewController implements Serializable{
         }
     }
 
-//    public TreeNode getDocTree () {
-//        return createTree(findCorpusKeyword());
-//    }
-
-//    private TreeNode createTree(List<Corpus> corpusList) {
-//        TreeNode docRoot = new DefaultTreeNode("Root", null);
-//        if (corpusList.isEmpty()) {
-//            TreeNode empty = new DefaultTreeNode("empty", "empty tree", docRoot);
-//            docRoot.getChildren().add(empty);
-//        } else {
-//            for (Corpus cp : corpusList) {
-//                TreeNode node = new DefaultTreeNode("head",cp.getName(), docRoot);
-//                for (Document doc : cp.getDocuments()) {
-//                    node.getChildren().add(new DefaultTreeNode(doc.getName()));
-//                }
-//            }
-//        }
-//        return docRoot;
-//    }
-
     private boolean matchSearch (String query, String name) {
         return ((name.equalsIgnoreCase(query))
                 ||(name.toLowerCase().contains(query.toLowerCase()))

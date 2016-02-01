@@ -12,7 +12,7 @@
 
     <ui:define name="filter">
         <h:form>
-            <p:inputText value="#{documentController.filter}">
+            <p:inputText value="#{documentController.filter}" placeholder="#{text['docFilter']}">
                 <p:ajax event="keyup" listener="#{documentController.filterCorpora()}" update="docList"/>
             </p:inputText>
         </h:form>
