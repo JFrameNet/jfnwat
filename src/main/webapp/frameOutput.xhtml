@@ -12,10 +12,7 @@
                 <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
                     <p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="output">
                         <p:tab title="#{text['definition']}" >
-                            <p:dataList type="definition" value="#{frameController.processDef(frame,frame.definition)}" var="str">
-                                <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
-                            </p:dataList>
-                            <div class="EmptyBox10"/>
+                            <h:outputText value="#{frameController.processDef(frame, frame.definition)}" escape="false" />
                         </p:tab>
                         <p:tab title="#{text['frameElements']}">
                             <p:dataTable var="fe" value="#{frame.coreFrameEl}" emptyMessage="">
@@ -27,10 +24,7 @@
                                 </p:column >
                                 <p:column styleClass="frame-element-def">
                                     <div class="ContainerIndent">
-                                        <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
-                                            <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
-                                        </p:dataList>
-                                        <div class="EmptyBox10"/>
+                                        <h:outputText value="#{frameController.processDef(frame, fe.definition)}" escape="false" />
                                     </div>
                                 </p:column>
                             </p:dataTable>
@@ -42,12 +36,7 @@
                                     </div>
                                 </p:column >
                                 <p:column styleClass="frame-element-def">
-                                    <div class="ContainerIndent">
-                                        <p:dataList type="definition" value="#{frameController.processDef(frame,fe.definition)}" var="str">
-                                            <h:outputText value="#{str.word}"  styleClass="horizontal" style="white-space: pre-wrap; color: #{str.wordColor}" escape="false"/>
-                                        </p:dataList>
-                                        <div class="EmptyBox10"/>
-                                    </div>
+                                    <h:outputText value="#{frameController.processDef(frame, fe.definition)}" escape="false" />
                                 </p:column>
                             </p:dataTable>
                         </p:tab>

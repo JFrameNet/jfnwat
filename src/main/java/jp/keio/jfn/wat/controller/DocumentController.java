@@ -73,7 +73,7 @@ public class DocumentController implements Serializable {
     public SentenceOutput showAnnotatedLU (String screenWidth, DocumentOutput doc) {
         if (doc != null) {
 //            double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
-            return doc.processSentences(85);
+            return doc.processSentences(83);
         } else {
             return  null;
         }
