@@ -4,3 +4,4 @@ Datasource configuration is defined in src/main/resources/application.properties
 * Run from IntelliJ : the main class is src/main/java/jp/keio/jfn/wat/JFNWAT
 * Run from command line, using Spring Boot maven plugin in the project directory
 > mvn spring-boot:run
+* Access the application with http://localhost:<PORT>/index.jsf
