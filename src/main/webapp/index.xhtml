@@ -1,11 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
-<f:view>
-    <h:outputLabel value="Hello, world"/>
-</f:view>
-</html>
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/indexLayout.xhtml">
+
+    <ui:define name="image">
+        <p:graphicImage id="top-logo" name="#{text['mainLogo']}" width="400"/>
+    </ui:define>
+    <ui:define name="search">
+        <h:form>
+            <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" onfocus="this.select()" queryDelay="100" value="#{searchViewController.search}" completeMethod="#{searchViewController.completeText}"/>
+            <p:commandButton icon="fa fa-search" id="btnSearch" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton btn-search"/>
+        </h:form>
+    </ui:define>
+    <ui:define name="language">
+        <h:form>
+            <h:outputText value="#{text['selectLanguageText']}" />
+            <h:commandLink value="#{text['availableLanguage']}" action="#{localeBean.change()}"/>
+        </h:form>
+    </ui:define>
+    <ui:define name="indexes">
+        <p:commandButton value="#{text['frameIndex']}" action="#{tabController.toFrame}" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
+        <p:commandButton value="#{text['lexUnitIndex']}"  action="#{tabController.toLexUnit}" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
+        <p:commandButton value="#{text['documentIndex']}" action="#{tabController.toDocuments}" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
+    </ui:define>
+
+</ui:composition>

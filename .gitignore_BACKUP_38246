@@ -1,0 +1,8 @@
+target
+<<<<<<< HEAD
+.idea
+=======
+.idea
+jfnwat.iml
+src/main/webapp/WEB-INF/classes
+>>>>>>> test
