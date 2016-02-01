@@ -16,7 +16,7 @@
         </div>
         <div class="Fleft OvHidden">
             <h:form>
-                <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" styleClass="autocomplete-jfn" onfocus="this.select()" value="#{searchViewController.search}"/>
+                <p:autoComplete id="acMaxResults" maxResults="5" queryDelay="100" completeMethod="#{searchViewController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{searchViewController.search}"/>
                 <p:commandButton value="#{text['search']}" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton toolbar-btn-search"/>
             </h:form>
         </div>
