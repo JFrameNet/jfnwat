@@ -30,6 +30,9 @@ public class LUOutput {
 
     private String def = "";
 
+    private String displayCore = "none";
+    private String displayNonCore = "none";
+
     public LUOutput(LexUnit lexUnit, boolean real) {
         this.def = lexUnit.getSenseDesc();
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
@@ -367,5 +370,21 @@ public class LUOutput {
 
     public void setSelectedSentences(List<SentenceOutput> selectedSentences) {
         this.selectedSentences = selectedSentences;
+    }
+
+    public String getDisplayCore() {
+        return displayCore;
+    }
+
+    public String getDisplayNonCore() {
+        return displayNonCore;
+    }
+
+    public void setDisplayCore(String displayCore) {
+        this.displayCore = displayCore;
+    }
+
+    public void setDisplayNonCore(String displayNonCore) {
+        this.displayNonCore = displayNonCore;
     }
 }

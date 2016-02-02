@@ -42,12 +42,16 @@ function displayAll (id)  {
 
 function displayCore (id) {
     var div = document.getElementById('core'+id);
+    var other = document.getElementById('non-core'+id);
+    other.style.display = 'none';
     div.style.display = 'block';
 }
 
 function displayNonCore(id) {
+    var div = document.getElementById('core'+id);
     var other = document.getElementById('non-core'+id);
     other.style.display = 'block';
+    div.style.display = 'none';
 }
 
 

@@ -22,9 +22,9 @@
                             <h:outputText value="#{lu.def}"/>
                         </div>
                         <p:commandButton value="All"  styleClass="main-btn all-btn filter-btn" action="#{lexUnitController.addFilter(lu,'All')}" update="@(.allReal)" onclick="displayAll(#{lu.lightLU.id})"/> 
-                        <p:commandButton value="Core" styleClass="main-btn core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.allReal)" onclick="displayCore(#{lu.lightLU.id})"/> 
-                        <p:commandButton value="Non-Core" styleClass="main-btn non-core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.allReal)" onclick="displayNonCore(#{lu.lightLU.id})"/> 
-                        <div style="display: none;" id="core#{lu.lightLU.id}">
+                        <p:commandButton value="Core Only" styleClass="main-btn core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.allReal)" onclick="displayCore(#{lu.lightLU.id})"/> 
+                        <p:commandButton value="Non-Core Only" styleClass="main-btn non-core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.allReal)" onclick="displayNonCore(#{lu.lightLU.id})"/> 
+                        <div style="display: #{lu.displayCore}" id="core#{lu.lightLU.id}">
                             <p:dataTable var="element" styleClass="hide-column-names texalcenter" value="#{lu.feCoreRealizations}" emptyMessage=""> 
                                 <p:column styleClass="element-column"> 
                                     <p:commandButton value="#{element.frameElement.name}" styleClass="core-btn filter-btn element-btn" action="#{lexUnitController.addFilter(lu,element.frameElement.name)}" update="@(.allReal)"/> 
@@ -38,7 +38,7 @@
                                 </p:column> 
                             </p:dataTable>
                         </div>
-                        <div style="display: none;" id="non-core#{lu.lightLU.id}">
+                        <div style="display: #{lu.displayNonCore}" id="non-core#{lu.lightLU.id}">
                             <p:dataTable var="element" styleClass="hide-column-names texalcenter" value="#{lu.feNonCoreRealizations}" emptyMessage=""> 
                                 <p:column styleClass="element-column"> 
                                     <p:commandButton value="#{element.frameElement.name}" styleClass="filter-btn non-core-btn element-btn" action="#{lexUnitController.addFilter(lu, element.frameElement.name)}" update="@(.allReal)"/> 
@@ -55,7 +55,8 @@
                         <div id="filter-selection" class="ContainerIndent">
                             <p:fieldset>
                                 <p:dataList styleClass="allReal" var="elements" value="#{lexUnitController.getSelectedEl(lu)}" type="definition" emptyMessage="">
-                                    <p:commandButton styleClass="horizontal selected-filter" action="#{lexUnitController.removeFilter(lu, elements)}" value="#{elements}" icon="ui-icon-close" onclick="hideFilter(this)" update="@(.allReal)"/>
+                                    <p:commandButton styleClass="horizontal selected-filter GreenButton" action="#{lexUnitController.removeFilter(lu, elements)}" value="#{elements}" icon="ui-icon-close" onclick="hideFilter(this)" update="@(.allReal)"/>
+                                    <h:outputText styleClass="horizontal" rendered="#{lexUnitController.getSelectedEl(lu).indexOf(elements) != lexUnitController.getSelectedEl(lu).size() -1}" style="padding-top: 10px!important; margin: 3px" value="AND"/>
                                 </p:dataList>
                             </p:fieldset>
                         </div>
@@ -88,7 +89,7 @@
                             <p:dataList styleClass="display-sent" var="proc" value="#{lexUnitController.showAnnotation(lu)}" type="definition" emptyMessage="">  
                                 <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>
                                 <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                    <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="annotation-table" rowStyleClass="annotation"> 
+                                    <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto; border-left: solid 1px #546E7A" styleClass="annotation-table" rowStyleClass="annotation"> 
                                         <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
                                             <f:facet name="header"> 
                                                 <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" styleClass="word lu-el"/>
@@ -108,9 +109,6 @@
                                 <div class="EmptyBox20"/> 
                             </p:dataList> 
                         </p:dialog>
-                        <p:panel styleClass="bottom-panel tab-layout">
-
-                        </p:panel>
                     </p:tab>
                 </p:tabView>
             </h:form>

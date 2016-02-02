@@ -182,6 +182,16 @@ public class LexUnitController implements Serializable {
             selectedEl.add(string);
             lu.setSelectedEl(selectedEl);
             filterValencePatterns(lu);
+            if (string.equals("Core")) {
+                lu.setDisplayCore("block");
+                lu.setDisplayNonCore("none");
+            } else if (string.equals("Non-Core")) {
+                lu.setDisplayNonCore("block");
+                lu.setDisplayNonCore("none");
+            }else if (string.equals("All")) {
+                lu.setDisplayNonCore("block");
+                lu.setDisplayNonCore("block");
+            }
             return;
         }
         if (!lu.getSelectedEl().contains(string)) {
