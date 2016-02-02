@@ -32,6 +32,9 @@ public class LUOutput {
 
     private String displayCore = "none";
     private String displayNonCore = "none";
+    private String hasCore = "";
+    private String hasNonCore = "";
+    private String hasEl = "";
 
     public LUOutput(LexUnit lexUnit, boolean real) {
         this.def = lexUnit.getSenseDesc();
@@ -41,6 +44,9 @@ public class LUOutput {
             findRealizations();
         }
         findALlFE();
+        this.hasCore = this.feCoreRealizations.isEmpty()?"none":"inline";
+        this.hasNonCore = this.feNonCoreRealizations.isEmpty()?"none":"inline";
+        this.hasEl = this.feGroupRealizations.isEmpty()?"none":"inline";
     }
 
     private void findALlFE() {
@@ -386,5 +392,17 @@ public class LUOutput {
 
     public void setDisplayNonCore(String displayNonCore) {
         this.displayNonCore = displayNonCore;
+    }
+
+    public String getHasCore() {
+        return hasCore;
+    }
+
+    public String getHasNonCore() {
+        return hasNonCore;
+    }
+
+    public String getHasEl() {
+        return hasEl;
     }
 }

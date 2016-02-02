@@ -21,9 +21,9 @@
                             <br/><br/>
                             <h:outputText value="#{lu.def}"/>
                         </div>
-                        <p:commandButton value="All"  styleClass="main-btn all-btn filter-btn" action="#{lexUnitController.addFilter(lu,'All')}" update="@(.allReal)" onclick="displayAll(#{lu.lightLU.id})"/> 
-                        <p:commandButton value="Core Only" styleClass="main-btn core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.allReal)" onclick="displayCore(#{lu.lightLU.id})"/> 
-                        <p:commandButton value="Non-Core Only" styleClass="main-btn non-core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.allReal)" onclick="displayNonCore(#{lu.lightLU.id})"/> 
+                        <p:commandButton value="All" style="display: #{lu.hasEl}"  styleClass="main-btn all-btn filter-btn" action="#{lexUnitController.addFilter(lu,'All')}" update="@(.allReal)" onclick="displayAll(#{lu.lightLU.id})"/> 
+                        <p:commandButton value="Core Only" style="display: #{lu.hasCore}" styleClass="main-btn core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Core')}" update="@(.allReal)" onclick="displayCore(#{lu.lightLU.id})"/> 
+                        <p:commandButton value="Non-Core Only" style="display: #{lu.hasNonCore}" styleClass="main-btn non-core-btn filter-btn" action="#{lexUnitController.addFilter(lu,'Non-Core')}" update="@(.allReal)" onclick="displayNonCore(#{lu.lightLU.id})"/> 
                         <div style="display: #{lu.displayCore}" id="core#{lu.lightLU.id}">
                             <p:dataTable var="element" styleClass="hide-column-names texalcenter" value="#{lu.feCoreRealizations}" emptyMessage=""> 
                                 <p:column styleClass="element-column"> 

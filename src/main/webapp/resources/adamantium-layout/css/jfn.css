@@ -165,22 +165,18 @@
 }
 .main-btn {
   width: 20%;
-  text-align: left;
 }
 .element-btn {
   width: 90%;
-  text-align: left;
 }
 .element-column {
   border: none!important;
   background-color: transparent!important;
-  text-align: left!important;
   width: 25%;
 }
 .real-column {
   border: none!important;
   background-color: transparent!important;
-  text-align: left;
 }
 .selected-filter {
   margin: 2px;
