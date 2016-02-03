@@ -24,6 +24,9 @@ import javax.annotation.ManagedBean;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is a controller for the home and the search page.
+ */
 @ManagedBean
 @RestController
 @Scope("view")
@@ -43,20 +46,24 @@ public class SearchViewController implements Serializable{
 
     private String search = "";
 
+    /**
+     * Filter for the autocomplete search bar. If a frame name, a corpus name, a document name or a lexical unit name
+     * matches the string entered by the user, it is added to the list of possible results to be displayed.
+     */
     public List<String> completeText(String query) {
         List<String> results = new ArrayList<String>();
         for (LexUnit lu : lexUnitRepository.findAll()) {
-            if (matchSearch(query, lu.getName())) {
+            if (Utils.matchSearch(query, lu.getName())) {
                 results.add(lu.getName());
             }
         }
         for (Frame frame : frameRepository.findAll()) {
-            if (matchSearch(query, frame.getName())) {
+            if (Utils.matchSearch(query, frame.getName())) {
                 results.add(frame.getName());
             }
         }
         for (Corpus cp : corpusRepository.findAll()) {
-            if (matchSearch(query, cp.getName())) {
+            if (Utils.matchSearch(query, cp.getName())) {
                 results.add(cp.getName());
             }
         }
@@ -67,13 +74,18 @@ public class SearchViewController implements Serializable{
         return "searchPage?faces-redirect=true&search=" + search;
     }
 
+    /**
+     * Finds all the frame whose name match the search filter
+     *
+     * @return a list of frames
+     */
     public List<Frame> findFrameKeyword () {
         if (search.isEmpty()) {
             return new ArrayList<Frame>();
         } else {
             List<Frame> frameList = new ArrayList<Frame>();
             for (Frame frame : frameRepository.findAll()) {
-                if (matchSearch(search, frame.getName())) {
+                if (Utils.matchSearch(search, frame.getName())) {
                     frameList.add(frame);
                 }
             }
@@ -81,6 +93,11 @@ public class SearchViewController implements Serializable{
         }
     }
 
+    /**
+     * Finds all the lexical units whose name or frame name match the search filter
+     *
+     * @return a list of LightLU objects created from a list of the selected lexical units.
+     */
     @Transactional
     public List<LightLU> findLUKeyword () {
         if (search.isEmpty()) {
@@ -88,7 +105,7 @@ public class SearchViewController implements Serializable{
         } else {
             List<LightLU> lexUnitList = new ArrayList<LightLU>();
             for (LexUnit lu : lexUnitRepository.findAll()) {
-                if ((matchSearch(search, lu.getName())) || (matchSearch(search, lu.getFrame().getName()))) {
+                if ((Utils.matchSearch(search, lu.getName())) || (Utils.matchSearch(search, lu.getFrame().getName()))) {
                     Hibernate.initialize(lu.getStatuses());
                     LightLU lightLU = new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName());
                     lightLU.setStatuses(lu.getStatuses());
@@ -100,6 +117,11 @@ public class SearchViewController implements Serializable{
         }
     }
 
+    /**
+     * Finds all the corpora whose name or child document name match the search filter
+     *
+     * @return a list of corpora
+     */
     @Transactional
     public List<Corpus> findCorpusKeyword () {
         if (search.isEmpty()) {
@@ -107,12 +129,12 @@ public class SearchViewController implements Serializable{
         } else {
             List<Corpus> corpusList = new ArrayList<Corpus>();
             for (Corpus cp : corpusRepository.findAll()) {
-                if (matchSearch(search, cp.getName())) {
+                if (Utils.matchSearch(search, cp.getName())) {
                     corpusList.add(cp);
                 }
             }
             for (Document document : documentRepository.findAll()) {
-                if (matchSearch(search, document.getName())) {
+                if (Utils.matchSearch(search, document.getName())) {
                     boolean in = false;
                     for (Corpus corpus : corpusList) {
                         if (corpus.getId() == document.getCorpus().getId()) {
@@ -127,12 +149,6 @@ public class SearchViewController implements Serializable{
             }
             return corpusList;
         }
-    }
-
-    private boolean matchSearch (String query, String name) {
-        return ((name.equalsIgnoreCase(query))
-                ||(name.toLowerCase().contains(query.toLowerCase()))
-                ||(query.toLowerCase().contains(name.toLowerCase())));
     }
 
     public String getSearch() {

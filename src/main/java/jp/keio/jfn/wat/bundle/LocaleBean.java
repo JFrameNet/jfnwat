@@ -11,6 +11,8 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 /**
+ * This class manages the locale. Users have the choice between English and Japanese.
+ *
  * @author Alex Kabbach
  */
 @Controller

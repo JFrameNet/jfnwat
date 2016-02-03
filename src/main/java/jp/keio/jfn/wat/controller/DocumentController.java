@@ -12,14 +12,19 @@ import jp.keio.jfn.wat.repository.CorpusRepository;
 import jp.keio.jfn.wat.repository.DocumentRepository;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * This class is a controller for the document index. It handles operations on DocumentOutput objects.
+ */
 @ManagedBean
 @Controller
+@Scope("view")
 public class DocumentController implements Serializable {
 
     @Autowired
@@ -35,39 +40,18 @@ public class DocumentController implements Serializable {
 
     private List<Document> allDocs = new ArrayList<Document>();
 
-    public void setFilter (String f) {
-        filter = f;
-    }
-
-    public String getFilter () {
-        return filter;
-    }
-
+    /**
+     * Filters documents when a user types a search string in the input field of the document index.
+     * Updates this.allDocs with all the documents whose name or parent corpus name matches the search string.
+     */
     public void filterCorpora() {
         List <Document> filteredDocs  = new ArrayList<Document>();
         for (Document doc : documentRepository.findAll()) {
-            if (matchSearch(filter, doc.getCorpus().getName()) || matchSearch(filter, doc.getName())) {
+            if (Utils.matchSearch(filter, doc.getCorpus().getName()) || Utils.matchSearch(filter, doc.getName())) {
                 filteredDocs.add(doc);
             }
         }
         allDocs = filteredDocs;
-    }
-
-    private boolean matchSearch (String query, String name) {
-        return ((name.equalsIgnoreCase(query))
-                ||(name.toLowerCase().contains(query.toLowerCase()))
-                ||(query.toLowerCase().contains(name.toLowerCase())));
-    }
-
-    public List<Document> getAllDocs () {
-        if (filter.isEmpty() && allDocs.isEmpty()) {
-            List <Document> documentList = new ArrayList<Document>();
-            for (Document lu : documentRepository.findAll()) {
-                documentList.add(lu);
-            }
-            allDocs = documentList;
-        }
-        return allDocs;
     }
 
     public SentenceOutput showAnnotatedLU (String screenWidth, DocumentOutput doc) {
@@ -80,15 +64,25 @@ public class DocumentController implements Serializable {
 
     }
 
-
+    /**
+     * Returns all selected annotated sentences for the document.
+     */
     public List<SentenceOutput> showAnnotation(DocumentOutput doc) {
         return doc.getSelectedSentences();
     }
 
+    /**
+     * Removes the sentence from the list of all sentences selected for the document.
+     */
     public void removeSentence (DocumentOutput doc, SentenceOutput sentenceOutput) {
         doc.getSelectedSentences().remove(sentenceOutput);
     }
 
+    /**
+     * Creates an annotated sentence depending on the selected target and the screen width.
+     * Adds colors to the labels so as to be consistent for the whole document : the same frame element will be of the
+     * same color for every sentence of the document.
+     */
     @Transactional
     public void selectLU(DocumentOutput doc, AnnotationSet a, String screenWidth) {
         for (SentenceOutput sentenceOutput : doc.getSelectedSentences()) {
@@ -101,6 +95,7 @@ public class DocumentController implements Serializable {
         for (Layer layer : annotationSet.getLayers()){
             Hibernate.initialize(layer.getLabels());
         }
+        // Finds all labels from the target layer and the FE layer.
         LUOutput lu = new LUOutput(annotationSet.getLexUnit(), false);
         Layer layerFE = null;
         Layer layerTarget = null;
@@ -117,17 +112,40 @@ public class DocumentController implements Serializable {
         List<Label> allLabels = layerFE.getLabels();
         allLabels.addAll(layerTarget.getLabels());
 //        double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
-        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 80, false);
+        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 80);
         for (List<ElementTag> elementTagList : processed.getElements()) {
             for (ElementTag elementTag : elementTagList) {
                 String tag = elementTag.getTag();
                 if (tag.equals("")) {
                     elementTag.setTagColor("#F5F5F5");
                 } else {
-                    elementTag.setTagColor(TabController.allColors.get(doc.getAllFE().indexOf(tag)));
+                    elementTag.setTagColor(Utils.allColors.get(doc.getAllFE().indexOf(tag)));
                 }
             }
         }
         doc.getSelectedSentences().add(processed);
     }
+
+    /**
+     * Getter for allDocs. If the list if empty and the string search is empty it returns all documents.
+     */
+    public List<Document> getAllDocs () {
+        if (filter.isEmpty() && allDocs.isEmpty()) {
+            List <Document> documentList = new ArrayList<Document>();
+            for (Document lu : documentRepository.findAll()) {
+                documentList.add(lu);
+            }
+            allDocs = documentList;
+        }
+        return allDocs;
+    }
+
+    public void setFilter (String f) {
+        filter = f;
+    }
+
+    public String getFilter () {
+        return filter;
+    }
+
 }

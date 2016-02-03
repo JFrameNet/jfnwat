@@ -5,7 +5,8 @@ import jp.keio.jfn.wat.domain.FrameElement;
 import jp.keio.jfn.wat.domain.LexUnit;
 
 /**
- * Created by jfn on 1/13/16.
+ * This is an helper to display annotation.
+ * An ElementTag object consists of a word and an associated tag. A color can be specified for the word and the tag.
  */
 public class ElementTag {
     private String word;
@@ -16,8 +17,11 @@ public class ElementTag {
     private boolean isLU;
     private AnnotationSet annotationSet = null;
 
-    public ElementTag (String el, String t) {
-        this.word = el;
+    /**
+     * Initialisation of an ElementTag with a word and an associated tag.
+     */
+    public ElementTag (String w, String t) {
+        this.word = w;
         this.tag = t;
         this.wordColor = "#546E7A";
         this.tagColor = "#FFFFFF";

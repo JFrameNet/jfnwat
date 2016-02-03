@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 1/13/16.
+ * This class is a representation of an annotated sentence.
+ * Every line of the sentence is associated with a list of ElementTag objects.
  */
 public class SentenceOutput {
 
@@ -16,6 +17,9 @@ public class SentenceOutput {
 
     private AnnotationSet annotationSet;
 
+    /**
+     * Initialization
+     */
     public SentenceOutput(List<List<ElementTag>> list, String text) {
         this.elements = list;
         this.text = text;

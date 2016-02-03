@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by jfn on 1/18/16.
+ * This class defines all the elements to be retrieved for a Frame object for the Web Report.
  */
 public class FrameOutput {
 
@@ -28,6 +28,9 @@ public class FrameOutput {
 
     private List<Map.Entry<String, Frame>> relations = new ArrayList<Map.Entry<String, Frame>>();
 
+    /**
+     * Initialization with a Frame
+     */
     public FrameOutput (Frame mainFrame) {
         findFrameElements(mainFrame);
         displayFrameRelations(mainFrame);
@@ -35,6 +38,9 @@ public class FrameOutput {
         definition = mainFrame.getDefinition();
     }
 
+    /**
+     * Finds all frame elements associated to the frame and sort them depending on their type (Core or not).
+     */
     private void findFrameElements (Frame currentFrame) {
         for (FrameElement fe : currentFrame.getFrameElements()) {
             if (fe.getType().equals("Core")) {
@@ -47,15 +53,21 @@ public class FrameOutput {
         }
     }
 
+    /**
+     * Finds all frame relations that include the frame considered.
+     * It also retrieves information about core sets.
+     */
     private void displayFrameRelations (Frame currentFrame) {
         HashMap<String, List<Frame>> mapRelations = new HashMap<String, List<Frame>>();
         for (FrameRelation rel : currentFrame.getFrameRelations1()) {
             RelationType type = rel.getRelationType();
+            // Frame relations of type 4 and 5 are ignored. Type 6 corresponds to core sets.
             if ((type.getId() != 4) &&(type.getId()!=5) && (type.getId() !=6)) {
                 Frame subFrame = rel.getFrame2();
                 if ((subFrame != null) && (subFrame.getId() != 100)){
                     insertInMap(mapRelations, processFrameRelation(type, true), subFrame);
                 }
+                //adds core sets
             } else if (type.getId() == 6) {
                 for (FERelation feRelation : rel.getFerelations()) {
                     String result = "{" + feRelation.getFrameElement2().getName()+", "+ feRelation.getFrameElement1().getName()+"}";
@@ -85,6 +97,10 @@ public class FrameOutput {
         }
     }
 
+    /**
+     * Process frame relations to display a string according to the type of the relation and if the current frame is the
+     * subFrame or the superFrame in the relation.
+     */
     private String processFrameRelation (RelationType rel, boolean isFrame1) {
         String result="";
         switch (rel.getId()){
