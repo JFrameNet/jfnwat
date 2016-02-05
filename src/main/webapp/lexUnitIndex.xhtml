@@ -21,7 +21,7 @@
 
     <ui:define name="indexList">
         <div>
-            <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}">
+            <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="1500" emptyMessage="#{text['emptyMessage']}">
                 <p:column>
                     <h:form>
                         <p:commandLink global="false" action="#{tabController.addLU(lu)}" value="#{lu.name}" styleClass="element-index" ajax="false">

@@ -20,7 +20,7 @@
 
     <ui:define name="indexList">
         <div>
-            <p:dataTable id="frameList" value="#{frameController.orderedFrames}" var="frame" scrollable="true" scrollRows="60" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}" liveScroll="true">
+            <p:dataTable id="frameList" value="#{frameController.orderedFrames}" var="frame" scrollable="true" scrollRows="60" scrollHeight="1500" emptyMessage="#{text['emptyMessage']}" liveScroll="true">
                 <p:column>
                     <h:form>
                         <p:commandLink global="false" action="#{tabController.addFrame(frame)}" value="#{frame}" styleClass="element-index">

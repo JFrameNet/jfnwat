@@ -20,7 +20,7 @@
 
     <ui:define name="indexList">
         <div>
-            <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="100%" emptyMessage="#{text['emptyMessage']}">
+            <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="1500" emptyMessage="#{text['emptyMessage']}">
                 <p:column>
                     <h:form>
                         <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" styleClass="element-index">
