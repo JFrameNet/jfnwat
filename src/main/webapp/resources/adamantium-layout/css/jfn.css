@@ -24,6 +24,9 @@
 .general-tooltip {
   font-size: smaller;
 }
+.hidden-width-helper {
+  display: none;
+}
 /*Tabs*/
 .tab-layout {
   border: none !important;

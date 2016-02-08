@@ -8,9 +8,10 @@
     <ui:define name="lexUnitOutput">
         <div class="ContainerIndent">
             <h:form id="form3">
-                <h:inputText id="w1" value="#{lexUnitController.screenWidth}" style="display: none"/>
-                <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" styleClass="tab-layout">
+                <h:inputText id="w1" value="#{lexUnitController.screenWidth}" styleClass="hidden-width-helper"/>
+                <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" styleClass="tab-layout" id="tab-lu">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}"/>
+                    <p:ajax event="tabChange" oncomplete="resizeDialog(#{tabController.loadedLUs.size()})"/>
                     <p:tab title="#{lu.lightLU.name}" closable="true">
                         <div class="ContainerIndent">
                             <p:commandLink action="#{tabController.addFrame(lu.lightLU.frame)}" value="#{lu.lightLU.frame}" styleClass="horizontal"/>
@@ -82,9 +83,10 @@
                                 </p:dataTable>
                             </div>
                         </p:panel>
-                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" minHeight="40">
+                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" minHeight="40" id="wind">
                             <f:facet name="header">
                                 <p:commandButton value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" update="@(.display-sent)" styleClass="GrayButton"/>
+                                <p:commandButton value="Resize" action="#{lexUnitController.onResize(lu)}" update="@(.display-sent)" styleClass="GrayButton"/>
                             </f:facet>
                             <p:dataList styleClass="display-sent" var="proc" value="#{lexUnitController.showAnnotation(lu)}" type="definition" emptyMessage="">  
                                 <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>
@@ -109,6 +111,8 @@
                                 <div class="EmptyBox20"/> 
                             </p:dataList> 
                         </p:dialog>
+                        <p:resizable for="wind" onResize="resizeDialog(#{tabController.loadedLUs.size()})">
+                        </p:resizable>
                     </p:tab>
                 </p:tabView>
             </h:form>
