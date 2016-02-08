@@ -1,0 +1,19 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/kwicTemplate.xhtml">
+
+    <ui:define name="search">
+        <div class="Fleft OvHidden">
+            <h:form>
+                <p:autoComplete id="acMaxResults" maxResults="5" queryDelay="100" completeMethod="#{kwicViewController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicViewController.search}"/>
+                <p:commandButton value="#{text['search']}" action="#{kwicViewController.navigateWithSearch()}" styleClass="GreenButton toolbar-btn-search"/>
+            </h:form>
+        </div>
+    </ui:define>
+
+
+</ui:composition>
