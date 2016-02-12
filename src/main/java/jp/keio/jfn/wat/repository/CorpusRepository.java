@@ -7,5 +7,5 @@ import java.util.List;
 
 
 public interface CorpusRepository extends CrudRepository<Corpus, Long> {
-
+    Corpus findById(Integer id);
 }

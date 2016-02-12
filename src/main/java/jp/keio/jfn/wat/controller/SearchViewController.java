@@ -3,6 +3,7 @@ package jp.keio.jfn.wat.controller;
 
 import jp.keio.jfn.wat.domain.*;
 import org.hibernate.Hibernate;
+import org.hibernate.procedure.internal.Util;
 import org.springframework.context.annotation.Scope;
 
 import jp.keio.jfn.wat.repository.CorpusRepository;
@@ -67,6 +68,11 @@ public class SearchViewController implements Serializable{
                 results.add(cp.getName());
             }
         }
+        for (Document document : documentRepository.findAll()) {
+            if (Utils.matchSearch(query, document.getName())) {
+                results.add(document.getName());
+            }
+        }
         return results;
     }
 
@@ -106,11 +112,14 @@ public class SearchViewController implements Serializable{
             List<LightLU> lexUnitList = new ArrayList<LightLU>();
             for (LexUnit lu : lexUnitRepository.findAll()) {
                 if ((Utils.matchSearch(search, lu.getName())) || (Utils.matchSearch(search, lu.getFrame().getName()))) {
-                    Hibernate.initialize(lu.getStatuses());
                     LightLU lightLU = new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName());
-                    lightLU.setStatuses(lu.getStatuses());
+                    try {
+                        Hibernate.initialize(lu.getStatuses());
+                        lightLU.setStatuses(lu.getStatuses());
+                    } catch (Exception e) {
+                        System.err.print(e.toString());
+                    }
                     lexUnitList.add(lightLU);
-
                 }
             }
             return lexUnitList;
@@ -122,7 +131,6 @@ public class SearchViewController implements Serializable{
      *
      * @return a list of corpora
      */
-    @Transactional
     public List<Corpus> findCorpusKeyword () {
         if (search.isEmpty()) {
             return new ArrayList<Corpus>();
@@ -159,4 +167,19 @@ public class SearchViewController implements Serializable{
         this.search = search;
     }
 
+    public void setCorpusRepository(CorpusRepository corpusRepository) {
+        this.corpusRepository = corpusRepository;
+    }
+
+    public void setDocumentRepository(DocumentRepository documentRepository) {
+        this.documentRepository = documentRepository;
+    }
+
+    public void setFrameRepository(FrameRepository frameRepository) {
+        this.frameRepository = frameRepository;
+    }
+
+    public void setLexUnitRepository(LexUnitRepository lexUnitRepository) {
+        this.lexUnitRepository = lexUnitRepository;
+    }
 }

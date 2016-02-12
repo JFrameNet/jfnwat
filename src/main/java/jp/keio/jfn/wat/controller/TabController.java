@@ -265,4 +265,8 @@ public class TabController {
     public int getIndex() {
         return index;
     }
+
+    public void setLexUnitRepository(LexUnitRepository l) {
+        lexUnitRepository = l;
+    }
 }

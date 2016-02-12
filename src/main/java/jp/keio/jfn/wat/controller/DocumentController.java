@@ -3,6 +3,7 @@ package jp.keio.jfn.wat.controller;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import javax.faces.bean.ManagedBean;
 import javax.annotation.PostConstruct;
 
@@ -146,6 +147,14 @@ public class DocumentController implements Serializable {
 
     public String getFilter () {
         return filter;
+    }
+
+    public void setDocumentRepository(DocumentRepository d) {
+        documentRepository = d;
+    }
+
+    public void setAllDocs(List<Document> list) {
+        allDocs = list;
     }
 
 }

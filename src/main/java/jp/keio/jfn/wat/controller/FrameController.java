@@ -141,4 +141,8 @@ public class FrameController implements Serializable {
     public String getFilter () {
         return filter;
     }
+
+    public void setFrameRepository(FrameRepository f) {
+        frameRepository = f;
+    }
 }

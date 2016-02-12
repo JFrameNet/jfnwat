@@ -299,4 +299,8 @@ public class LexUnitController implements Serializable {
     public List<SentenceOutput> showAnnotation (LUOutput lu) {
         return lu.getSelectedSentences();
     }
+
+    public void setLexUnitRepository(LexUnitRepository l) {
+        lexUnitRepository = l;
+    }
 }
