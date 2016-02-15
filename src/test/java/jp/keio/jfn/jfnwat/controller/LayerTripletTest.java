@@ -54,6 +54,12 @@ public class LayerTripletTest {
     @Autowired
     MiscLabelRepository miscLabelRepository;
 
+    @Autowired
+    FrameElementRepository frameElementRepository;
+
+    @Autowired
+    FrameRepository frameRepository;
+
     private LayerTriplet layerTriplet;
 
     private Label labelPT;
@@ -76,14 +82,56 @@ public class LayerTripletTest {
         layerType.setName("name");
         layerTypeRepository.save(layerType);
 
+        Frame frame = new Frame();
+        frame.setName("frame");
+        frame.setCreatedBy("test");
+        frameRepository.save(frame);
+
+        layerTriplet = createLayerTriplet(0,"frame element", "pt", "gf", frameElementRepository,
+                miscLabelRepository,
+                labelTypeRepository,
+                sentenceRepository,
+                annotationSetRepository,
+                layerRepository,
+                labelRepository,
+                annotationStatusRepository,
+                frame,
+                color,
+                layerType,
+                instantiationType);
+
+        labelGF = layerTriplet.getLabelGF();
+        labelPT = layerTriplet.getLabelPT();
+    }
+
+
+    public static LayerTriplet createLayerTriplet(int index, String fe, String pt, String gf,
+                                           FrameElementRepository frameElementRepository,
+                                           MiscLabelRepository miscLabelRepository,
+                                           LabelTypeRepository labelTypeRepository,
+                                           SentenceRepository sentenceRepository,
+                                           AnnotationSetRepository annotationSetRepository,
+                                           LayerRepository layerRepository,
+                                           LabelRepository labelRepository,
+                                           AnnotationStatusRepository annotationStatusRepository,
+                                           Frame frame,
+                                           Color color,
+                                           LayerType layerType,
+                                           InstantiationType instantiationType) {
+        FrameElement frameElement = new FrameElement();
+        frameElement.setName(fe);
+        frameElement.setId(index*10);
+        frameElement.setFrame(frame);
+        frameElementRepository.save(frameElement);
+
         MiscLabel miscLabel2 = new MiscLabel();
-        miscLabel2.setName("pt");
-        miscLabel2.setId(2);
+        miscLabel2.setName(pt);
+        miscLabel2.setId(index*10 + 2);
         miscLabelRepository.save(miscLabel2);
 
         MiscLabel miscLabel3 = new MiscLabel();
-        miscLabel3.setName("gf");
-        miscLabel3.setId(3);
+        miscLabel3.setName(gf);
+        miscLabel3.setId(index*10 + 3);
         miscLabelRepository.save(miscLabel3);
 
         LabelType labelType1 = new LabelType();
@@ -92,6 +140,8 @@ public class LayerTripletTest {
         labelType1.setColor3(color);
         labelType1.setColor4(color);
         labelType1.setLayerType(layerType);
+        labelType1.setFrameElement(frameElement);
+        labelType1.setId(index*10 + 1);
         labelTypeRepository.save(labelType1);
 
         LabelType labelType2 = new LabelType();
@@ -101,7 +151,7 @@ public class LayerTripletTest {
         labelType2.setColor4(color);
         labelType2.setLayerType(layerType);
         labelType2.setMiscLabel(miscLabel2);
-        labelType2.setId(2);
+        labelType2.setId(index * 10 + 2);
         labelTypeRepository.save(labelType2);
 
         LabelType labelType3 = new LabelType();
@@ -111,28 +161,32 @@ public class LayerTripletTest {
         labelType3.setColor4(color);
         labelType3.setLayerType(layerType);
         labelType3.setMiscLabel(miscLabel3);
-        labelType3.setId(3);
+        labelType3.setId(index * 10 + 3);
         labelTypeRepository.save(labelType3);
 
         Sentence sentence = new Sentence();
         sentence.setText("text");
         sentence.setCreatedBy("test");
+        sentence.setId(index);
         sentenceRepository.save(sentence);
 
         AnnotationStatus annotationStatus = new AnnotationStatus();
         annotationStatus.setName("status");
+        annotationStatus.setId(index);
         annotationStatusRepository.save(annotationStatus);
 
         AnnotationSet annotationSet = new AnnotationSet();
         annotationSet.setSentence(sentence);
         annotationSet.setAnnotationStatus(annotationStatus);
         annotationSet.setCreatedBy("test");
+        annotationSet.setId(index);
         annotationSetRepository.save(annotationSet);
 
         Layer layer = new Layer();
         layer.setAnnotationSet(annotationSet);
         layer.setCreatedBy("test");
         layer.setLayerType(layerType);
+        layer.setId(index);
         layerRepository.save(layer);
 
         Label labelFE = new Label();
@@ -140,25 +194,30 @@ public class LayerTripletTest {
         labelFE.setCreatedBy("test");
         labelFE.setLabelType(labelType1);
         labelFE.setLayer(layer);
+        labelFE.setId(index*10 + 1);
         labelRepository.save(labelFE);
 
-        labelPT = new Label();
+        Label labelPT = new Label();
         labelPT.setInstantiationType(instantiationType);
         labelPT.setCreatedBy("test");
         labelPT.setLabelType(labelType2);
         labelPT.setLayer(layer);
-        labelPT.setId(2);
+        labelPT.setId(index*10 +2);
         labelRepository.save(labelPT);
 
-        labelGF = new Label();
+        Label labelGF = new Label();
         labelGF.setInstantiationType(instantiationType);
         labelGF.setCreatedBy("test");
         labelGF.setLabelType(labelType3);
         labelGF.setLayer(layer);
-        labelGF.setId(3);
+        labelGF.setId(index*10 +3);
         labelRepository.save(labelGF);
 
-        layerTriplet = new LayerTriplet(labelFE);
+        LayerTriplet layerTriplet = new LayerTriplet(labelFE);
+        layerTriplet.setLabelGF(labelGF);
+        layerTriplet.setLabelPT(labelPT);
+
+        return layerTriplet;
     }
 
     @After
@@ -173,6 +232,8 @@ public class LayerTripletTest {
         layerTypeRepository.deleteAll();
         sentenceRepository.deleteAll();
         miscLabelRepository.deleteAll();
+        frameElementRepository.deleteAll();
+        frameRepository.deleteAll();
         layerTriplet = null;
     }
 
@@ -180,6 +241,8 @@ public class LayerTripletTest {
     public void testOutputString1() {
         instantiationType.setId((byte)1);
 
+        layerTriplet.setLabelPT(null);
+        layerTriplet.setLabelGF(null);
         assertEquals(".", layerTriplet.outputString());
 
         layerTriplet.setLabelPT(labelPT);

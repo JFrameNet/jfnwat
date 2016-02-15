@@ -15,7 +15,7 @@ public class AnnotationStatus implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private byte id;
+	private int id;
 
 	private String description;
 
@@ -28,11 +28,11 @@ public class AnnotationStatus implements Serializable {
 	public AnnotationStatus() {
 	}
 
-	public byte getId() {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId(byte id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
