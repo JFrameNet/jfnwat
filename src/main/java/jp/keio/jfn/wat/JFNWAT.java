@@ -17,7 +17,7 @@ import org.springframework.boot.context.embedded.ServletListenerRegistrationBean
 import com.sun.faces.config.ConfigureListener;
 
 /**
- * @author Alex Kabbach
+ * This is the main class for the JFNWAT application.
  */
 @SpringBootApplication
 public class JFNWAT implements ServletContextAware {

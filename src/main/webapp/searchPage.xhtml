@@ -47,7 +47,7 @@
         </p:dataTable>
     </ui:define>
     <ui:define name="docs">
-        <p:accordionPanel value="#{searchViewController.findCorpusKeyword()}" activeIndex="-1" var="corpus">
+        <p:accordionPanel value="#{searchViewController.findCorpusKeyword()}" activeIndex="-1" var="corpus" styleClass="noborder">
             <p:tab title="#{corpus.name}">
                 <p:dataTable value="#{corpus.documents}" var="doc" styleClass="hide-column-names">
                     <p:column>

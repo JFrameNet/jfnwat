@@ -1,20 +1,26 @@
 package jp.keio.jfn.wat.controller;
 
-import jp.keio.jfn.wat.domain.FrameElement;
 import jp.keio.jfn.wat.domain.Label;
 
 /**
- * Created by jfn on 1/8/16.
+ * This class represents the grammatical information associated to a frame element label.
+ * PT is its phrase type and GF the grammatical function.
  */
 public class LayerTriplet {
     private Label labelFE;
     private Label labelGF;
     private Label labelPT;
 
+    /**
+     * Initialization with the frame element label.
+     */
     public LayerTriplet(Label label) {
         labelFE = label;
     }
 
+    /**
+     * Creates an output string of the format FE.PT.GF with the name of the labels of the triple.
+     */
     public String outputString () {
         if (labelFE.getInstantiationType().getId() == 1) {
             String pt = (labelPT == null) ? "" : labelPT.getLabelType().getMiscLabel().getName();

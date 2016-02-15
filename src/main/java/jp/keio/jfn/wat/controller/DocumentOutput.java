@@ -7,15 +7,21 @@ import java.util.List;
 
 
 /**
- * Created by jfn on 1/27/16.
+ * This class defines all the elements to be retrieved for a Document object.
  */
 public class DocumentOutput {
+
     private List<Sentence> sentences  = new ArrayList<Sentence>();
 
     private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
 
     private String name;
 
+    private List<String> allFE = new ArrayList<String>();
+
+    /**
+     * Instantiation with a Document object.
+     */
     public DocumentOutput(Document document) {
         for (Paragraph paragraph : document.getParagraphs()) {
             sentences.addAll(paragraph.getSentences());
@@ -23,12 +29,11 @@ public class DocumentOutput {
         this.name = document.getName();
     }
 
-    private List<String> allFE = new ArrayList<String>();
-
-    public String getName() {
-        return name;
-    }
-
+    /**
+     * Creates a list of all the possible frame elements for any annotation set for all the sentences in the
+     * document.
+     * This list will be used to set frame elements colors when displaying annotations.
+     */
     private void findALlFESentences() {
         for (Sentence sentence : this.sentences) {
             for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
@@ -46,11 +51,19 @@ public class DocumentOutput {
         }
     }
 
+    /**
+     * Returns one SentenceOuput composed of all the sentences of the document concatenated. Looks for all the target
+     * LUs in the sentences.
+     *
+     * @param breakLine this variable sets the line break. It depends on the screen width.
+     * @return a unique SentenceOutput in which all the targets LU are a separated ElementTag.
+     */
     public SentenceOutput processSentences (int breakLine) {
         findALlFESentences();
         String allText = "";
         List<Label> allLabels = new ArrayList<Label>();
         List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
+        // Concatenates all sentences for this document and lists all target LUs
         for (Sentence sentence : this.sentences) {
             allText = allText + sentence.getText();
             for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
@@ -61,16 +74,20 @@ public class DocumentOutput {
                 }
             }
         }
+        // rank is the line number
         int rank = 0;
         int imin = 0;
         int iaux =0;
         int imax = allText.length();
         List<ElementTag> line;
+        // Loop on the whole text
         while (imin + rank*breakLine < imax) {
             line = new ArrayList<ElementTag>();
+            // Loop for one line
             while ((imin + rank*breakLine < imax)&& (imin < breakLine)) {
                 for (Label label : allLabels) {
                     if (label.getInstantiationType().getId() == 1){
+                        // Adds the length of all previous sentences to the sentence from which the label is extracted
                         int index = this.sentences.indexOf(label.getLayer().getAnnotationSet().getSentence());
                         int previousSentence = 0;
                         for (int i = 0; i < index; i ++) {
@@ -139,5 +156,9 @@ public class DocumentOutput {
 
     public List<String> getAllFE() {
         return allFE;
+    }
+
+    public String getName() {
+        return name;
     }
 }

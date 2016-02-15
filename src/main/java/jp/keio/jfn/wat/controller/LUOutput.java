@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 1/18/16.
+ * This class defines all the elements to be retrieved for a LexicalUnit object.
  */
 public class LUOutput {
 
@@ -28,15 +28,35 @@ public class LUOutput {
 
     private List<String> frameElements = new ArrayList<String>();
 
+    private String def = "";
+
+    private String displayCore = "none";
+    private String displayNonCore = "none";
+    private String hasCore = "";
+    private String hasNonCore = "";
+    private String hasEl = "";
+
+    /**
+     * Initialization.
+     *
+     * @param real defines if we want to retrieve the group realizations associated with the Lexical Unit or not.
+     */
     public LUOutput(LexUnit lexUnit, boolean real) {
+        this.def = lexUnit.getSenseDesc();
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
         this.annotations = lexUnit.getAnnotationSets();
         if (real) {
             findRealizations();
         }
         findALlFE();
+        this.hasCore = this.feCoreRealizations.isEmpty()?"none":"inline";
+        this.hasNonCore = this.feNonCoreRealizations.isEmpty()?"none":"inline";
+        this.hasEl = this.feGroupRealizations.isEmpty()?"none":"inline";
     }
 
+    /**
+     * Finds all frame elements present in the annotation sets associated to the lexical unit.
+     */
     private void findALlFE() {
         for (AnnotationSet annoSet : this.annotations) {
             for (Layer layer : annoSet.getLayers()){
@@ -52,64 +72,9 @@ public class LUOutput {
         }
     }
 
-    public void findFrameElements (AnnotationSet annotationSet, FrameElement fe, LayerTriplet valenceUnit) {
-        PatternEntry newPattern = new PatternEntry();
-        List<LayerTriplet> unit = new ArrayList<LayerTriplet>();
-        unit.add(valenceUnit);
-        newPattern.setValenceUnits(unit);
-        newPattern.addOccurence(annotationSet);
-        boolean insert = true;
-        List<FERealization> list = fe.getType().equals("Core") ? this.feCoreRealizations : this.feNonCoreRealizations;
-        for (FERealization realization : list) {
-            if (realization.getFrameElement().getId() == fe.getId()) {
-                insert = false;
-                boolean insertPattern = true;
-                for (PatternEntry patternEntry : realization.getPatterns()) {
-                    if (patternEntry.hasValence (valenceUnit)) {
-                        insertPattern = false;
-                        patternEntry.addOccurence(annotationSet);
-                        break;
-                    }
-                }
-                if (insertPattern) {
-                    realization.addPattern(newPattern);
-                }
-            }
-        }
-        if (insert) {
-            list.add(new FERealization(fe, newPattern));
-        }
-    }
-
-    public void findGroupRealizations (AnnotationSet annotationSet, List<FrameElement> groupFE, List<LayerTriplet> valenceGroup) {
-        PatternEntry newGroupPattern = new PatternEntry();
-        newGroupPattern.setValenceUnits(valenceGroup);
-        newGroupPattern.addOccurence(annotationSet);
-        List<PatternEntry> patternEntries = new ArrayList<PatternEntry>();
-        patternEntries.add(newGroupPattern);
-
-        boolean insert = true;
-        for (FEGroupRealization realization : this.feGroupRealizations) {
-            if (realization.equalsFEGroup (groupFE)){
-                insert = false;
-                boolean insertPattern = true;
-                for (PatternEntry patternEntry : realization.getPatterns()){
-                    if (patternEntry.hasGroupValence (valenceGroup)) {
-                        insertPattern = false;
-                        patternEntry.addOccurence(annotationSet);
-                        break;
-                    }
-                }
-                if (insertPattern) {
-                    realization.addPattern(newGroupPattern);
-                }
-            }
-        }
-        if (insert) {
-            this.feGroupRealizations.add( new FEGroupRealization(groupFE, patternEntries));
-        }
-    }
-
+    /**
+     * Finds all frame elements realizations and frame element group realizations for the lexical unit.
+     */
     public void findRealizations () {
         for (AnnotationSet annoSet : this.annotations) {
             Layer layerFE = null;
@@ -161,7 +126,76 @@ public class LUOutput {
         }
     }
 
-    public List<SentenceOutput> processSentences (List<AnnotationSet> annotationSetList, int breakLine, boolean btn) {
+    /**
+     * Inserts a frame element realization in this.feCoreRealizations or this.feNonCoreRealizations depending on the
+     * frame element type.
+     */
+    private void findFrameElements (AnnotationSet annotationSet, FrameElement fe, LayerTriplet valenceUnit) {
+        PatternEntry newPattern = new PatternEntry();
+        List<LayerTriplet> unit = new ArrayList<LayerTriplet>();
+        unit.add(valenceUnit);
+        newPattern.setValenceUnits(unit);
+        newPattern.addOccurence(annotationSet);
+        boolean insert = true;
+        List<FERealization> list = fe.getType().equals("Core") ? this.feCoreRealizations : this.feNonCoreRealizations;
+        for (FERealization realization : list) {
+            if (realization.getFrameElement().getId() == fe.getId()) {
+                insert = false;
+                boolean insertPattern = true;
+                for (PatternEntry patternEntry : realization.getPatterns()) {
+                    if (patternEntry.hasValence (valenceUnit)) {
+                        insertPattern = false;
+                        patternEntry.addOccurence(annotationSet);
+                        break;
+                    }
+                }
+                if (insertPattern) {
+                    realization.addPattern(newPattern);
+                }
+            }
+        }
+        if (insert) {
+            list.add(new FERealization(fe, newPattern));
+        }
+    }
+
+    /**
+     * Inserts a frame element group realization in this.fGroupRealizations.
+     */
+    private void findGroupRealizations (AnnotationSet annotationSet, List<FrameElement> groupFE, List<LayerTriplet> valenceGroup) {
+        PatternEntry newGroupPattern = new PatternEntry();
+        newGroupPattern.setValenceUnits(valenceGroup);
+        newGroupPattern.addOccurence(annotationSet);
+        List<PatternEntry> patternEntries = new ArrayList<PatternEntry>();
+        patternEntries.add(newGroupPattern);
+
+        boolean insert = true;
+        for (FEGroupRealization realization : this.feGroupRealizations) {
+            if (realization.equalsFEGroup (groupFE)){
+                insert = false;
+                boolean insertPattern = true;
+                for (PatternEntry patternEntry : realization.getPatterns()){
+                    if (patternEntry.hasGroupValence (valenceGroup)) {
+                        insertPattern = false;
+                        patternEntry.addOccurence(annotationSet);
+                        break;
+                    }
+                }
+                if (insertPattern) {
+                    realization.addPattern(newGroupPattern);
+                }
+            }
+        }
+        if (insert) {
+            this.feGroupRealizations.add( new FEGroupRealization(groupFE, patternEntries));
+        }
+    }
+
+    /**
+     * Process a list of annotation sets to display a list of annotated sentences (SentenceOutput objects).
+     * It takes the screen width as a parameter to decide the size of the lines.
+     */
+    public List<SentenceOutput> processSentences (List<AnnotationSet> annotationSetList, int breakLine) {
         List<SentenceOutput> result = new ArrayList<SentenceOutput>();
         for (AnnotationSet annoSet : annotationSetList) {
             Layer layerFE = null;
@@ -179,14 +213,23 @@ public class LUOutput {
             if (layerFE != null) {
                 List<Label> allLabels = layerFE.getLabels();
                 allLabels.addAll(layerTarget.getLabels());
-                result.add(auxFun(annoSet, allLabels, breakLine, btn));
+                result.add(auxFun(annoSet, allLabels, breakLine));
             }
         }
         addColors(result);
         return result;
     }
 
-    public SentenceOutput auxFun (AnnotationSet annotationSet, List<Label> allLabels, int breakLine, boolean btn) {
+    /**
+     * Processes one annotation set.
+     *
+     * @param annotationSet the annotation set to process.
+     * @param allLabels list of all labels to consider when processing the sentence.
+     * @param breakLine depends on the screen width.
+     * @return a SentenceOutput, with as many lines as necessary, and every frame element label associated to its word
+     * as an ElementTag object.
+     */
+    public SentenceOutput auxFun (AnnotationSet annotationSet, List<Label> allLabels, int breakLine) {
         String text = annotationSet.getSentence().getText();
         List<List<ElementTag>> list = new ArrayList<List<ElementTag>>();
         int rank = 0;
@@ -198,8 +241,7 @@ public class LUOutput {
         while (imin + rank*breakLine < imax) {
             line = new ArrayList<ElementTag>();
             if (newStart != null) {
-                int offset = (btn && (rank == 1)) ? 5 : 0;
-                String word = text.substring(rank*breakLine - offset, newStart.getEndChar() + 1);
+                String word = text.substring(rank*breakLine, newStart.getEndChar());
                 String tag = "";
                 ElementTag elementTag = new ElementTag(word, tag);
                 if (newStart.getLabelType().getLayerType().getId() == 1) {
@@ -209,7 +251,7 @@ public class LUOutput {
                     elementTag.setLU(true);
                 }
                 line.add(elementTag);
-                imin = newStart.getEndChar() - rank*breakLine + offset;
+                imin = newStart.getEndChar() - rank*breakLine;
                 iaux = imin;
                 newStart = null;
             }
@@ -256,9 +298,6 @@ public class LUOutput {
                 }
             }
             list.add(line);
-            if (btn && (rank == 0)) {
-                breakLine += 5;
-            }
             rank ++;
             imin = 0;
             iaux = 0;
@@ -272,7 +311,7 @@ public class LUOutput {
                 List<ElementTag> lastLine = list.get(list.size() -1);
                 int size = 0;
                 for (ElementTag elementTag1 : lastLine) {
-                    size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
+                    size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length()/2);
                 }
                 if (size < breakLine - Math.max(word.length(), el.getName().length()/2)) {
                     list.get(list.size() -1).add(elementTag);
@@ -289,8 +328,8 @@ public class LUOutput {
         for (ElementTag elementTag1 : lastLine) {
             size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
         }
-        int complete = breakLine - size;
-        String space = "&#160;&#160;&#160;&#160;";
+        int complete = breakLine - size + 3;
+        String space = "";
         for (int x = 0; x < complete; x ++ ) {
             space = space.concat("&#160;&#160;&#160;");
         }
@@ -300,6 +339,10 @@ public class LUOutput {
         return sentenceOutput;
     }
 
+    /**
+     * Adds colors to a list of SentenceOutput objects. The colors are consistent in all the annotation for one lexical
+     * unit (same frame element will always be of the same color for this LU).
+     */
     private void addColors (List<SentenceOutput> list) {
         for (SentenceOutput sentenceOutput : list) {
             for (List<ElementTag> elementTagList : sentenceOutput.getElements()) {
@@ -308,7 +351,7 @@ public class LUOutput {
                     if (elementTag.getTag().equals("")) {
                         elementTag.setTagColor("#F5F5F5");
                     } else {
-                        elementTag.setTagColor(TabController.allColors.get(this.frameElements.indexOf(tag)));
+                        elementTag.setTagColor(Utils.allColors.get(this.frameElements.indexOf(tag)));
                     }
 
                 }
@@ -356,5 +399,41 @@ public class LUOutput {
 
     public void setSelectedEl(List<String> selectedEl) {
         this.selectedEl = selectedEl;
+    }
+
+    public String getDef() {
+        return def;
+    }
+
+    public void setSelectedSentences(List<SentenceOutput> selectedSentences) {
+        this.selectedSentences = selectedSentences;
+    }
+
+    public String getDisplayCore() {
+        return displayCore;
+    }
+
+    public String getDisplayNonCore() {
+        return displayNonCore;
+    }
+
+    public void setDisplayCore(String displayCore) {
+        this.displayCore = displayCore;
+    }
+
+    public void setDisplayNonCore(String displayNonCore) {
+        this.displayNonCore = displayNonCore;
+    }
+
+    public String getHasCore() {
+        return hasCore;
+    }
+
+    public String getHasNonCore() {
+        return hasNonCore;
+    }
+
+    public String getHasEl() {
+        return hasEl;
     }
 }

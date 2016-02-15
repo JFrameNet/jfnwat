@@ -7,30 +7,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 1/12/16.
+ * This class represents a frame element realization. It consists of one FrameElement and a lis of PatterEntry objects.
  */
 public class FERealization {
+    private FrameElement frameElement;
 
+    private List<PatternEntry> patterns;
+
+    /**
+     * Initialization
+     */
     public FERealization(FrameElement element, PatternEntry patternEntry) {
         frameElement = element;
         patterns = new ArrayList<PatternEntry>();
         patterns.add(patternEntry);
 
     }
-
-    private List<AnnotationSet> allAnnotations = new ArrayList<AnnotationSet>();
-
-    public int getTotalOccurences () {
-        int result = 0;
-        for (PatternEntry patternEntry : patterns) {
-            result += patternEntry.getAnnoSet().size();
-        }
-        return result;
-    }
-
-    private FrameElement frameElement;
-
-    private List<PatternEntry> patterns;
 
     public void addPattern (PatternEntry pattern) {
         patterns.add(pattern);
@@ -52,8 +44,11 @@ public class FERealization {
         patterns = list;
     }
 
+    /**
+     * Retrieves all the annotations associated to the frame element.
+     */
     public List<AnnotationSet> getAllAnnotations() {
-        allAnnotations = new ArrayList<AnnotationSet>();
+        List<AnnotationSet> allAnnotations = new ArrayList<AnnotationSet>();
         for (PatternEntry patternEntry : patterns) {
             allAnnotations.addAll(patternEntry.getAnnoSet());
         }

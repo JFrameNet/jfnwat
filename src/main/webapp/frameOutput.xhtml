@@ -48,7 +48,7 @@
                                 <br/>
                             </div>
                             <div >
-                                <p:dataList var="rel" type="definition" value="#{frame.relations}" emptyMessage="#{text['emptyMessage']}">
+                                <p:dataList var="rel" type="definition" value="#{frame.relations}" emptyMessage="">
                                     <div>
                                         <div class="Wid20 Fleft OvHidden">
                                             <h:outputText value="#{rel.key} :"/>
@@ -63,10 +63,13 @@
                             </div>
                         </p:tab>
                         <p:tab title="#{text['lexUnits']}">
-                            <p:dataList var="lexUnit" type="definition" value="#{frame.allLexUnits}" emptyMessage="#{text['emptyMessage']}">
-                                <p:commandLink styleClass="horizontal list-lu" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}"/>
+                            <p:dataList var="lexUnit" type="definition" value="#{frameController.lexUnitsByFrame(frame)}" emptyMessage="#{text['emptyMessage']}">
+                                <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="font-size: larger"/>
+                                <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" styleClass="horizontal">
+                                    <h:outputText styleClass="horizontal general-tooltip" value="#{status.statusType.name}" />
+                                </p:dataList>
+                                <br></br><br/>
                             </p:dataList>
-                            <div class="EmptyBox20"/>
                         </p:tab>
                     </p:accordionPanel>
                 </p:tab>

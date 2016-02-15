@@ -6,7 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 1/18/16.
+ * This class represents a lexical unit object, with fewer variables (only id, name and frame).
+ * It is used for the Web Report, when all other properties of a lexical unit are not needed.
  */
 public class LightLU {
     private int id;
@@ -14,6 +15,9 @@ public class LightLU {
     private String frame;
     private List<Status> statuses = new ArrayList<Status>();
 
+    /**
+     * Initialization
+     */
     public LightLU (int id, String name, String frame) {
         this.id = id;
         this.name = name;

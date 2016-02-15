@@ -52,7 +52,7 @@
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-  color: #546e7a;
+  color: #363636;
   text-decoration: none;
 }
 .ui-state-default a,
@@ -75,13 +75,13 @@
 .ui-state-focus a:hover,
 .ui-state-focus a:link,
 .ui-state-focus a:visited {
-  color: #546e7a;
+  color: #363636;
   text-decoration: none;
 }
 .ui-state-active a,
 .ui-state-active a:link,
 .ui-state-active a:visited {
-  color: #546e7a;
+  color: #363636;
   text-decoration: none;
 }
 /* Interaction Cues
@@ -155,7 +155,7 @@ label.ui-state-error {
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-  background-image: url("#{resource['primefaces-adamantium:images/ui-icons_72b42d_256x240.png']}");
+  background-image: url("#{resource['primefaces-adamantium:images/ui-icons_ffffff_256x240.png']}");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
@@ -2459,7 +2459,7 @@ hr.ui-widget-header {
 }
 /*Style For UI Accordion --------------------------------------------------------------------------------------*/
 .ui-accordion {
-  border: solid 1px #e0e0e0 !important;
+  border: solid 1px #e0e0e0;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -3095,7 +3095,6 @@ hr.ui-widget-header {
   border-radius: 2px;
 }
 .ui-dialog .ui-dialog-titlebar {
-  padding: 10px 20px !important;
   border-bottom: solid 1px #e0e0e0 !important;
   background-color: #ffffff;
   color: #546e7a;
@@ -3112,7 +3111,7 @@ hr.ui-widget-header {
   margin-top: 6px;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-closethick {
-  background-image: url("#{resource['primefaces-adamantium:images/delete-gray.svg']}");
+  background-image: url("#{resource['primefaces-adamantium:images/delete-white.svg']}");
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 100%;
@@ -3727,7 +3726,7 @@ hr.ui-widget-header {
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem a {
   font-size: 18px;
-  color: #666f77;
+  color: #363636;
   padding: 12px 15px !important;
   font-family: 'latoregular';
   line-height: 1;

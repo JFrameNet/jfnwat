@@ -11,7 +11,7 @@
     </ui:define>
     <ui:define name="search">
         <h:form>
-            <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" onfocus="this.select()" queryDelay="100" value="#{searchViewController.search}" completeMethod="#{searchViewController.completeText}"/>
+            <p:autoComplete id="acMaxResults" class="searchBar" maxResults="5" onfocus="this.select()" queryDelay="100" value="#{searchViewController.search}" completeMethod="#{searchViewController.completeText}" placeholder="#{text['mainSearchPlaceHOlder']}"/>
             <p:commandButton icon="fa fa-search" id="btnSearch" action="#{searchViewController.navigateWithSearch()}" styleClass="GreenButton btn-search"/>
         </h:form>
     </ui:define>

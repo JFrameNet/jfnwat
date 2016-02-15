@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 1/12/16.
+ * This class represents a pattern entry, which consists in a list of LayerTriplet (labels in the format FE.PT.GF) and
+ * a list of annotation sets.
  */
 public class PatternEntry {
 
@@ -17,6 +18,11 @@ public class PatternEntry {
 
     private List<AnnotationSet> annoSet  = new ArrayList<AnnotationSet>();
 
+    /**
+     * Checks if an input LayerTriplet object is already present in the valenceUnits list.
+     *
+     * @return true if it founds the LayerTriplet object in valenceUnits list, false otherwise.
+     */
     public boolean hasValence (LayerTriplet valence) {
         int instantiationType = valence.getLabelFE().getInstantiationType().getId();
         if (instantiationType == 1) {
@@ -63,6 +69,10 @@ public class PatternEntry {
         return false;
     }
 
+    /**
+     * Two labels are the same if they are both null or if their associated name (the frame element name or the MiscLabel
+     * name depending on the type of the label) are identical.
+     */
     private boolean sameLabel (Label label1, Label label2, boolean fe) {
         if (label1 == null) {
             if (label2 == null) {
@@ -85,6 +95,11 @@ public class PatternEntry {
         return false;
     }
 
+    /**
+     * Checks if an input list of LayerTriplet objects contains the same elements as the current LayerTriplet list.
+     *
+     * @return true if every LayerTriplet object is contained in valenceUnits list, false otherwise.
+     */
     public boolean hasGroupValence (List<LayerTriplet> listValence) {
         for (LayerTriplet valence : listValence) {
             if (! hasValence(valence)) {
@@ -94,6 +109,9 @@ public class PatternEntry {
         return true;
     }
 
+    /**
+     * Returns the output string in the format FE.PT.GF associated to a frame element
+     */
     public String outputFE(FrameElement frameElement) {
         for (LayerTriplet unit : valenceUnits) {
             if (unit.getLabelFE().getLabelType().getFrameElement().getId() == frameElement.getId()) {
@@ -119,7 +137,4 @@ public class PatternEntry {
         return annoSet;
     }
 
-    public void setAnnoSet(List<AnnotationSet> list) {
-        annoSet = list;
-    }
 }

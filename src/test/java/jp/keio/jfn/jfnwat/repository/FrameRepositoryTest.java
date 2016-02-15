@@ -32,5 +32,6 @@ public class FrameRepositoryTest {
 		assertNull(frame.getId());
 		frameRepository.save(frame);
 		assertNotNull(frame.getId());
+		frameRepository.delete(frameRepository.findByName("Test").get(0));
 	}
 }
