@@ -83,10 +83,9 @@
                                 </p:dataTable>
                             </div>
                         </p:panel>
-                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" height="200" resizable="false" position="left bottom" fitViewport="true" positionType="fixed">
+                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" height="300" resizable="false" position="left bottom" positionType="fixed" minimizable="true" draggable="false">
                             <f:facet name="header">
                                 <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" update="@(.display-sent)" style="font-size: smaller"/>
-                                <!--<p:commandButton value="Hide" onclick="hideSentences(this,#{tabController.loadedLUs.size()})" styleClass="GrayButton" />-->
                             </f:facet>
                             <p:dataList styleClass="display-sent" var="proc" id="sentences" value="#{lexUnitController.showAnnotation(lu)}" type="definition" emptyMessage="">  
                                 <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>

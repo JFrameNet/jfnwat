@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
@@ -122,6 +123,7 @@ public class LayerTripletTest {
         frameElement.setName(fe);
         frameElement.setId(index*10);
         frameElement.setFrame(frame);
+        frameElement.setCreatedBy("test");
         frameElementRepository.save(frameElement);
 
         MiscLabel miscLabel2 = new MiscLabel();

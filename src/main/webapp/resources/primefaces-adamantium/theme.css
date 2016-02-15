@@ -3107,7 +3107,10 @@ hr.ui-widget-header {
   margin: 5px 16px 5px 0px !important;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon {
-  padding: 0px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 0;
+  padding-bottom: 0;
   margin-top: 6px;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-closethick {
@@ -3117,13 +3120,13 @@ hr.ui-widget-header {
   background-size: 100%;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-minus {
-  background-image: url("#{resource['primefaces-adamantium:images/minus-sign-gray.svg']}");
+  background-image: url("#{resource['primefaces-adamantium:images/minus-sign-white.svg']}");
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 100%;
 }
 .ui-dialog-docking-zone .ui-icon-plus {
-  background-image: url("#{resource['primefaces-adamantium:images/plus-sign-gray.svg']}");
+  background-image: url("#{resource['primefaces-adamantium:images/plus-sign-white.svg']}");
   background-position: center !important;
   background-repeat: no-repeat;
   background-size: 90%;
