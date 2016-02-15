@@ -123,7 +123,8 @@ public class LexUnitController implements Serializable {
      * The sentences are then processed as SentenceOutput objects.
      */
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
-        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.09);
+        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.098);
+        System.out.print(breakline);
         for (SentenceOutput sentence : lu.processSentences(group.getAllAnnotations(), (int)breakline)) {
             boolean insert = true;
             // if the sentence is already in the selected sentences list, do not insert it again
@@ -278,15 +279,16 @@ public class LexUnitController implements Serializable {
         return lu.getStatuses();
     }
 
-    public void onResize(LUOutput lu) {
-        List<AnnotationSet> toResize = new ArrayList<AnnotationSet>();
-        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.09);
-        for (SentenceOutput sentenceOutput : lu.getSelectedSentences()) {
-            toResize.add(sentenceOutput.getAnnotationSet());
-        }
-        List<SentenceOutput> outputs = lu.processSentences(toResize, (int) breakline);
-        lu.setSelectedSentences(outputs);
-    }
+//    public void onResize(LUOutput lu) {
+//        List<AnnotationSet> toResize = new ArrayList<AnnotationSet>();
+//        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.1);
+//        System.out.print(breakline);
+//        for (SentenceOutput sentenceOutput : lu.getSelectedSentences()) {
+//            toResize.add(sentenceOutput.getAnnotationSet());
+//        }
+//        List<SentenceOutput> outputs = lu.processSentences(toResize, (int) breakline);
+//        lu.setSelectedSentences(outputs);
+//    }
 
     public void setFilter (String f) {
         filter = f;

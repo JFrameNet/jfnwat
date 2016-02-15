@@ -44,7 +44,7 @@ function mExternalJsLoadFunc()
     var a = $(window).width();
     var div = document.getElementById('form2:form3:w1');
     if (div != null) {
-        div.value=(a*0.65);
+        div.value=a;
     }
 }
 

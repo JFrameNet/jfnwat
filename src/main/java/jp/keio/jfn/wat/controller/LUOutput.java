@@ -241,7 +241,7 @@ public class LUOutput {
         while (imin + rank*breakLine < imax) {
             line = new ArrayList<ElementTag>();
             if (newStart != null) {
-                String word = text.substring(rank*breakLine, newStart.getEndChar() + 1);
+                String word = text.substring(rank*breakLine, newStart.getEndChar());
                 String tag = "";
                 ElementTag elementTag = new ElementTag(word, tag);
                 if (newStart.getLabelType().getLayerType().getId() == 1) {
@@ -311,7 +311,7 @@ public class LUOutput {
                 List<ElementTag> lastLine = list.get(list.size() -1);
                 int size = 0;
                 for (ElementTag elementTag1 : lastLine) {
-                    size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
+                    size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length()/2);
                 }
                 if (size < breakLine - Math.max(word.length(), el.getName().length()/2)) {
                     list.get(list.size() -1).add(elementTag);
@@ -328,8 +328,8 @@ public class LUOutput {
         for (ElementTag elementTag1 : lastLine) {
             size +=  Math.max(elementTag1.getWord().length(), elementTag1.getTag().length());
         }
-        int complete = breakLine - size;
-        String space = "&#160;&#160;&#160;&#160;";
+        int complete = breakLine - size + 3;
+        String space = "";
         for (int x = 0; x < complete; x ++ ) {
             space = space.concat("&#160;&#160;&#160;");
         }
