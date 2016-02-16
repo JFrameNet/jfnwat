@@ -67,35 +67,57 @@ public class PatternEntryTest {
 
     private PatternEntry patternEntry;
 
-    private Color color;
-
-    private Frame frame;
-
-    private LayerType layerType;
-
-    private InstantiationType instantiationType;
-
     @Before
     public void setup() {
+        patternEntry = createPatterEntry(1,
+                frameElementRepository,
+                miscLabelRepository,
+                labelTypeRepository,
+                sentenceRepository,
+                annotationSetRepository,
+                layerRepository,
+                labelRepository,
+                annotationStatusRepository,
+                colorRepository,
+                instantiationTypeRepository,
+                layerTypeRepository,
+                frameRepository);
+    }
 
-        color = new Color();
+
+    public static PatternEntry createPatterEntry (int index, FrameElementRepository frameElementRepository,
+                                                  MiscLabelRepository miscLabelRepository,
+                                                  LabelTypeRepository labelTypeRepository,
+                                                  SentenceRepository sentenceRepository,
+                                                  AnnotationSetRepository annotationSetRepository,
+                                                  LayerRepository layerRepository,
+                                                  LabelRepository labelRepository,
+                                                  AnnotationStatusRepository annotationStatusRepository,
+                                                  ColorRepository colorRepository,
+                                                  InstantiationTypeRepository instantiationTypeRepository,
+                                                  LayerTypeRepository layerTypeRepository,
+                                                  FrameRepository frameRepository) {
+        Color color = new Color();
         color.setName("name");
         color.setRgb("rgb");
+        color.setId((byte)index);
         colorRepository.save(color);
 
-        instantiationType = new InstantiationType();
+        InstantiationType instantiationType = new InstantiationType();
+        instantiationType.setId((byte) index);
         instantiationTypeRepository.save(instantiationType);
 
-        layerType = new LayerType();
+        LayerType layerType = new LayerType();
+        layerType.setId(index);
         layerType.setName("name");
         layerTypeRepository.save(layerType);
 
-        frame = new Frame();
-        frame.setName("frame");
+        Frame frame = new Frame();
+        frame.setName("frame" + index);
         frame.setCreatedBy("test");
         frameRepository.save(frame);
 
-        LayerTriplet layerTriplet1 = LayerTripletTest.createLayerTriplet(1,"fe1","pt1","gf1", frameElementRepository,
+        LayerTriplet layerTriplet1 = LayerTripletTest.createLayerTriplet(index * 10 + 1,"fe1","pt1","gf1", frameElementRepository,
                 miscLabelRepository,
                 labelTypeRepository,
                 sentenceRepository,
@@ -104,7 +126,7 @@ public class PatternEntryTest {
                 labelRepository,
                 annotationStatusRepository,
                 frame, color, layerType, instantiationType);
-        LayerTriplet layerTriplet2 = LayerTripletTest.createLayerTriplet(2,"fe2","pt2","gf2", frameElementRepository,
+        LayerTriplet layerTriplet2 = LayerTripletTest.createLayerTriplet(index * 10 + 2,"fe2","pt2","gf2", frameElementRepository,
                 miscLabelRepository,
                 labelTypeRepository,
                 sentenceRepository,
@@ -113,7 +135,7 @@ public class PatternEntryTest {
                 labelRepository,
                 annotationStatusRepository,
                 frame, color, layerType, instantiationType);
-        LayerTriplet layerTriplet3 = LayerTripletTest.createLayerTriplet(3,"fe3","pt3","gf3", frameElementRepository,
+        LayerTriplet layerTriplet3 = LayerTripletTest.createLayerTriplet(index * 10 + 3,"fe3","pt3","gf3", frameElementRepository,
                 miscLabelRepository,
                 labelTypeRepository,
                 sentenceRepository,
@@ -122,8 +144,11 @@ public class PatternEntryTest {
                 labelRepository,
                 annotationStatusRepository,
                 frame, color, layerType, instantiationType);
-        patternEntry = new PatternEntry();
+
+        PatternEntry patternEntry = new PatternEntry();
         patternEntry.setValenceUnits(new ArrayList<LayerTriplet>(Arrays.asList(layerTriplet1,layerTriplet2,layerTriplet3)));
+
+        return patternEntry;
     }
 
     @After
@@ -145,7 +170,24 @@ public class PatternEntryTest {
 
     @Test
     public void testHasValenceFalse() {
-        LayerTriplet testTriplet = LayerTripletTest.createLayerTriplet(4,"fetest","pttest","gftest", frameElementRepository,
+        Color color = new Color();
+        color.setName("name");
+        color.setRgb("rgb");
+        colorRepository.save(color);
+
+        InstantiationType instantiationType = new InstantiationType();
+        instantiationTypeRepository.save(instantiationType);
+
+        LayerType layerType = new LayerType();
+        layerType.setName("name");
+        layerTypeRepository.save(layerType);
+
+        Frame frame = new Frame();
+        frame.setName("frame2");
+        frame.setCreatedBy("test");
+        frameRepository.save(frame);
+
+        LayerTriplet testTriplet = LayerTripletTest.createLayerTriplet(40,"fetest","pttest","gftest", frameElementRepository,
                 miscLabelRepository,
                 labelTypeRepository,
                 sentenceRepository,
@@ -165,8 +207,31 @@ public class PatternEntryTest {
     }
 
     @Test
+    public void testHasGroupValenceEmpty() {
+        assertEquals(true, patternEntry.hasGroupValence(new ArrayList<LayerTriplet>()));
+    }
+
+
+    @Test
     public void testHasGroupValenceFalse() {
-        LayerTriplet testTriplet = LayerTripletTest.createLayerTriplet(5,"fetest","pttest","gftest", frameElementRepository,
+        Color color = new Color();
+        color.setName("name");
+        color.setRgb("rgb");
+        colorRepository.save(color);
+
+        InstantiationType instantiationType = new InstantiationType();
+        instantiationTypeRepository.save(instantiationType);
+
+        LayerType layerType = new LayerType();
+        layerType.setName("name");
+        layerTypeRepository.save(layerType);
+
+        Frame frame = new Frame();
+        frame.setName("frame3");
+        frame.setCreatedBy("test");
+        frameRepository.save(frame);
+
+        LayerTriplet testTriplet = LayerTripletTest.createLayerTriplet(50,"fetest","pttest","gftest", frameElementRepository,
                 miscLabelRepository,
                 labelTypeRepository,
                 sentenceRepository,
@@ -194,9 +259,45 @@ public class PatternEntryTest {
     }
 
     @Test
-    public void testOutputFE() {
+    public void testOutputFE1() {
+        LayerTriplet layerTriplet1 = patternEntry.getValenceUnits().get(0);
+        FrameElement frameElement1 = layerTriplet1.getLabelFE().getLabelType().getFrameElement();
+        layerTriplet1.getLabelFE().getInstantiationType().setId((byte)1);
+
+        LayerTriplet layerTriplet2 = patternEntry.getValenceUnits().get(1);
+        FrameElement frameElement2 = layerTriplet2.getLabelFE().getLabelType().getFrameElement();
+        layerTriplet2.getLabelFE().getInstantiationType().setId((byte)1);
+
+        LayerTriplet layerTriplet3 = patternEntry.getValenceUnits().get(2);
+        FrameElement frameElement3 = layerTriplet3.getLabelFE().getLabelType().getFrameElement();
+        layerTriplet3.getLabelFE().getInstantiationType().setId((byte)1);
+
+        assertEquals("pt1.gf1", patternEntry.outputFE(frameElement1));
+        assertEquals("pt2.gf2",patternEntry.outputFE(frameElement2));
+        assertEquals("pt3.gf3",patternEntry.outputFE(frameElement3));
+
+        Label label1 = layerTriplet1.getLabelPT();
+        layerTriplet1.setLabelPT(null);
+        Label label2 = layerTriplet2.getLabelPT();
+        layerTriplet2.setLabelPT(null);
+        Label label3 = layerTriplet3.getLabelPT();
+        layerTriplet3.setLabelPT(null);
+
+        assertEquals(".gf1", patternEntry.outputFE(frameElement1));
+        assertEquals(".gf2",patternEntry.outputFE(frameElement2));
+        assertEquals(".gf3",patternEntry.outputFE(frameElement3));
+
+        layerTriplet1.setLabelPT(label1);
+        layerTriplet2.setLabelPT(label2);
+        layerTriplet3.setLabelPT(label3);
+    }
+
+    @Test
+    public void testOutputFE2() {
         FrameElement frameElement = patternEntry.getValenceUnits().get(0).getLabelFE().getLabelType().getFrameElement();
-        patternEntry.getValenceUnits().get(0).getLabelFE().getInstantiationType().setId((byte)1);
-        assertEquals("pt1.gf1", patternEntry.outputFE(frameElement));
+        InstantiationType in = patternEntry.getValenceUnits().get(0).getLabelFE().getInstantiationType();
+        in.setId((byte)4);
+        in.setName("test name");
+        assertEquals("test name", patternEntry.outputFE(frameElement));
     }
 }

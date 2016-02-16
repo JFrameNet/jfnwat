@@ -13,6 +13,8 @@ public class DocumentOutput {
 
     private List<Sentence> sentences  = new ArrayList<Sentence>();
 
+    private List<SentenceDisplay> sentenceDisplay = new ArrayList<SentenceDisplay>();
+
     private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
 
     private String name;
@@ -26,7 +28,11 @@ public class DocumentOutput {
         for (Paragraph paragraph : document.getParagraphs()) {
             sentences.addAll(paragraph.getSentences());
         }
+        for (Sentence sentence : sentences) {
+            sentenceDisplay.add(new SentenceDisplay(sentence));
+        }
         this.name = document.getName();
+        findALlFESentences();
     }
 
     /**
@@ -160,5 +166,9 @@ public class DocumentOutput {
 
     public String getName() {
         return name;
+    }
+
+    public List<SentenceDisplay> getSentenceDisplay() {
+        return sentenceDisplay;
     }
 }

@@ -37,6 +37,15 @@
   padding-right: 5px;
   padding-left: 5px;
 }
+.ui-panelgrid {
+  border: none!important;
+}
+.ui-panelgrid tbody tr td {
+  border: none !important;
+}
+.ui-panelgrid .ui-panelgrid-cell {
+  padding: 0!important;
+}
 /*Tabs*/
 .tab-layout {
   border: none !important;
@@ -76,6 +85,12 @@
 .element-index {
   line-height: 20px;
   padding-left: 5px ;
+  text-decoration: none !important;
+}
+.element-index:hover {
+  line-height: 20px;
+  padding-left: 5px ;
+  text-decoration: underline !important;
 }
 .sub-element-index {
   margin-left: 10px;
@@ -133,6 +148,9 @@
   text-decoration: underline;
   font-weight: normal;
   white-space: nowrap;
+}
+.doc {
+  width: 100%;
 }
 /*Frame*/
 .frame-element {
@@ -220,5 +238,8 @@
   border: none!important;
   width: 120px;
   padding: 0;
+}
+.underline-tag {
+  border-bottom: solid 1px !important;
 }
 

@@ -2,6 +2,7 @@ package jp.keio.jfn.wat.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.faces.bean.ManagedBean;
@@ -68,8 +69,17 @@ public class DocumentController implements Serializable {
     /**
      * Returns all selected annotated sentences for the document.
      */
-    public List<SentenceOutput> showAnnotation(DocumentOutput doc) {
-        return doc.getSelectedSentences();
+    public void showAnnotation(DocumentOutput doc) {
+        for (SentenceDisplay sentenceDisplay : doc.getSentenceDisplay()) {
+            if (sentenceDisplay.getDisplayedAnnotationSet() == null) {
+                for (AnnotationSet annotationSet : sentenceDisplay.getSentence().getAnnotationSets()) {
+                    if (annotationSet.getLexUnit() != null) {
+                        sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -155,6 +165,27 @@ public class DocumentController implements Serializable {
 
     public void setAllDocs(List<Document> list) {
         allDocs = list;
+    }
+
+    public List<Tag> getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
+        AnnotationSet annotationSet = sentenceDisplay.getDisplayedAnnotationSet();
+        if (annotationSet == null) {
+            List<Tag> result = new ArrayList<Tag>();
+            for (Target target : AnnotationDisplay.getTargetsSentence(sentenceDisplay.getSentence())) {
+                result.add(new Tag("", new ArrayList<Target>(Arrays.asList(target))));
+            }
+            return result;
+        }
+        return AnnotationDisplay.getAnnotation(sentenceDisplay.getDisplayedAnnotationSet(), doc.getAllFE());
+    }
+
+    public void setAnnotationSentence(SentenceDisplay sentence, AnnotationSet annotationSet) {
+        AnnotationSet current = sentence.getDisplayedAnnotationSet();
+        if ((current != null) && (current.getId() == annotationSet.getId())) {
+            sentence.setDisplayedAnnotationSet(null);
+        } else {
+            sentence.setDisplayedAnnotationSet(annotationSet);
+        }
     }
 
 }

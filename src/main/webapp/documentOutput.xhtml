@@ -10,49 +10,31 @@
             <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" styleClass="tab-layout">
                 <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                    <p:panel styleClass="NoBorder">
-                        <div >
-                            <p:dataList id="output" value="#{documentController.showAnnotatedLU(tabController.screenWidth, doc).elements}" var="line" type="definition" emptyMessage=""> 
-                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="paragraph"> 
-                                    <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
-                                        <f:facet name="header"> 
-                                            <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet, tabController.screenWidth)}" value="#{tag.word}" styleClass="paragraph-link" style="color: #{tag.wordColor}" update="@(.display-sent)"/> 
-                                            <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
-                                                <h:outputText value="#{tag.tag}" styleClass="general-tooltip"/>
-                                            </p:tooltip>
-                                        </f:facet> 
-                                    </p:columns> 
-                                </p:dataTable> 
-                            </p:dataList> 
-                        </div>
-                    </p:panel>
-                    <p:panel styleClass="NoBorder bottom-panel">
-                        <p:dataList styleClass="display-sent" var="proc" value="#{documentController.showAnnotation(doc)}" type="definition" emptyMessage="">  
-                            <p:commandLink styleClass="horizontal remove-link" value="x" update="@(.display-sent)" action="#{documentController.removeSentence(doc,proc)}"/>
-                            <h:outputText styleClass="horizontal lex-unit-name" value="#{proc.annotationSet.lexUnit.name}"/>
-                            <h:outputText value="#{proc.annotationSet.lexUnit.frame.name}" styleClass="general-tooltip"/>
-                            <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="annotation-table" rowStyleClass="annotation"> 
-                                    <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
-                                        <f:facet name="header"> 
-                                            <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" styleClass="word lu-el" escape="false"/>
-                                            <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" styleClass="word normal-el" escape="false"/> 
-                                        </f:facet> 
-                                        <p:lightBox rendered="#{!tag.isLU()}" style="border-top: solid 1px #{tag.tagColor}">
-                                            <h:outputLink value="#">
-                                                <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor}"/>
-                                            </h:outputLink>
-                                            <f:facet name="inline">
-                                                <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
-                                            </f:facet>
-                                        </p:lightBox>
-                                    </p:columns> 
-                                </p:dataTable> 
-                            </p:dataList> 
-                            <div class="EmptyBox20"/> 
-                        </p:dataList> 
-                    </p:panel>
-
+                    <p:dataList id="output" value="#{doc.sentenceDisplay}" var="line" type="definition" emptyMessage="" styleClass="horizontal doc"> 
+                        <p:dataList type="definition" var="tag" value="#{documentController.getAnnotation(doc, line)}" styleClass="horizontal doc display-sent" >
+                            <p:panelGrid columns="1" styleClass="horizontal noborder texalcenter">
+                                <p:row>
+                                    <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="horizontal">
+                                        <p:column>
+                                            <p:commandLink rendered="#{word.isFocus()}" style="background-color: #F5D8C6"  value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
+                                            <p:commandLink rendered="#{(!word.isFocus())and word.isValid()}" style="font-weight: bold;" value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
+                                            <h:outputText rendered="#{!word.isFocus() and !word.isValid()}" value="#{word.text}"/>
+                                        </p:column>
+                                    </p:dataList>
+                                </p:row>
+                                <p:row style="background-color: #f5f5f5">
+                                    <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
+                                        <h:outputLink value="#">
+                                            <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                                        </h:outputLink>
+                                        <f:facet name="inline">
+                                            <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                                        </f:facet>
+                                    </p:lightBox>
+                                </p:row>
+                            </p:panelGrid>
+                        </p:dataList>
+                    </p:dataList> 
                 </p:tab>
             </p:tabView>
         </h:form>
