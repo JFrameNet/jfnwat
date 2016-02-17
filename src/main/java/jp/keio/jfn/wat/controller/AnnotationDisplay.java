@@ -18,28 +18,15 @@ public class AnnotationDisplay {
         display.setDisplayedAnnotationSet(annotationSet);
         List<Pos> positions = getPosTargets(display, single);
         List<Tag> tags = new ArrayList<Tag>();
-        Layer layerFE = null;
-        Layer layerTarget = null;
+        List<Label> allTargets = new ArrayList<Label>();
+        List<Label> allLabels = new ArrayList<Label>();
         for (Layer layer : annotationSet.getLayers()){
             if (layer.getLayerType().getId() == 1) {
-                layerFE = layer;
+                allLabels.addAll(layer.getLabels());
             } else  if (layer.getLayerType().getId() == 2) {
-                layerTarget = layer;
-            }
-            if ((layerFE != null) && (layerTarget != null)) {
-                break;
+                allTargets.addAll(layer.getLabels());
             }
         }
-        List<Label> allLabels;
-        try {
-            assert layerFE != null;
-            allLabels = layerFE.getLabels();
-            allLabels.addAll(layerTarget.getLabels());
-        } catch (NullPointerException e) {
-            System.err.print("No frame elements");
-            return new ArrayList<Tag>();
-        }
-
         int i = 0;
         int iaux = 0;
         int max = annotationSet.getSentence().getText().length();
@@ -50,21 +37,28 @@ public class AnnotationDisplay {
                     if (i > iaux) {
                         tags.addAll(getTargets(annotationSet.getSentence().getText(), iaux, i, positions));
                     }
-                    if (label.getLabelType().getLayerType().getId() == 1) {
-                        String s = label.getLabelType().getFrameElement().getName();
-                        Tag t = new Tag(s, findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, false));
-                        t.setColor(Utils.allColors.get(allFE.indexOf(s)));
-                        t.setFrameElement(label.getLabelType().getFrameElement());
-                        tags.add(t);
-                    } else {
-                        tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, true)));
-                    }
-
+                    String s = label.getLabelType().getFrameElement().getName();
+                    Tag t = new Tag(s, findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, allTargets));
+                    t.setColor(Utils.allColors.get(allFE.indexOf(s)));
+                    t.setFrameElement(label.getLabelType().getFrameElement());
+                    tags.add(t);
                     i = label.getEndChar();
                     iaux = i + 1;
                     break;
                 }
             }
+            for (Label label : allTargets) {
+                if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
+                    if (i > iaux) {
+                        tags.addAll(getTargets(annotationSet.getSentence().getText(), iaux, i, positions));
+                    }
+                    tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, allTargets)));
+                    i = label.getEndChar();
+                    iaux = i + 1;
+                    break;
+                }
+            }
+
             i ++;
         }
         if (iaux < max) {
@@ -120,7 +114,7 @@ public class AnnotationDisplay {
         positions.add(i,x);
     }
 
-    private static List<Target> findTargets (String text, int start, int end, List<Pos> pos, boolean target) {
+    private static List<Target> findTargets (String text, int start, int end, List<Pos> pos, List<Label> focus) {
         List<Target> result = new ArrayList<Target>();
         int i = start;
         int aux = i;
@@ -132,7 +126,11 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,position.getEnd() + 1));
                     t.setValid(true);
-                    t.setBkg("#66BB6A");
+                    for (Label label : focus) {
+                        if (label.getStartChar() == position.getStart() && position.getEnd() == label.getEndChar()) {
+                            t.setBkg("#66BB6A");
+                        }
+                    }
                     t.setAnnotationSet(position.getAnnotationSet());
                     result.add(t);
                     i = position.getEnd();
