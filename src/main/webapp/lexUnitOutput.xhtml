@@ -8,10 +8,8 @@
     <ui:define name="lexUnitOutput">
         <div class="ContainerIndent">
             <h:form id="form3">
-                <h:inputText id="w1" value="#{lexUnitController.screenWidth}" styleClass="hidden-width-helper"/>
                 <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" styleClass="tab-layout" id="tab-lu">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}"/>
-                    <p:ajax event="tabChange" oncomplete="resizeDialog(#{tabController.loadedLUs.size()})"/>
                     <p:tab title="#{lu.lightLU.name}" closable="true">
                         <div class="ContainerIndent">
                             <p:commandLink action="#{tabController.addFrame(lu.lightLU.frame)}" value="#{lu.lightLU.frame}" styleClass="horizontal"/>
@@ -87,31 +85,33 @@
                             <f:facet name="header">
                                 <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" update="@(.display-sent)" style="font-size: smaller"/>
                             </f:facet>
-                            <p:dataList styleClass="display-sent" var="proc" id="sentences" value="#{lexUnitController.showAnnotation(lu)}" type="definition" emptyMessage="">  
-                                <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, proc)}"/>
-                                <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                    <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto; border-left: solid 1px #546E7A" styleClass="annotation-table" rowStyleClass="annotation"> 
-                                        <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
-                                            <f:facet name="header"> 
-                                                <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" styleClass="word lu-el"/>
-                                                <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" styleClass="word normal-el" escape="false"/> 
-                                            </f:facet> 
-                                            <p:lightBox rendered="#{!tag.isLU()}" style="border-top: solid 1px #{tag.tagColor}">
+                            <p:dataList id="output" value="#{lexUnitController.showAnnotation(lu)}" var="line" type="definition" emptyMessage="" styleClass="horizontal doc"> 
+                                <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, line)}"/>
+                                <p:dataList type="definition" var="tag" value="#{line.elements}" styleClass="horizontal doc display-sent" >
+                                    <p:panelGrid columns="1" styleClass="horizontal noborder texalcenter">
+                                        <p:row>
+                                            <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="horizontal" styleClass="horizontal">
+                                                <p:column style="text-align: center">
+                                                    <h:outputText rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}"/>
+                                                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
+                                                </p:column>
+                                            </p:dataList>
+                                        </p:row>
+                                        <p:row style="background-color: #f5f5f5">
+                                            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
                                                 <h:outputLink value="#">
-                                                    <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor}"/>
+                                                    <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
                                                 </h:outputLink>
                                                 <f:facet name="inline">
                                                     <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
                                                 </f:facet>
                                             </p:lightBox>
-                                        </p:columns> 
-                                    </p:dataTable> 
-                                </p:dataList> 
-                                <div class="EmptyBox10"/> 
+                                        </p:row>
+                                    </p:panelGrid>
+                                </p:dataList>
                             </p:dataList> 
+                            <div class="EmptyBox40"/>
                         </p:dialog>
-                        <!--<p:resizable for="wind" onResize="resizeDialog(#{tabController.loadedLUs.size()})">-->
-                        <!--</p:resizable>-->
                     </p:tab>
                 </p:tabView>
             </h:form>

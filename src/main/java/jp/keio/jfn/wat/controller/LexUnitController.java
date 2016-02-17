@@ -25,8 +25,6 @@ public class LexUnitController implements Serializable {
 
     private String filter = "";
 
-    private String screenWidth = "";
-
     /**
      * Adds a filter when the user clicks on a button corresponding to the name of a frame element on on the "All",
      * "Core Only" and "Non Core Only" buttons.
@@ -99,20 +97,18 @@ public class LexUnitController implements Serializable {
      * The sentences are then processed as SentenceOutput objects.
      */
     public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
-//        String value = FacesContext.getCurrentInstance().
-//                getExternalContext().getRequestParameterMap().get("form2:form3:w1");
-        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.09);
-        for (SentenceOutput sentence : lu.processSentences(patternEntry.getAnnoSet(), (int) breakline)) {
+        for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
             boolean insert = true;
-            // if the sentence is already in the selected sentences list, do not insert it again
-            for (SentenceOutput in : lu.getSelectedSentences()) {
-                if (sentence.getText().equals(in.getText())) {
+            for (SentenceOutput s : lu.getSelectedSentences()) {
+                if (s.getSentenceDisplay().getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
                     insert = false;
                     break;
                 }
             }
             if (insert) {
-                lu.getSelectedSentences().add(sentence);
+                SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence());
+                sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
+                lu.getSelectedSentences().add(new SentenceOutput(sentenceDisplay, AnnotationDisplay.getAnnotation(annotationSet, lu.getFrameElements(), true)));
             }
         }
     }
@@ -123,19 +119,18 @@ public class LexUnitController implements Serializable {
      * The sentences are then processed as SentenceOutput objects.
      */
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
-        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.098);
-        System.out.print(breakline);
-        for (SentenceOutput sentence : lu.processSentences(group.getAllAnnotations(), (int)breakline)) {
+        for (AnnotationSet annotationSet : group.getAllAnnotations()) {
             boolean insert = true;
-            // if the sentence is already in the selected sentences list, do not insert it again
-            for (SentenceOutput in : lu.getSelectedSentences()) {
-                if (sentence.getText().equals(in.getText())) {
+            for (SentenceOutput s : lu.getSelectedSentences()) {
+                if (s.getSentenceDisplay().getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
                     insert = false;
                     break;
                 }
             }
             if (insert) {
-                lu.getSelectedSentences().add(sentence);
+                SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence());
+                sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
+                lu.getSelectedSentences().add(new SentenceOutput(sentenceDisplay, AnnotationDisplay.getAnnotation(annotationSet, lu.getFrameElements(), true)));
             }
         }
     }
@@ -143,8 +138,8 @@ public class LexUnitController implements Serializable {
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
-    public void removeSentence (LUOutput lu, SentenceOutput sentenceOutput) {
-        lu.getSelectedSentences().remove(sentenceOutput);
+    public void removeSentence (LUOutput lu, SentenceOutput sentence) {
+        lu.getSelectedSentences().remove(sentence);
     }
 
 
@@ -261,14 +256,6 @@ public class LexUnitController implements Serializable {
         lu.setSelectedSentences(new ArrayList<SentenceOutput>());
     }
 
-    public void setScreenWidth(String screenWidth) {
-        this.screenWidth = screenWidth;
-    }
-
-    public String getScreenWidth() {
-        return screenWidth;
-    }
-
     /**
      * Gets all the satuses for the lexical unit.
      */
@@ -278,17 +265,6 @@ public class LexUnitController implements Serializable {
         Hibernate.initialize(lu.getStatuses());
         return lu.getStatuses();
     }
-
-//    public void onResize(LUOutput lu) {
-//        List<AnnotationSet> toResize = new ArrayList<AnnotationSet>();
-//        double breakline = (float) (Float.parseFloat(screenWidth)  * 0.1);
-//        System.out.print(breakline);
-//        for (SentenceOutput sentenceOutput : lu.getSelectedSentences()) {
-//            toResize.add(sentenceOutput.getAnnotationSet());
-//        }
-//        List<SentenceOutput> outputs = lu.processSentences(toResize, (int) breakline);
-//        lu.setSelectedSentences(outputs);
-//    }
 
     public void setFilter (String f) {
         filter = f;

@@ -56,87 +56,6 @@ public class DocumentController implements Serializable {
         allDocs = filteredDocs;
     }
 
-    public SentenceOutput showAnnotatedLU (String screenWidth, DocumentOutput doc) {
-        if (doc != null) {
-//            double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
-            return doc.processSentences(83);
-        } else {
-            return  null;
-        }
-
-    }
-
-    /**
-     * Returns all selected annotated sentences for the document.
-     */
-    public void showAnnotation(DocumentOutput doc) {
-        for (SentenceDisplay sentenceDisplay : doc.getSentenceDisplay()) {
-            if (sentenceDisplay.getDisplayedAnnotationSet() == null) {
-                for (AnnotationSet annotationSet : sentenceDisplay.getSentence().getAnnotationSets()) {
-                    if (annotationSet.getLexUnit() != null) {
-                        sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Removes the sentence from the list of all sentences selected for the document.
-     */
-    public void removeSentence (DocumentOutput doc, SentenceOutput sentenceOutput) {
-        doc.getSelectedSentences().remove(sentenceOutput);
-    }
-
-    /**
-     * Creates an annotated sentence depending on the selected target and the screen width.
-     * Adds colors to the labels so as to be consistent for the whole document : the same frame element will be of the
-     * same color for every sentence of the document.
-     */
-    @Transactional
-    public void selectLU(DocumentOutput doc, AnnotationSet a, String screenWidth) {
-        for (SentenceOutput sentenceOutput : doc.getSelectedSentences()) {
-            if (a.getId() == sentenceOutput.getAnnotationSet().getId()) {
-                return;
-            }
-        }
-        AnnotationSet annotationSet = annotationSetRepository.findById(a.getId());
-        Hibernate.initialize(annotationSet.getLayers());
-        for (Layer layer : annotationSet.getLayers()){
-            Hibernate.initialize(layer.getLabels());
-        }
-        // Finds all labels from the target layer and the FE layer.
-        LUOutput lu = new LUOutput(annotationSet.getLexUnit(), false);
-        Layer layerFE = null;
-        Layer layerTarget = null;
-        for (Layer layer : annotationSet.getLayers()){
-            if (layer.getLayerType().getId() == 1) {
-                layerFE = layer;
-            } else  if (layer.getLayerType().getId() == 2) {
-                layerTarget = layer;
-            }
-            if ((layerFE != null) && (layerTarget != null)) {
-                break;
-            }
-        }
-        List<Label> allLabels = layerFE.getLabels();
-        allLabels.addAll(layerTarget.getLabels());
-//        double breakline = (float) (Integer.parseInt(screenWidth)  * 0.0625);
-        SentenceOutput processed = lu.auxFun(annotationSet, allLabels, 80);
-        for (List<ElementTag> elementTagList : processed.getElements()) {
-            for (ElementTag elementTag : elementTagList) {
-                String tag = elementTag.getTag();
-                if (tag.equals("")) {
-                    elementTag.setTagColor("#F5F5F5");
-                } else {
-                    elementTag.setTagColor(Utils.allColors.get(doc.getAllFE().indexOf(tag)));
-                }
-            }
-        }
-        doc.getSelectedSentences().add(processed);
-    }
-
     /**
      * Getter for allDocs. If the list if empty and the string search is empty it returns all documents.
      */
@@ -149,6 +68,24 @@ public class DocumentController implements Serializable {
             allDocs = documentList;
         }
         return allDocs;
+    }
+
+    public List<Tag> getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
+        AnnotationSet annotationSet = sentenceDisplay.getDisplayedAnnotationSet();
+        Sentence sentence = sentenceDisplay.getSentence();
+        if (annotationSet == null) {
+            return  AnnotationDisplay.getTargets(sentence.getText(), 0, sentence.getText().length(), AnnotationDisplay.getPosTargets(sentenceDisplay, false));
+        }
+        return AnnotationDisplay.getAnnotation(sentenceDisplay.getDisplayedAnnotationSet(), doc.getAllFE(), false);
+    }
+
+    public void setAnnotationSentence(SentenceDisplay sentence, AnnotationSet annotationSet) {
+        AnnotationSet current = sentence.getDisplayedAnnotationSet();
+        if ((current != null) && (current.getId() == annotationSet.getId())) {
+            sentence.setDisplayedAnnotationSet(null);
+        } else {
+            sentence.setDisplayedAnnotationSet(annotationSet);
+        }
     }
 
     public void setFilter (String f) {
@@ -165,27 +102,6 @@ public class DocumentController implements Serializable {
 
     public void setAllDocs(List<Document> list) {
         allDocs = list;
-    }
-
-    public List<Tag> getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
-        AnnotationSet annotationSet = sentenceDisplay.getDisplayedAnnotationSet();
-        if (annotationSet == null) {
-            List<Tag> result = new ArrayList<Tag>();
-            for (Target target : AnnotationDisplay.getTargetsSentence(sentenceDisplay.getSentence())) {
-                result.add(new Tag("", new ArrayList<Target>(Arrays.asList(target))));
-            }
-            return result;
-        }
-        return AnnotationDisplay.getAnnotation(sentenceDisplay.getDisplayedAnnotationSet(), doc.getAllFE());
-    }
-
-    public void setAnnotationSentence(SentenceDisplay sentence, AnnotationSet annotationSet) {
-        AnnotationSet current = sentence.getDisplayedAnnotationSet();
-        if ((current != null) && (current.getId() == annotationSet.getId())) {
-            sentence.setDisplayedAnnotationSet(null);
-        } else {
-            sentence.setDisplayedAnnotationSet(annotationSet);
-        }
     }
 
 }

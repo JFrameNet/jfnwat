@@ -10,12 +10,12 @@ public class Target {
     private String text;
     private AnnotationSet annotationSet;
     private boolean valid;
-    private boolean focus;
+    private String bkg;
 
     public Target (String text) {
         this.text = text;
         this.valid = false;
-        this.focus = false;
+        this.bkg = "#ffffff";
     }
 
     public AnnotationSet getAnnotationSet() {
@@ -42,11 +42,11 @@ public class Target {
         this.valid = valid;
     }
 
-    public boolean isFocus() {
-        return focus;
+    public String getBkg() {
+        return bkg;
     }
 
-    public void setFocus(boolean focus) {
-        this.focus = focus;
+    public void setBkg(String bkg) {
+        this.bkg = bkg;
     }
 }

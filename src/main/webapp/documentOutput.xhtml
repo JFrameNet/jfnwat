@@ -14,11 +14,10 @@
                         <p:dataList type="definition" var="tag" value="#{documentController.getAnnotation(doc, line)}" styleClass="horizontal doc display-sent" >
                             <p:panelGrid columns="1" styleClass="horizontal noborder texalcenter">
                                 <p:row>
-                                    <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="horizontal">
-                                        <p:column>
-                                            <p:commandLink rendered="#{word.isFocus()}" style="background-color: #F5D8C6"  value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
-                                            <p:commandLink rendered="#{(!word.isFocus())and word.isValid()}" style="font-weight: bold;" value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
-                                            <h:outputText rendered="#{!word.isFocus() and !word.isValid()}" value="#{word.text}"/>
+                                    <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="horizontal" styleClass="horizontal">
+                                        <p:column style="text-align: center">
+                                            <p:commandLink rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
+                                            <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
                                         </p:column>
                                     </p:dataList>
                                 </p:row>

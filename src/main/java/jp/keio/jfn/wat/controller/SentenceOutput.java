@@ -1,8 +1,5 @@
 package jp.keio.jfn.wat.controller;
 
-import jp.keio.jfn.wat.domain.AnnotationSet;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,33 +8,32 @@ import java.util.List;
  */
 public class SentenceOutput {
 
-    private List<List<ElementTag>> elements;
+    private List<Tag> elements;
 
-    private String text;
-
-    private AnnotationSet annotationSet;
+    private SentenceDisplay sentenceDisplay;
 
     /**
      * Initialization
      */
-    public SentenceOutput(List<List<ElementTag>> list, String text) {
-        this.elements = list;
-        this.text = text;
+    public SentenceOutput(SentenceDisplay sentence, List<Tag> elements) {
+        this.elements = elements;
+        this.sentenceDisplay = sentence;
     }
 
-    public List<List<ElementTag>> getElements() {
+
+    public List<Tag> getElements() {
         return elements;
     }
 
-    public String getText() {
-        return text;
+    public SentenceDisplay getSentenceDisplay() {
+        return sentenceDisplay;
     }
 
-    public AnnotationSet getAnnotationSet() {
-        return annotationSet;
+    public void setElements(List<Tag> elements) {
+        this.elements = elements;
     }
 
-    public void setAnnotationSet(AnnotationSet annotationSet) {
-        this.annotationSet = annotationSet;
+    public void setSentenceDisplay(SentenceDisplay sentenceDisplay) {
+        this.sentenceDisplay = sentenceDisplay;
     }
 }

@@ -3,7 +3,6 @@ package jp.keio.jfn.wat.controller;
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.Label;
 import jp.keio.jfn.wat.domain.Layer;
-import jp.keio.jfn.wat.domain.Sentence;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,50 +13,10 @@ import java.util.List;
  */
 public class AnnotationDisplay {
 
-    public static List<Target> getTargetsSentence(Sentence sentence) {
-        List<Target> targets = new ArrayList<Target>();
-        List<Label> allLabels = new ArrayList<Label>();
-        for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
-            for (Layer layer : annoSet.getLayers()){
-                if (layer.getLayerType().getId() == 2) {
-                    allLabels.addAll(layer.getLabels());
-                }
-            }
-        }
-        int i = 0;
-        int aux = 0;
-        int max = sentence.getText().length();
-
-        while (i < max) {
-            for (Label label : allLabels) {
-                if (i == label.getStartChar()) {
-                    if (i > aux) {
-                        String wordEmpty = sentence.getText().substring(aux, i);
-                        Target target = new Target(wordEmpty);
-                        targets.add(target);
-                    }
-                    String word = sentence.getText().substring(i, label.getEndChar() + 1);
-                    Target target = new Target(word);
-                    target.setValid(true);
-                    target.setAnnotationSet(label.getLayer().getAnnotationSet());
-                    targets.add(target);
-                    i = label.getEndChar();
-                    aux = i + 1;
-                    break;
-                }
-            }
-            i ++;
-        }
-        if (aux < max) {
-            String wordEmpty = sentence.getText().substring(aux, max);
-            Target target = new Target(wordEmpty);
-            targets.add(target);
-        }
-        return targets;
-    }
-
-    public static List<Tag> getAnnotation(AnnotationSet annotationSet, List<String> allFE) {
-        List<Pos> positions = getPosTargets(annotationSet.getSentence());
+    public static List<Tag> getAnnotation(AnnotationSet annotationSet, List<String> allFE, boolean single) {
+        SentenceDisplay display = new SentenceDisplay(annotationSet.getSentence());
+        display.setDisplayedAnnotationSet(annotationSet);
+        List<Pos> positions = getPosTargets(display, single);
         List<Tag> tags = new ArrayList<Tag>();
         Layer layerFE = null;
         Layer layerTarget = null;
@@ -89,7 +48,7 @@ public class AnnotationDisplay {
             for (Label label : allLabels) {
                 if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
                     if (i > iaux) {
-                        tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), iaux, i,positions, false )));
+                        tags.addAll(getTargets(annotationSet.getSentence().getText(), iaux, i, positions));
                     }
                     if (label.getLabelType().getLayerType().getId() == 1) {
                         String s = label.getLabelType().getFrameElement().getName();
@@ -109,7 +68,7 @@ public class AnnotationDisplay {
             i ++;
         }
         if (iaux < max) {
-            tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), iaux, max,positions, false)));
+            tags.addAll(getTargets(annotationSet.getSentence().getText(), iaux, max, positions));
         }
         for (Label label : allLabels) {
             if (label.getInstantiationType().getId() != 1) {
@@ -124,16 +83,25 @@ public class AnnotationDisplay {
         return tags;
     }
 
-    private static List<Pos> getPosTargets(Sentence sentence) {
+    public static List<Pos> getPosTargets(SentenceDisplay sentenceDisplay, boolean single) {
         List<Pos> list = new ArrayList<Pos>();
         List<Label> allLabels = new ArrayList<Label>();
-        for (AnnotationSet annoSet :sentence.getAnnotationSets()) {
-            for (Layer layer : annoSet.getLayers()){
+        if (single) {
+            for (Layer layer : sentenceDisplay.getDisplayedAnnotationSet().getLayers()){
                 if (layer.getLayerType().getId() == 2) {
                     allLabels.addAll(layer.getLabels());
                 }
             }
+        } else {
+            for (AnnotationSet annoSet : sentenceDisplay.getSentence().getAnnotationSets()) {
+                for (Layer layer : annoSet.getLayers()){
+                    if (layer.getLayerType().getId() == 2) {
+                        allLabels.addAll(layer.getLabels());
+                    }
+                }
+            }
         }
+
         for (Label label : allLabels) {
             Pos pos = new Pos(label.getStartChar(), label.getEndChar(), label.getLayer().getAnnotationSet());
             insertPos(list,pos);
@@ -164,7 +132,7 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,position.getEnd() + 1));
                     t.setValid(true);
-                    t.setFocus(target);
+                    t.setBkg("#66BB6A");
                     t.setAnnotationSet(position.getAnnotationSet());
                     result.add(t);
                     i = position.getEnd();
@@ -175,6 +143,34 @@ public class AnnotationDisplay {
         }
         if (aux < end) {
             result.add(new Target(text.substring(aux,end)));
+        }
+        return result;
+    }
+
+    public static List<Tag> getTargets(String text, int start, int end, List<Pos> pos) {
+        List<Tag> result = new ArrayList<Tag>();
+        int i = start;
+        int aux = i;
+        while (i < end) {
+            for (Pos position : pos) {
+                if (position.getStart() == i) {
+                    if (i > aux) {
+                        Target t = new Target(text.substring(aux,i));
+                        result.add(new Tag("", new ArrayList<Target>(Arrays.asList(t))));
+                    }
+                    Target t = new Target(text.substring(i,position.getEnd() + 1));
+                    t.setValid(true);
+                    t.setAnnotationSet(position.getAnnotationSet());
+                    result.add(new Tag("", new ArrayList<Target>(Arrays.asList(t))));
+                    i = position.getEnd();
+                    aux = i + 1;
+                }
+            }
+            i ++;
+        }
+        if (aux < end) {
+            Target t = new Target(text.substring(aux,end));
+            result.add(new Tag("", new ArrayList<Target>(Arrays.asList(t))));
         }
         return result;
     }

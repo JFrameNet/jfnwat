@@ -1189,7 +1189,7 @@ label {
 .ui-datalist .ui-datalist-content .ui-datalist-data {
   margin: 0px;
   padding-top: 0px;
-  padding-right: 15px;
+  padding-right: 0px;
   font-family: 'latoregular';
   font-size: 14px;
   color: #546e7a;
@@ -2679,7 +2679,6 @@ hr.ui-widget-header {
 .ui-tabs-top .ui-tabs-nav li a {
   color: #546e7a !important;
   font-size: 17px;
-  padding: 14px 1em !important;
   border-radius: 0px !important;
   font-family: 'latolight';
 }
