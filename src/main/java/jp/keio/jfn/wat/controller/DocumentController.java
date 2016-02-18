@@ -74,7 +74,8 @@ public class DocumentController implements Serializable {
         AnnotationSet annotationSet = sentenceDisplay.getDisplayedAnnotationSet();
         Sentence sentence = sentenceDisplay.getSentence();
         if (annotationSet == null) {
-            return  AnnotationDisplay.getTargets(sentence.getText(), 0, sentence.getText().length(), AnnotationDisplay.getPosTargets(sentenceDisplay, false));
+            Tag tag = AnnotationDisplay.getTagMultipleTargets(sentence.getText(), 0, sentence.getText().length(), AnnotationDisplay.getPosTargets(sentenceDisplay, false));
+            return new ArrayList<Tag>(Arrays.asList(tag));
         }
         return AnnotationDisplay.getAnnotation(sentenceDisplay.getDisplayedAnnotationSet(), doc.getAllFE(), false);
     }

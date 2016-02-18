@@ -80,18 +80,18 @@ public class TabController {
     /**
      * Adds a new LUOutput object to the loaded lexical units list.
      *
-     * @param lu is the id of the lexical unit to be added
+     * @param id is the id of the lexical unit to be added
      */
     @Transactional
-    public String addLU(LightLU lu) {
+    public String addLU(int id) {
         // TODO: 2/3/16 change to check id instead of name (many LUs can have the same name)
         for (LUOutput luOutput : loadedLUs) {
-            if (luOutput.getLightLU().getName().equals(lu.getName())) {
+            if (luOutput.getLightLU().getId() == id) {
                 index = loadedLUs.indexOf(luOutput);
-                return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
+                return "lexUnitOutput?faces-redirect=true&i=1&lu=" + id;
             }
         }
-        mainLU = lexUnitRepository.findById(lu.getId());
+        mainLU = lexUnitRepository.findById(id);
         Hibernate.initialize(mainLU.getAnnotationSets());
         for (AnnotationSet annotationSet : mainLU.getAnnotationSets()) {
             Hibernate.initialize(annotationSet.getLayers());
@@ -101,7 +101,7 @@ public class TabController {
         }
         loadedLUs.add(new LUOutput(mainLU, true));
         index = loadedLUs.size() -1;
-        return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
+        return "lexUnitOutput?faces-redirect=true&i=1&lu=" + id;
     }
 
     /**

@@ -89,9 +89,9 @@
                                 <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, line)}"/>
                                 <p:dataList type="definition" var="tag" value="#{line.elements}" styleClass="horizontal doc display-sent" >
                                     <p:panelGrid columns="1" styleClass="horizontal noborder texalcenter">
-                                        <p:row>
-                                            <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="horizontal" styleClass="horizontal">
-                                                <p:column style="text-align: center">
+                                        <p:row styleClass="horizontal">
+                                            <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="textAlCenter">
+                                                <p:column>
                                                     <h:outputText rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}"/>
                                                     <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
                                                 </p:column>

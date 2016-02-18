@@ -31,7 +31,7 @@
     <ui:define name="lexunit">
         <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
-                <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" styleClass="result-lu"/>
+                <p:commandLink action="#{tabController.addLU(lexUnit.id)}" value="#{lexUnit.name}" styleClass="result-lu"/>
             </p:column>
             <p:column headerText="#{text['frame']}">
                 <p:commandLink action="#{tabController.addFrame(lexUnit.frame)}" value="#{lexUnit.frame}"/>

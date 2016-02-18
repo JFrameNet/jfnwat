@@ -64,7 +64,7 @@
                         </p:tab>
                         <p:tab title="#{text['lexUnits']}">
                             <p:dataList var="lexUnit" type="definition" value="#{frameController.lexUnitsByFrame(frame)}" emptyMessage="#{text['emptyMessage']}">
-                                <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="font-size: larger"/>
+                                <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLU(lexUnit.id)}" value="#{lexUnit.name}" style="font-size: larger"/>
                                 <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" styleClass="horizontal">
                                     <h:outputText styleClass="horizontal general-tooltip" value="#{status.statusType.name}" />
                                 </p:dataList>
