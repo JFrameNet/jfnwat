@@ -17,11 +17,13 @@ public class SentenceDisplay {
     private List<Tag> elements;
     private List<Label> focus = new ArrayList<Label>();
     private List<Label> allTargets = new ArrayList<Label>();
+    private boolean fullText;
 
     public SentenceDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText) {
         this.sentence = sentence;
         this.displayedAnnotationSet = annotationSet;
-        getPosFocus(fullText);
+        this.fullText = fullText;
+        getPosFocus();
     }
 
     public AnnotationSet getDisplayedAnnotationSet() {
@@ -32,16 +34,18 @@ public class SentenceDisplay {
         return sentence;
     }
 
-    private void getPosFocus(boolean fullText) {
+    private void getPosFocus() {
         List<Label> allLabels = new ArrayList<Label>();
-        if (displayedAnnotationSet != null) {
+        if (displayedAnnotationSet == null) {
+            this.focus = new ArrayList<Label>();
+        } else {
             for (Layer layer : displayedAnnotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 2) {
                     this.focus.addAll(layer.getLabels());
                 }
             }
         }
-        if (fullText) {
+        if (this.fullText) {
             for (AnnotationSet annoSet : sentence.getAnnotationSets()) {
                 for (Layer layer : annoSet.getLayers()){
                     if (layer.getLayerType().getId() == 2) {
@@ -73,6 +77,7 @@ public class SentenceDisplay {
 
     public void setDisplayedAnnotationSet(AnnotationSet displayedAnnotationSet) {
         this.displayedAnnotationSet = displayedAnnotationSet;
+        getPosFocus();
     }
 
     public void setSentence(Sentence sentence) {

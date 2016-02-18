@@ -76,8 +76,8 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     t.setValid(true);
-                    for (Label l : focus) {
-                        if (label.getStartChar() == l.getEndChar() && l.getEndChar() == label.getEndChar()) {
+                    for (Label on : focus) {
+                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
                             t.setBkg("#66BB6A");
                         }
                     }
