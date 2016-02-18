@@ -85,32 +85,33 @@
                             <f:facet name="header">
                                 <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" update="@(.display-sent)" style="font-size: smaller"/>
                             </f:facet>
-                            <p:dataList id="output" value="#{lexUnitController.showAnnotation(lu)}" var="line" type="definition" emptyMessage="" styleClass="horizontal doc"> 
-                                <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, line)}"/>
-                                <p:dataList type="definition" var="tag" value="#{line.elements}" styleClass="horizontal doc display-sent" >
-                                    <p:panelGrid columns="1" styleClass="horizontal noborder texalcenter">
-                                        <p:row styleClass="horizontal">
-                                            <p:dataList type="definition" var="word" value="#{tag.associated}" itemStyleClass="textAlCenter">
-                                                <p:column>
-                                                    <h:outputText rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}"/>
-                                                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
-                                                </p:column>
-                                            </p:dataList>
-                                        </p:row>
-                                        <p:row style="background-color: #f5f5f5">
-                                            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
-                                                <h:outputLink value="#">
-                                                    <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
-                                                </h:outputLink>
-                                                <f:facet name="inline">
-                                                    <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
-                                                </f:facet>
-                                            </p:lightBox>
-                                        </p:row>
-                                    </p:panelGrid>
-                                </p:dataList>
+                            <p:dataList id="output" value="#{lexUnitController.showAnnotation(lu)}" var="line" type="definition" emptyMessage="" styleClass="doc display-sent"> 
+                                <p:fieldset>
+                                    <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left; width: 100%"/>
+                                    <ui:repeat var="tag" value="#{line.elements}" >
+                                        <p:panelGrid columns="1" styleClass="noborder horizontal">
+                                            <p:row>
+                                                <ui:repeat var="word" value="#{tag.associated}">
+                                                    <p:column>
+                                                        <h:outputText rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}"/>
+                                                        <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
+                                                    </p:column>
+                                                </ui:repeat>
+                                            </p:row>
+                                            <p:row >
+                                                <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #f5f5f5">
+                                                    <h:outputLink value="#">
+                                                        <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                                                    </h:outputLink>
+                                                    <f:facet name="inline">
+                                                        <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                                                    </f:facet>
+                                                </p:lightBox>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </ui:repeat>
+                                </p:fieldset>
                             </p:dataList> 
-                            <div class="EmptyBox40"/>
                         </p:dialog>
                     </p:tab>
                 </p:tabView>

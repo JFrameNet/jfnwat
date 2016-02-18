@@ -46,6 +46,9 @@
 .ui-panelgrid .ui-panelgrid-cell {
   padding: 0!important;
 }
+.ui-panelgrid .ui-panelgrid-cell {
+  padding: 0!important;
+}
 /*Tabs*/
 .tab-layout {
   border: none !important;

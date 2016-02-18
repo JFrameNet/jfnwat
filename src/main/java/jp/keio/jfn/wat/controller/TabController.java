@@ -38,8 +38,6 @@ public class TabController {
 
     private int index = 0;
 
-    private String screenWidth = "";
-
     private List<LightLU> lightLUs = new ArrayList<LightLU>();
 
     @Autowired
@@ -240,14 +238,6 @@ public class TabController {
 
     public List<DocumentOutput> getLoadedDocs() {
         return loadedDocs;
-    }
-
-    public String getScreenWidth() {
-        return screenWidth;
-    }
-
-    public void setScreenWidth(String screenWidth) {
-        this.screenWidth = screenWidth;
     }
 
     public List<FrameOutput> getLoadedFrames() {

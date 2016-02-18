@@ -3,7 +3,6 @@ package jp.keio.jfn.wat.controller;
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.Label;
 import jp.keio.jfn.wat.domain.Layer;
-import jp.keio.jfn.wat.domain.LexUnit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class AnnotationDisplay {
             for (Label label : allLabels) {
                 if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
                     if (i > iaux) {
-                        tags.add(getTagMultipleTargets(annotationSet.getSentence().getText(), iaux, i, positions));
+                        tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), iaux, i, positions, allTargets)));
                     }
                     String s = label.getLabelType().getFrameElement().getName();
                     Tag t = new Tag(s, findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, allTargets));
@@ -48,22 +47,11 @@ public class AnnotationDisplay {
                     break;
                 }
             }
-            for (Label label : allTargets) {
-                if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
-                    if (i > iaux) {
-                        tags.add(getTagMultipleTargets(annotationSet.getSentence().getText(), iaux, i, positions));
-                    }
-                    tags.add(new Tag("", findTargets(annotationSet.getSentence().getText(), i, label.getEndChar() + 1, positions, allTargets)));
-                    i = label.getEndChar();
-                    iaux = i + 1;
-                    break;
-                }
-            }
 
             i ++;
         }
         if (iaux < max) {
-            tags.add(getTagMultipleTargets(annotationSet.getSentence().getText(), iaux, max, positions));
+            tags.add(new Tag("",findTargets(annotationSet.getSentence().getText(), iaux, max, positions, allTargets)));
         }
         for (Label label : allLabels) {
             if (label.getInstantiationType().getId() != 1) {
@@ -115,7 +103,7 @@ public class AnnotationDisplay {
         positions.add(i,x);
     }
 
-    private static List<Target> findTargets (String text, int start, int end, List<Pos> pos, List<Label> focus) {
+    public static List<Target> findTargets (String text, int start, int end, List<Pos> pos, List<Label> focus) {
         List<Target> result = new ArrayList<Target>();
         int i = start;
         int aux = i;
@@ -143,34 +131,9 @@ public class AnnotationDisplay {
         if (aux < end) {
             result.add(new Target(text.substring(aux,end)));
         }
+//        if ((result.size() == 1) && result.get(0).getText().isEmpty()) {
+//            result.get(0).setText("&#160;");
+//        }
         return result;
-    }
-
-    public static Tag getTagMultipleTargets(String text, int start, int end, List<Pos> pos) {
-        List<Target> result = new ArrayList<Target>();
-        int i = start;
-        int aux = i;
-        while (i < end) {
-            for (Pos position : pos) {
-                if (position.getStart() == i) {
-                    if (i > aux) {
-                        Target t = new Target(text.substring(aux,i));
-                        result.add(t);
-                    }
-                    Target t = new Target(text.substring(i,position.getEnd() + 1));
-                    t.setValid(true);
-                    t.setAnnotationSet(position.getAnnotationSet());
-                    result.add(t);
-                    i = position.getEnd();
-                    aux = i + 1;
-                }
-            }
-            i ++;
-        }
-        if (aux < end) {
-            Target t = new Target(text.substring(aux,end));
-            result.add(t);
-        }
-        return new Tag("",result);
     }
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * This class is a representation of an annotated sentence.
- * Every line of the sentence is associated with a list of ElementTag objects.
  */
 public class SentenceOutput {
 
@@ -33,7 +32,4 @@ public class SentenceOutput {
         this.elements = elements;
     }
 
-    public void setSentenceDisplay(SentenceDisplay sentenceDisplay) {
-        this.sentenceDisplay = sentenceDisplay;
-    }
 }
