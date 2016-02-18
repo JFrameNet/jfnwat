@@ -17,8 +17,8 @@ public class Tag {
 
     public Tag (String value, List<Target> words) {
         this.associated = words;
-        this.value = value.isEmpty()?"foo" : value;
-        this.color = "#F5F5F5";
+        this.value = value;
+        this.color = this.value.equals("foo") ?"#F5F5F5":"#FFFFFF";
     }
 
     public List<Target> getAssociated() {

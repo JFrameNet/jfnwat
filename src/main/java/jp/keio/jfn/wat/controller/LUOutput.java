@@ -20,7 +20,7 @@ public class LUOutput {
 
     private List<FEGroupRealization> valencePatterns = new ArrayList<FEGroupRealization>();
 
-    private List<SentenceOutput> selectedSentences = new ArrayList<SentenceOutput>();
+    private List<SentenceDisplay> selectedSentences = new ArrayList<SentenceDisplay>();
 
     private List<String> selectedEl = new ArrayList<String>();
 
@@ -216,7 +216,7 @@ public class LUOutput {
         return valencePatterns;
     }
 
-    public List<SentenceOutput> getSelectedSentences() {
+    public List<SentenceDisplay> getSelectedSentences() {
         return selectedSentences;
     }
 
@@ -236,7 +236,7 @@ public class LUOutput {
         return def;
     }
 
-    public void setSelectedSentences(List<SentenceOutput> selectedSentences) {
+    public void setSelectedSentences(List<SentenceDisplay> selectedSentences) {
         this.selectedSentences = selectedSentences;
     }
 

@@ -94,51 +94,43 @@ public class LexUnitController implements Serializable {
     /**
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
      * selected sentences.
-     * The sentences are then processed as SentenceOutput objects.
      */
     public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
         for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
-            boolean insert = true;
-            for (SentenceOutput s : lu.getSelectedSentences()) {
-                if (s.getSentenceDisplay().getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
-                    insert = false;
-                    break;
-                }
-            }
-            if (insert) {
-                SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence());
-                sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
-                lu.getSelectedSentences().add(new SentenceOutput(sentenceDisplay, AnnotationDisplay.getAnnotation(annotationSet, lu.getFrameElements(), true)));
-            }
+            insertSentence(lu, annotationSet);
         }
     }
 
     /**
      * This method is called when a user wants to add all of the sentences of a group realization to the list of the
      * selected sentences.
-     * The sentences are then processed as SentenceOutput objects.
      */
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
         for (AnnotationSet annotationSet : group.getAllAnnotations()) {
-            boolean insert = true;
-            for (SentenceOutput s : lu.getSelectedSentences()) {
-                if (s.getSentenceDisplay().getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
-                    insert = false;
-                    break;
-                }
-            }
-            if (insert) {
-                SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence());
-                sentenceDisplay.setDisplayedAnnotationSet(annotationSet);
-                lu.getSelectedSentences().add(new SentenceOutput(sentenceDisplay, AnnotationDisplay.getAnnotation(annotationSet, lu.getFrameElements(), true)));
+            insertSentence(lu, annotationSet);
+        }
+    }
+
+    private void insertSentence (LUOutput lu, AnnotationSet annotationSet) {
+        boolean insert = true;
+        for (SentenceDisplay s : lu.getSelectedSentences()) {
+            if (s.getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
+                insert = false;
+                break;
             }
         }
+        if (insert) {
+            SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence(), annotationSet, false);
+            AnnotationDisplay.getAnnotation(sentenceDisplay, lu.getFrameElements());
+            lu.getSelectedSentences().add(sentenceDisplay);
+        }
+
     }
 
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
-    public void removeSentence (LUOutput lu, SentenceOutput sentence) {
+    public void removeSentence (LUOutput lu, SentenceDisplay sentence) {
         lu.getSelectedSentences().remove(sentence);
     }
 
@@ -253,7 +245,7 @@ public class LexUnitController implements Serializable {
     }
 
     public void clearAllSentences(LUOutput lu) {
-        lu.setSelectedSentences(new ArrayList<SentenceOutput>());
+        lu.setSelectedSentences(new ArrayList<SentenceDisplay>());
     }
 
     /**
@@ -274,7 +266,7 @@ public class LexUnitController implements Serializable {
         return filter;
     }
 
-    public List<SentenceOutput> showAnnotation (LUOutput lu) {
+    public List<SentenceDisplay> showAnnotation (LUOutput lu) {
         return lu.getSelectedSentences();
     }
 

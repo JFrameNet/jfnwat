@@ -12,7 +12,7 @@
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
                     <p:dataList type="definition" id="output" value="#{doc.sentenceDisplay}" var="line" styleClass="display-sent doc"> 
                         <p:fieldset>
-                            <ui:repeat var="tag" value="#{documentController.getAnnotation(doc, line)}">
+                            <ui:repeat var="tag" value="#{documentController.getAnnotation(doc, line).elements}">
                                 <p:panelGrid columns="1" styleClass="noborder display-sent" style="float: left">
                                     <p:row>
                                         <ui:repeat var="word" value="#{tag.associated}">

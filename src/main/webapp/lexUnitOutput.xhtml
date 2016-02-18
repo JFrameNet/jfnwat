@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/lexUnitIndex.xhtml">
     <ui:define name="lexUnitOutput">
-        <div class="ContainerIndent">
+        <div>
             <h:form id="form3">
                 <p:tabView value="#{tabController.loadedLUs}" activeIndex="#{tabController.index}" var="lu" dynamic="false" cache="true" styleClass="tab-layout" id="tab-lu">
                     <p:ajax event="tabClose" listener="#{tabController.onTabLUClose}"/>
