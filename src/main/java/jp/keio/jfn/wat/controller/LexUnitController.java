@@ -111,6 +111,10 @@ public class LexUnitController implements Serializable {
         }
     }
 
+    /**
+     * Adds a new SentenceDisplay object corresponding to an annotation set to the list of the selected sentences.
+     * The insert is not performed if the annotation set has already been selected.
+     */
     private void insertSentence (LUOutput lu, AnnotationSet annotationSet) {
         boolean insert = true;
         for (SentenceDisplay s : lu.getSelectedSentences()) {
@@ -121,7 +125,7 @@ public class LexUnitController implements Serializable {
         }
         if (insert) {
             SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence(), annotationSet, false);
-            AnnotationDisplay.getAnnotation(sentenceDisplay, lu.getFrameElements());
+            sentenceDisplay.getAnnotation(lu.getFrameElements());
             lu.getSelectedSentences().add(sentenceDisplay);
         }
 

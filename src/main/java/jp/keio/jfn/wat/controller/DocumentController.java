@@ -70,11 +70,18 @@ public class DocumentController implements Serializable {
         return allDocs;
     }
 
+    /**
+     * Returns a SentenceDisplay object with the corresponding list of tags.
+     */
     public SentenceDisplay getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
-        AnnotationDisplay.getAnnotation(sentenceDisplay, doc.getAllFE());
+        sentenceDisplay.getAnnotation(doc.getAllFE());
         return sentenceDisplay;
     }
 
+    /**
+     * Sets the annotation set for a SentenceDisplay object.
+     * If the chosen annotation set is already being displayed, the future annotation set is set to null (hide annotation).
+     */
     public void setAnnotationSentence(SentenceDisplay sentence, AnnotationSet annotationSet) {
         AnnotationSet current = sentence.getDisplayedAnnotationSet();
         if ((current != null) && (current.getId() == annotationSet.getId())) {

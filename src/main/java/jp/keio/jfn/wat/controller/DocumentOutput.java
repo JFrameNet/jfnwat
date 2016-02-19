@@ -21,6 +21,8 @@ public class DocumentOutput {
 
     /**
      * Instantiation with a Document object.
+     * It creates a list of SentenceDisplay objects in fullText mode, with the annotation set parameter initially set
+     * to null.
      */
     public DocumentOutput(Document document) {
         for (Paragraph paragraph : document.getParagraphs()) {

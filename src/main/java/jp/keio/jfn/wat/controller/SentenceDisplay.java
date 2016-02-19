@@ -6,10 +6,12 @@ import jp.keio.jfn.wat.domain.Layer;
 import jp.keio.jfn.wat.domain.Sentence;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by jfn on 2/16/16.
+ * This class is used to represent an annotation. A SentenceDisplay object is associated with one annotation set,
+ * from which a list of tags is created. The annotation can be done in "normal" or "fullText" mode.
  */
 public class SentenceDisplay {
     private Sentence sentence;
@@ -19,6 +21,12 @@ public class SentenceDisplay {
     private List<Label> allTargets = new ArrayList<Label>();
     private boolean fullText;
 
+    /**
+     * Initialization.
+     * @param sentence the original sentence, it does not depends on the annotation set
+     * @param annotationSet the chosen annotation set, can be null in fullText mode
+     * @param fullText set to true for documents
+     */
     public SentenceDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText) {
         this.sentence = sentence;
         this.displayedAnnotationSet = annotationSet;
@@ -26,19 +34,76 @@ public class SentenceDisplay {
         getPosFocus();
     }
 
-    public AnnotationSet getDisplayedAnnotationSet() {
-        return displayedAnnotationSet;
+    /**
+     * Creates the list of Tag object corresponding to the chosen annotation.
+     * @param allFE is the list of the names of all the frame elements. It is used to keep the colours consistent
+     *              within the same page (a frame element in the view will be displayed in the same colour for
+     *              every sentence).
+     */
+    public void getAnnotation(List<String> allFE) {
+        getPosFocus();
+        List<Tag> tags = new ArrayList<Tag>();
+        // Creates the list of all the labels related to a frame element (i.e. labels belonging to a layer of type 1)
+        List<Label> allLabels = new ArrayList<Label>();
+        if (displayedAnnotationSet != null) {
+            for (Layer layer : displayedAnnotationSet.getLayers()){
+                if (layer.getLayerType().getId() == 1) {
+                    allLabels.addAll(layer.getLabels());
+                }
+            }
+        }
+        int i = 0;
+        int iaux = 0;
+        int max = this.sentence.getText().length();
+
+        while (i < max) {
+            for (Label label : allLabels) {
+                if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
+                    if (i > iaux) {
+                        // empty tag (no frame element associated)
+                        tags.add(new Tag("", findTargets(iaux, i)));
+                    }
+                    String s = label.getLabelType().getFrameElement().getName();
+                    // regular tag (associated to a frame element)
+                    Tag t = new Tag(s, findTargets(i, label.getEndChar() + 1));
+                    t.setColor(Utils.allColors.get(allFE.indexOf(s)));
+                    t.setFrameElement(label.getLabelType().getFrameElement());
+                    tags.add(t);
+                    i = label.getEndChar();
+                    iaux = i + 1;
+                    break;
+                }
+            }
+
+            i ++;
+        }
+        if (iaux < max) {
+            // empty tag (no frame element associated)
+            tags.add(new Tag("",findTargets(iaux, max)));
+        }
+        // add all of the frame elements annotated but not instantiated in the sentence
+        for (Label label : allLabels) {
+            if (label.getInstantiationType().getId() != 1) {
+                String word = label.getInstantiationType().getName();
+                String el = label.getLabelType().getFrameElement().getName();
+                Tag tag = new Tag(el, new ArrayList<Target>(Arrays.asList(new Target(word))));
+                tag.setFrameElement(label.getLabelType().getFrameElement());
+                tag.setColor(Utils.allColors.get(allFE.indexOf(el)));
+                tags.add(tag);
+            }
+        }
+        this.elements = tags;
     }
 
-    public Sentence getSentence() {
-        return sentence;
-    }
-
+    /**
+     * Creates the focus list, a list of all the target labels for the chosen annotation set.
+     * If the annotation is "fullText", allTarget list contains all of the label targets for every annotation set
+     * associated to the sentence. Otherwise, allTarget list equals the focus list.
+     */
     private void getPosFocus() {
         List<Label> allLabels = new ArrayList<Label>();
-        if (displayedAnnotationSet == null) {
-            this.focus = new ArrayList<Label>();
-        } else {
+        this.focus = new ArrayList<Label>();
+        if (displayedAnnotationSet != null) {
             for (Layer layer : displayedAnnotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 2) {
                     this.focus.addAll(layer.getLabels());
@@ -64,6 +129,9 @@ public class SentenceDisplay {
         this.allTargets = sorted;
     }
 
+    /**
+     * Inserts a label in a list in ascending order for the startChar parameter.
+     */
     private void insertAtPos (List<Label> labels, Label label) {
         int i = 0;
         while (i < labels.size()) {
@@ -75,9 +143,48 @@ public class SentenceDisplay {
         labels.add(i,label);
     }
 
+    /**
+     * Creates a list of targets.
+     * For every label in the focus list, the background color is changed.
+     */
+    private List<Target> findTargets (int start, int end) {
+        String text = this.sentence.getText();
+        List<Target> result = new ArrayList<Target>();
+        int i = start;
+        int aux = i;
+        while (i < end) {
+            for (Label label : this.allTargets) {
+                if (label.getStartChar() == i) {
+                    if (i > aux) {
+                        result.add(new Target(text.substring(aux,i)));
+                    }
+                    Target t = new Target(text.substring(i,label.getEndChar() + 1));
+                    t.setValid(true);
+                    for (Label on : this.focus) {
+                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
+                            t.setBkg("#66BB6A");
+                        }
+                    }
+                    t.setAnnotationSet(label.getLayer().getAnnotationSet());
+                    result.add(t);
+                    i = label.getEndChar();
+                    aux = i + 1;
+                }
+            }
+            i ++;
+        }
+        if (aux < end) {
+            result.add(new Target(text.substring(aux,end)));
+        }
+        return result;
+    }
+
+    public AnnotationSet getDisplayedAnnotationSet() {
+        return displayedAnnotationSet;
+    }
+
     public void setDisplayedAnnotationSet(AnnotationSet displayedAnnotationSet) {
         this.displayedAnnotationSet = displayedAnnotationSet;
-        getPosFocus();
     }
 
     public void setSentence(Sentence sentence) {
@@ -91,10 +198,10 @@ public class SentenceDisplay {
         this.elements = elements;
     }
 
-
-    public List<Label> getAllTargets() {
-        return allTargets;
+    public Sentence getSentence() {
+        return sentence;
     }
+
 
     public void setFocus(List<Label> focus) {
         this.focus = focus;

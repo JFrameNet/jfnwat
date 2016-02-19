@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by jfn on 2/16/16.
+ * This class is used to represent annotation, an annotated sentence is associated with a list of Tag objects.
+ * The value of a tag object is the name of the corresponding frame element, can be empty, in this case the frameElement
+ * propriety is null.
  */
 public class Tag {
     private String value;
@@ -15,6 +17,13 @@ public class Tag {
 
     private String color;
 
+    /**
+     * Initialization.
+     * The color of the annotation depends on the display mode (lexical unit entry or fullText).
+     *
+     * @param value the name of the frame element, can be empty if the FE is null.
+     * @param words a list of targets associated
+     */
     public Tag (String value, List<Target> words) {
         this.associated = words;
         this.value = value;
