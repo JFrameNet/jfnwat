@@ -12,11 +12,15 @@ import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 @ManagedBean
 @RestController
+@Component
+@Scope("session")
 /**
  * This class controls the tabulations in the Web Report.
  * It keeps all the loaded frames, lexical units and documents.
