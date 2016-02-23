@@ -61,7 +61,11 @@ public class SentenceDisplay {
                 if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
                     if (i > iaux) {
                         // empty tag (no frame element associated)
-                        tags.add(new Tag("", findTargets(iaux, i)));
+                        Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, i));
+                        if (!tag.isEmpty()) {
+                            tags.add(tag);
+                        }
+
                     }
                     String s = label.getLabelType().getFrameElement().getName();
                     // regular tag (associated to a frame element)
@@ -79,7 +83,10 @@ public class SentenceDisplay {
         }
         if (iaux < max) {
             // empty tag (no frame element associated)
-            tags.add(new Tag("",findTargets(iaux, max)));
+            Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, max));
+            if (!tag.isEmpty()) {
+                tags.add(tag);
+            }
         }
         // add all of the frame elements annotated but not instantiated in the sentence
         for (Label label : allLabels) {

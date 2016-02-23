@@ -27,7 +27,16 @@ public class Tag {
     public Tag (String value, List<Target> words) {
         this.associated = words;
         this.value = value;
-        this.color = this.value.equals("foo") ?"#F5F5F5":"#FFFFFF";
+        this.color = this.value.equals("LU") ?"#F5F5F5":"#FFFFFF";
+    }
+
+    public boolean isEmpty() {
+        for (Target target : associated) {
+            if (!target.getText().equals(" ")) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public List<Target> getAssociated() {

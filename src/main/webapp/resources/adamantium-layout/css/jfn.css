@@ -45,9 +45,7 @@
 }
 .ui-panelgrid .ui-panelgrid-cell {
   padding: 0!important;
-}
-.ui-panelgrid .ui-panelgrid-cell {
-  padding: 0!important;
+  text-align: center;
 }
 .ui-fieldset {
   padding-top: 10px!important;
