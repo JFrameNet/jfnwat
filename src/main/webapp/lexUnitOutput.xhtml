@@ -81,7 +81,7 @@
                                 </p:dataTable>
                             </div>
                         </p:panel>
-                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" draggable="false" styleClass="dialog-sentences">
+                        <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" draggable="false" resizable="false" styleClass="dialog-sentences">
                             <f:facet name="header">
                                 <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" update="@(.display-sent)" style="font-size: smaller"/>
                             </f:facet>
