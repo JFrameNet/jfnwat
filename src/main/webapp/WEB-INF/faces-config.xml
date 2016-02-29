@@ -5,6 +5,7 @@
               version="2.2">
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <view-handler>jp.keio.jfn.wat.config.CustomViewHandler</view-handler>
         <locale-config>
             <default-locale>en</default-locale>
             <supported-locale>jp</supported-locale>

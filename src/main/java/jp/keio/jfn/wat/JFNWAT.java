@@ -2,8 +2,6 @@ package jp.keio.jfn.wat;
 
 import java.util.HashMap;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -11,11 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 
-import jp.keio.jfn.wat.ViewScope;
+import jp.keio.jfn.wat.scopes.ViewScope;
 
 import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;

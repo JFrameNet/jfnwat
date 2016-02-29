@@ -5,12 +5,12 @@ p {
 }
 input[type=submit] {
   font-family: 'latoregular', sans-serif;
-  padding: 5px;
+  padding: 10px 24px;
   cursor: pointer;
 }
 input[type=reset] {
   font-family: 'latoregular', sans-serif;
-  padding: 5px;
+  padding: 10px 24px;
   cursor: pointer;
 }
 input[type=text] {
