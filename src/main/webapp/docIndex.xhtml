@@ -7,7 +7,7 @@
                 template="/indexTemplate.xhtml">
     <ui:define name="topic">
         #{text['documentIndex']} <br/>
-        <span class="CardSubTopic">#{text['documentSubTopic']}</span>
+        <span class="CardSubTopic"><h:outputText value="#{text['documentSubTopic']}" escape="false"/></span>
     </ui:define>
 
     <ui:define name="filter">
