@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login.xhtml")
                     .permitAll()
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/index.xhtml");
+                .defaultSuccessUrl("/index.jsf");
 
     }
 }

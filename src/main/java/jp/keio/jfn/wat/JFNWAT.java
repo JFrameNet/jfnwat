@@ -3,6 +3,7 @@ package jp.keio.jfn.wat;
 import java.util.HashMap;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,11 @@ import com.sun.faces.config.ConfigureListener;
 public class JFNWAT implements ServletContextAware {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(JFNWAT.class, args);
+        SpringApplication springApplication =
+                new SpringApplication(JFNWAT.class);
+        springApplication.addListeners(
+                new ApplicationPidFileWriter("./bin/jfnwat.pid"));
+        springApplication.run(args);
 	}
 
 	@Override
