@@ -59,11 +59,11 @@ public class TabController {
      * @param name is the name of the frame to be added
      */
     @Transactional
-    public String addFrame(String name) {
+    public void addFrame(String name) {
         for (FrameOutput frameOutput : loadedFrames) {
             if (frameOutput.getName().equals(name)) {
                 index = loadedFrames.indexOf(frameOutput);
-                return "frameOutput?faces-redirect=true&i-0&frame=" + name;
+                return;
             }
         }
         mainFrame = frameRepository.findByName(name).get(0);
@@ -76,7 +76,18 @@ public class TabController {
         Hibernate.initialize(mainFrame.getFrameRelations2());
         loadedFrames.add(new FrameOutput(mainFrame));
         index = loadedFrames.size() -1;
-        return "frameOutput?faces-redirect=true&i-0&frame=" + name;
+    }
+
+    /**
+     * Adds a new FrameOutput object to the loaded frames list and returns the address of the Frame Index for
+     * redirection.
+     *
+     * @param name is the name of the frame to be added
+     */
+    @Transactional
+    public String addFrameRedirect (String name) {
+        addFrame(name);
+        return "frameOutput?faces-redirect=true&i-0";
     }
 
     /**
@@ -85,12 +96,12 @@ public class TabController {
      * @param id is the id of the lexical unit to be added
      */
     @Transactional
-    public String addLU(int id) {
+    public void addLU(int id) {
         // TODO: 2/3/16 change to check id instead of name (many LUs can have the same name)
         for (LUOutput luOutput : loadedLUs) {
             if (luOutput.getLightLU().getId() == id) {
                 index = loadedLUs.indexOf(luOutput);
-                return "lexUnitOutput?faces-redirect=true&i=1&lu=" + id;
+                return;
             }
         }
         mainLU = lexUnitRepository.findById(id);
@@ -103,7 +114,18 @@ public class TabController {
         }
         loadedLUs.add(new LUOutput(mainLU, true));
         index = loadedLUs.size() -1;
-        return "lexUnitOutput?faces-redirect=true&i=1&lu=" + id;
+    }
+
+    /**
+     * Adds a new LUOutput object to the loaded lexical units list and returns the address of the Lexical Unit Index for
+     * redirection.
+     *
+     * @param id is the id of the lexical unit to be added
+     */
+    @Transactional
+    public String addLURedirect(int id) {
+        addLU(id);
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**
@@ -112,12 +134,11 @@ public class TabController {
      * @param document is the id of the document to be added
      */
     @Transactional
-    public String addDoc(Document document) {
-        // TODO: 2/3/16 change to check id instead of name (many documents can have the same name)
+    public void addDoc(Document document) {
         for (DocumentOutput documentOutput : loadedDocs) {
             if (documentOutput.getName().equals(document.getName())) {
                 index = loadedDocs.indexOf(documentOutput);
-                return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
+                return;
             }
         }
         mainDocument = documentRepository.findById(document.getId());
@@ -136,7 +157,18 @@ public class TabController {
         }
         loadedDocs.add(new DocumentOutput(mainDocument));
         index = loadedDocs.size() -1;
-        return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
+    }
+
+    /**
+     * Adds a new DocumentOutput object to the loaded documents list and returns the address of the Document Index for
+     * redirection.
+     *
+     * @param document is the id of the document to be added
+     */
+    @Transactional
+    public String addDocRedirect(Document document) {
+        addDoc(document);
+        return "documentOutput?faces-redirect=true&i=2";
     }
 
     /**
@@ -150,6 +182,9 @@ public class TabController {
                 break;
             }
         }
+    }
+
+    public void onTabChange(TabChangeEvent event) {
     }
 
     /**

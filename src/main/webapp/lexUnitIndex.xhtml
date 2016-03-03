@@ -24,9 +24,7 @@
             <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="100" liveScroll="true" scrollHeight="2500" emptyMessage="#{text['emptyMessage']}">
                 <p:column>
                     <h:form>
-                        <p:commandLink global="false" action="#{tabController.addLU(lu.id)}" value="#{lu.name}" styleClass="element-index" ajax="false">
-                            <f:ajax execute="@form" render="form2"/>
-                        </p:commandLink>
+                        <p:commandLink action="#{tabController.addLU(lu.id)}" value="#{lu.name}" styleClass="element-index" update="form2"/>
                         <h:outputText value="[#{lu.frame}]" styleClass="sub-element-index"/>
                     </h:form>
                 </p:column>

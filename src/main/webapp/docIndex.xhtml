@@ -23,9 +23,7 @@
             <p:dataTable id="docList" value="#{documentController.allDocs}" var="doc" scrollable="true" scrollRows="60" liveScroll="true" scrollHeight="1500" emptyMessage="#{text['emptyMessage']}">
                 <p:column>
                     <h:form>
-                        <p:commandLink global="false" action="#{tabController.addDoc(doc)}" value="#{doc.name}" styleClass="element-index">
-                            <f:ajax execute="@form" render="form2"/>
-                        </p:commandLink><br/>
+                        <p:commandLink action="#{tabController.addDoc(doc)}" value="#{doc.name}" styleClass="element-index" update="form2"/><br/>
                         <h:outputText value="[#{doc.corpus.name}]" styleClass="sub-element-index"/>
                     </h:form>
                 </p:column>

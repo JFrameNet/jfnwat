@@ -9,6 +9,7 @@
         <h:form>
             <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" styleClass="tab-layout">
                 <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
+                <p:ajax event="tabChange" listener="#{tabController.onTabChange}" update="output"/>
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
                     <p:dataList type="definition" id="output" value="#{doc.sentenceDisplay}" var="line" styleClass="display-sent doc"> 
                         <p:fieldset>
@@ -34,8 +35,8 @@
                                     </p:row>
                                 </p:panelGrid>
                             </ui:repeat>
-                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addFrame(line.displayedAnnotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="float: left; color: #66BB6A" value="[#{line.displayedAnnotationSet.lexUnit.frame.name}" />
-                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addLU(line.displayedAnnotationSet.lexUnit.id)}" styleClass="display-sent" style="float: left; color: #66BB6A" value=".#{line.displayedAnnotationSet.lexUnit.name}]" />
+                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addFrameRedirect(line.displayedAnnotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="float: left; color: #66BB6A" value="[#{line.displayedAnnotationSet.lexUnit.frame.name}" />
+                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addLURedirect(line.displayedAnnotationSet.lexUnit.id)}" styleClass="display-sent" style="float: left; color: #66BB6A" value=".#{line.displayedAnnotationSet.lexUnit.name}]" />
                         </p:fieldset>
                     </p:dataList> 
                 </p:tab>
