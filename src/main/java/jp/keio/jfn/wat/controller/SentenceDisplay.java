@@ -64,7 +64,7 @@ public class SentenceDisplay {
                     }
                     String s = label.getLabelType().getFrameElement().getName();
                     // regular tag (associated to a frame element)
-                    Tag t = new Tag(s, findTargets(i, label.getEndChar() + 1));
+                    Tag t = new Tag(this,s, findTargets(i, label.getEndChar() + 1));
                     t.setColor(Utils.allColors.get(allFE.indexOf(s)));
                     t.setFrameElement(label.getLabelType().getFrameElement());
                     tags.add(t);
@@ -84,7 +84,7 @@ public class SentenceDisplay {
             if (label.getInstantiationType().getId() != 1) {
                 String word = label.getInstantiationType().getName();
                 String el = label.getLabelType().getFrameElement().getName();
-                Tag tag = new Tag(el, new Target(this,word));
+                Tag tag = new Tag(this,el, new Target(word));
                 tag.setFrameElement(label.getLabelType().getFrameElement());
                 tag.setColor(Utils.allColors.get(allFE.indexOf(el)));
                 tags.add(tag);
@@ -142,7 +142,7 @@ public class SentenceDisplay {
     }
 
     /**
-     * Creates a list of targets.
+     * Creates a list of targets for frame elements type tags.
      * For every label in the focus list, the background color is changed.
      */
     private List<Target> findTargets (int start, int end) {
@@ -154,9 +154,9 @@ public class SentenceDisplay {
             for (Label label : this.allTargets) {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
-                        result.add(new Target(this,text.substring(aux,i)));
+                        result.add(new Target(text.substring(aux,i)));
                     }
-                    Target t = new Target(this,text.substring(i,label.getEndChar() + 1));
+                    Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     t.setValid(true);
                     for (Label on : this.focus) {
                         if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
@@ -172,11 +172,14 @@ public class SentenceDisplay {
             i ++;
         }
         if (aux < end) {
-            result.add(new Target(this,text.substring(aux,end)));
+            result.add(new Target(text.substring(aux,end)));
         }
         return result;
     }
 
+    /**
+     * Creates a list of tags that can be "blank" or "target" tags.
+     */
     private List<Tag> singleTags (int start, int end) {
         List<Tag> tags = new ArrayList<Tag>();
 
@@ -188,13 +191,13 @@ public class SentenceDisplay {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
                         for (int x = aux; x < i; x ++) {
-                            Tag tag = new Tag(this.fullText?"":"LU", new Target(this,sentence.getText().substring(x, x+1)));
+                            Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
                             if (!tag.isEmpty()) {
                                 tags.add(tag);
                             }
                         }
                     }
-                    Target t = new Target(this,text.substring(i,label.getEndChar() + 1));
+                    Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     t.setValid(true);
                     for (Label on : this.focus) {
                         if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
@@ -202,7 +205,7 @@ public class SentenceDisplay {
                         }
                     }
                     t.setAnnotationSet(label.getLayer().getAnnotationSet());
-                    tags.add(new Tag("",t));
+                    tags.add(new Tag(this,"",t));
                     i = label.getEndChar();
                     aux = i + 1;
                 }
@@ -211,7 +214,7 @@ public class SentenceDisplay {
         }
         if (aux < end) {
             for (int x = aux; x < end; x ++) {
-                Tag tag = new Tag(this.fullText?"":"LU", new Target(this,sentence.getText().substring(x, x+1)));
+                Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
                 if (!tag.isEmpty()) {
                     tags.add(tag);
                 }
@@ -243,12 +246,7 @@ public class SentenceDisplay {
         return sentence;
     }
 
-
-    public void setFocus(List<Label> focus) {
-        this.focus = focus;
-    }
-
-    public List<Label> getFocus() {
-        return focus;
+    public boolean isFullText() {
+        return fullText;
     }
 }

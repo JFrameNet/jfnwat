@@ -8,24 +8,22 @@
     <ui:define name="docOutput">
         <h:form>
             <p:tabView activeIndex="#{tabController.index}" dynamic="false" cache="true" styleClass="tab-layout">
-                <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="@(.display-sent)"/>
-                <p:ajax event="tabChange" listener="#{tabController.onTabChange}" update="@(.display-sent)"/>
+                <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}"/>
+                <p:ajax event="tabChange" listener="#{tabController.onTabChange}"/>
                 <c:forEach varStatus="loop" items="#{tabController.loadedDocs}" var="doc" >
                     <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                        <f:subview id="tab_#{loop.index}">
-                            <c:forEach items="#{doc.sentenceDisplay}" var="line" varStatus="loop">
-                                <p:fieldset styleClass="display-sent">
-                                    <c:forEach items="#{documentController.getAnnotation(doc, line).elements}" var="tag" varStatus="loop">
-                                        <ui:include src="WEB-INF/#{tabController.getTagType(tag)}.xhtml" >
-                                            <ui:param name="tag" value="#{tag}"/>
-                                        </ui:include>
-                                    </c:forEach>
-                                    <ui:include src="WEB-INF/frameTag.xhtml.xhtml" >
-                                        <ui:param name="line" value="#{line}"/>
+                        <c:forEach items="#{doc.sentenceDisplay}" var="line" varStatus="loop">
+                            <p:fieldset styleClass="display-sent">
+                                <c:forEach items="#{documentController.getAnnotation(doc, line).elements}" var="tag" varStatus="loop">
+                                    <ui:include src="WEB-INF/#{tabController.getTagType(tag)}.xhtml" >
+                                        <ui:param name="tag" value="#{tag}"/>
                                     </ui:include>
-                                </p:fieldset>
-                            </c:forEach>
-                        </f:subview>
+                                </c:forEach>
+                                <ui:include src="WEB-INF/frameTag.xhtml" >
+                                    <ui:param name="line" value="#{line}"/>
+                                </ui:include>
+                            </p:fieldset>
+                        </c:forEach>
                     </p:tab>
                 </c:forEach>
             </p:tabView>

@@ -9,9 +9,11 @@
             <h:outputText value="#{tag.target.text}"/>
         </p:row>
         <p:row >
-            <div style="border-top: solid 1px white; text-align: center">
-                <h:outputText value="." style="color: white"/>
-            </div>
+            <p:row >
+                <div style="border-top: solid 1px #{tag.myBackgroundColor()}; text-align: center; background-color:#{tag.myBackgroundColor()}">
+                    <h:outputText value="." style="color: #{tag.myBackgroundColor()}"/>
+                </div>
+            </p:row>
         </p:row>
     </p:panelGrid>
 </ui:composition>

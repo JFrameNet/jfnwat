@@ -4,18 +4,18 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
-    <p:panelGrid columns="1" styleClass="noborder horizontal" >
+    <p:panelGrid columns="1" styleClass="noborder" style="float: left" >
         <p:row>
             <ui:repeat var="word" value="#{tag.associated}">
                 <p:column rendered="#{tag.target == null}">
-                    <p:commandLink rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold; float: left" value="#{word.text}" action="#{documentController.setAnnotationSentence(word)}" update="@(.display-sent)" process="@this"/>
-                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}" style="float: left"/>
+                    <p:commandLink rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold" value="#{word.text}" action="#{documentController.setAnnotationSentence(tag,word)}" disabled="#{!tag.parentSentenceDisplay.fullText}"/>
+                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
                 </p:column>
             </ui:repeat>
-            <h:outputText value="#{tag.target.text}" rendered="#{tag.target != null}" style="float: left"/>
+            <h:outputText value="#{tag.target.text}" rendered="#{tag.target != null}"/>
         </p:row>
         <p:row >
-            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
+            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{tag.myBackgroundColor()}">
                 <h:outputLink value="#">
                     <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
                 </h:outputLink>

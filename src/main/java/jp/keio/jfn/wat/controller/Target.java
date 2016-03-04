@@ -15,17 +15,15 @@ public class Target {
     private AnnotationSet annotationSet;
     private boolean valid;
     private String bkg;
-    private SentenceDisplay parentSentenceDisplay;
 
     /**
      * Initialization with a String object.
      * Default values are for an invalid target.
      */
-    public Target (SentenceDisplay parent, String text) {
+    public Target (String text) {
         this.text = text;
         this.valid = false;
         this.bkg = "#ffffff";
-        this.parentSentenceDisplay = parent;
     }
 
     public AnnotationSet getAnnotationSet() {
@@ -58,9 +56,5 @@ public class Target {
 
     public void setBkg(String bkg) {
         this.bkg = bkg;
-    }
-
-    public SentenceDisplay getParentSentenceDisplay() {
-        return parentSentenceDisplay;
     }
 }

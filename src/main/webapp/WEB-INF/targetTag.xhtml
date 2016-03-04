@@ -6,11 +6,11 @@
                 xmlns:p="http://primefaces.org/ui">
     <p:panelGrid columns="1" styleClass="noborder" style="float: left">
         <p:row>
-            <p:commandLink style="background-color: #{tag.target.bkg};font-weight: bold" value="#{tag.target.text}" action="#{documentController.setAnnotationSentence(tag.target)}"/>
+            <p:commandLink style="background-color: #{tag.target.bkg};font-weight: bold" value="#{tag.target.text}" action="#{documentController.setAnnotationSentence(tag, tag.target)}" disabled="#{!tag.parentSentenceDisplay.fullText}"/>
         </p:row>
         <p:row >
-            <div style="border-top: solid 1px white; text-align: center">
-                <h:outputText value="." style="color: white"/>
+            <div style="border-top: solid 1px #{tag.myBackgroundColor()}; text-align: center; background-color: #{tag.myBackgroundColor()}">
+                <h:outputText value="." style="color: #{tag.myBackgroundColor()}"/>
             </div>
         </p:row>
     </p:panelGrid>

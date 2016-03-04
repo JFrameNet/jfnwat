@@ -95,20 +95,22 @@ public class LexUnitController implements Serializable {
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
      * selected sentences.
      */
-    public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
+    public String realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
         for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
             insertSentence(lu, annotationSet);
         }
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**
      * This method is called when a user wants to add all of the sentences of a group realization to the list of the
      * selected sentences.
      */
-    public void totalGroup (LUOutput lu,FEGroupRealization group) {
+    public String totalGroup (LUOutput lu,FEGroupRealization group) {
         for (AnnotationSet annotationSet : group.getAllAnnotations()) {
             insertSentence(lu, annotationSet);
         }
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**
@@ -134,8 +136,9 @@ public class LexUnitController implements Serializable {
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
-    public void removeSentence (LUOutput lu, SentenceDisplay sentence) {
+    public String removeSentence (LUOutput lu, SentenceDisplay sentence) {
         lu.getSelectedSentences().remove(sentence);
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
 
@@ -248,8 +251,9 @@ public class LexUnitController implements Serializable {
         return lu.getValencePatterns();
     }
 
-    public void clearAllSentences(LUOutput lu) {
+    public String clearAllSentences(LUOutput lu) {
         lu.setSelectedSentences(new ArrayList<SentenceDisplay>());
+        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**

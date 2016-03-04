@@ -82,8 +82,8 @@ public class DocumentController implements Serializable {
      * Sets the annotation set for a SentenceDisplay object.
      * If the chosen annotation set is already being displayed, the future annotation set is set to null (hide annotation).
      */
-    public String setAnnotationSentence(Target word) {
-        SentenceDisplay sentence = word.getParentSentenceDisplay();
+    public String setAnnotationSentence(Tag tag, Target word) {
+        SentenceDisplay sentence = tag.getParentSentenceDisplay();
         AnnotationSet annotationSet = word.getAnnotationSet();
         AnnotationSet current = sentence.getDisplayedAnnotationSet();
         if ((current != null) && (current.getId() == annotationSet.getId())) {
