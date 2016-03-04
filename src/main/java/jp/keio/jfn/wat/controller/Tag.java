@@ -14,7 +14,7 @@ public class Tag {
     private String value;
     private FrameElement frameElement;
     private List<Target> associated = new ArrayList<Target>();
-
+    private Target target;
     private String color;
 
     /**
@@ -27,16 +27,21 @@ public class Tag {
     public Tag (String value, List<Target> words) {
         this.associated = words;
         this.value = value;
-        this.color = this.value.equals("LU") ?"#F5F5F5":"#FFFFFF";
+        this.color = this.value.equals("LU") ?"#FFFFFF":"#FFFFFF";
+    }
+
+    public Tag (String value, Target word) {
+        this.target = word;
+        this.value = value;
+        this.color = this.value.equals("LU") ?"#FFFFFF":"#FFFFFF";
     }
 
     public boolean isEmpty() {
-        for (Target target : associated) {
-            if (!target.getText().equals(" ")) {
-                return false;
-            }
-        }
-        return true;
+        return target.getText().equals(" ");
+    }
+
+    public Target getTarget() {
+        return target;
     }
 
     public List<Target> getAssociated() {

@@ -26,3 +26,7 @@ function displayNonCore(id) {
 function hideFilter(div){
     div.display = 'none';
 }
+
+function reloadPage() {
+    location.reload();
+}

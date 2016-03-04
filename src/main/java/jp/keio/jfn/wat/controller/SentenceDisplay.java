@@ -60,12 +60,7 @@ public class SentenceDisplay {
             for (Label label : allLabels) {
                 if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
                     if (i > iaux) {
-                        // empty tag (no frame element associated)
-                        Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, i));
-                        if (!tag.isEmpty()) {
-                            tags.add(tag);
-                        }
-
+                        tags.addAll(singleTags(iaux,i));
                     }
                     String s = label.getLabelType().getFrameElement().getName();
                     // regular tag (associated to a frame element)
@@ -82,18 +77,14 @@ public class SentenceDisplay {
             i ++;
         }
         if (iaux < max) {
-            // empty tag (no frame element associated)
-            Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, max));
-            if (!tag.isEmpty()) {
-                tags.add(tag);
-            }
+            tags.addAll(singleTags(iaux,max));
         }
         // add all of the frame elements annotated but not instantiated in the sentence
         for (Label label : allLabels) {
             if (label.getInstantiationType().getId() != 1) {
                 String word = label.getInstantiationType().getName();
                 String el = label.getLabelType().getFrameElement().getName();
-                Tag tag = new Tag(el, new ArrayList<Target>(Arrays.asList(new Target(word))));
+                Tag tag = new Tag(el, new Target(this,word));
                 tag.setFrameElement(label.getLabelType().getFrameElement());
                 tag.setColor(Utils.allColors.get(allFE.indexOf(el)));
                 tags.add(tag);
@@ -163,9 +154,9 @@ public class SentenceDisplay {
             for (Label label : this.allTargets) {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
-                        result.add(new Target(text.substring(aux,i)));
+                        result.add(new Target(this,text.substring(aux,i)));
                     }
-                    Target t = new Target(text.substring(i,label.getEndChar() + 1));
+                    Target t = new Target(this,text.substring(i,label.getEndChar() + 1));
                     t.setValid(true);
                     for (Label on : this.focus) {
                         if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
@@ -181,9 +172,52 @@ public class SentenceDisplay {
             i ++;
         }
         if (aux < end) {
-            result.add(new Target(text.substring(aux,end)));
+            result.add(new Target(this,text.substring(aux,end)));
         }
         return result;
+    }
+
+    private List<Tag> singleTags (int start, int end) {
+        List<Tag> tags = new ArrayList<Tag>();
+
+        String text = this.sentence.getText();
+        int i = start;
+        int aux = i;
+        while (i < end) {
+            for (Label label : this.allTargets) {
+                if (label.getStartChar() == i) {
+                    if (i > aux) {
+                        for (int x = aux; x < i; x ++) {
+                            Tag tag = new Tag(this.fullText?"":"LU", new Target(this,sentence.getText().substring(x, x+1)));
+                            if (!tag.isEmpty()) {
+                                tags.add(tag);
+                            }
+                        }
+                    }
+                    Target t = new Target(this,text.substring(i,label.getEndChar() + 1));
+                    t.setValid(true);
+                    for (Label on : this.focus) {
+                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
+                            t.setBkg("#66BB6A");
+                        }
+                    }
+                    t.setAnnotationSet(label.getLayer().getAnnotationSet());
+                    tags.add(new Tag("",t));
+                    i = label.getEndChar();
+                    aux = i + 1;
+                }
+            }
+            i ++;
+        }
+        if (aux < end) {
+            for (int x = aux; x < end; x ++) {
+                Tag tag = new Tag(this.fullText?"":"LU", new Target(this,sentence.getText().substring(x, x+1)));
+                if (!tag.isEmpty()) {
+                    tags.add(tag);
+                }
+            }
+        }
+        return tags;
     }
 
     public AnnotationSet getDisplayedAnnotationSet() {

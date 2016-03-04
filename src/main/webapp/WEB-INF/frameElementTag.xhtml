@@ -1,0 +1,28 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panelGrid columns="1" styleClass="noborder horizontal" >
+        <p:row>
+            <ui:repeat var="word" value="#{tag.associated}">
+                <p:column rendered="#{tag.target == null}">
+                    <p:commandLink rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold; float: left" value="#{word.text}" action="#{documentController.setAnnotationSentence(word)}" update="@(.display-sent)" process="@this"/>
+                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}" style="float: left"/>
+                </p:column>
+            </ui:repeat>
+            <h:outputText value="#{tag.target.text}" rendered="#{tag.target != null}" style="float: left"/>
+        </p:row>
+        <p:row >
+            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
+                <h:outputLink value="#">
+                    <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                </h:outputLink>
+                <f:facet name="inline">
+                    <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                </f:facet>
+            </p:lightBox>
+        </p:row>
+    </p:panelGrid>
+</ui:composition>

@@ -1,13 +1,11 @@
 package jp.keio.jfn.wat.controller;
 
 import java.util.*;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
 import org.hibernate.Hibernate;
-import org.hibernate.procedure.internal.Util;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -273,6 +271,18 @@ public class TabController {
             orderedLU = lightLUs;
         }
         return orderedLU;
+    }
+
+    public String getTagType(Tag tag) {
+        if (tag == null) {
+            return "blankTag";
+        }
+        if (tag.getFrameElement() != null) {
+            return "frameElementTag";
+        } else if (tag.getTarget().isValid()) {
+            return "targetTag";
+        }
+        return "blankTag";
     }
 
     public List<DocumentOutput> getLoadedDocs() {
