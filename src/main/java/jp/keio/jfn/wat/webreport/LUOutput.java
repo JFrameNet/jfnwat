@@ -1,5 +1,6 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.webreport;
 
+import jp.keio.jfn.wat.annotation.SentenceDisplay;
 import jp.keio.jfn.wat.domain.*;
 
 import java.util.ArrayList;

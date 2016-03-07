@@ -1,4 +1,4 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat;
 
 import java.util.ArrayList;
 import java.util.Arrays;

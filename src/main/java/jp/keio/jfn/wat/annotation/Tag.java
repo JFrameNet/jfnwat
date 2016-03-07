@@ -1,4 +1,4 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.annotation;
 
 import jp.keio.jfn.wat.domain.FrameElement;
 
@@ -36,6 +36,7 @@ public class Tag {
         this.associated = words;
         this.value = value;
         this.parentSentenceDisplay = parent;
+        this.color = myBackgroundColor();
     }
 
     /**
@@ -50,6 +51,7 @@ public class Tag {
         this.target = word;
         this.value = value;
         this.parentSentenceDisplay = parent;
+        this.color = myBackgroundColor();
     }
 
     public String myBackgroundColor () {

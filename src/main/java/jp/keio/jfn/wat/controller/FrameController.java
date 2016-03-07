@@ -5,8 +5,12 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.faces.bean.ManagedBean;
+
+import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.FrameOutput;
+import jp.keio.jfn.wat.webreport.LightLU;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

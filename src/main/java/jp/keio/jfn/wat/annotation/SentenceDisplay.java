@@ -1,12 +1,12 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.annotation;
 
+import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.Label;
 import jp.keio.jfn.wat.domain.Layer;
 import jp.keio.jfn.wat.domain.Sentence;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -191,7 +191,7 @@ public class SentenceDisplay {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
                         for (int x = aux; x < i; x ++) {
-                            Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
+                            Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
                             if (!tag.isEmpty()) {
                                 tags.add(tag);
                             }
@@ -205,7 +205,7 @@ public class SentenceDisplay {
                         }
                     }
                     t.setAnnotationSet(label.getLayer().getAnnotationSet());
-                    tags.add(new Tag(this,"",t));
+                    tags.add(new Tag(this,".",t));
                     i = label.getEndChar();
                     aux = i + 1;
                 }
@@ -214,7 +214,7 @@ public class SentenceDisplay {
         }
         if (aux < end) {
             for (int x = aux; x < end; x ++) {
-                Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
+                Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
                 if (!tag.isEmpty()) {
                     tags.add(tag);
                 }

@@ -4,8 +4,13 @@ import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 
+import jp.keio.jfn.wat.annotation.SentenceDisplay;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.FEGroupRealization;
+import jp.keio.jfn.wat.webreport.LUOutput;
+import jp.keio.jfn.wat.webreport.LayerTriplet;
+import jp.keio.jfn.wat.webreport.PatternEntry;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +35,7 @@ public class LexUnitController implements Serializable {
      * "Core Only" and "Non Core Only" buttons.
      * Sets the boolean values displayCore and displayNonCore of the LUOutput object.
      */
-    public void addFilter (LUOutput lu,String string) {
+    public void addFilter (LUOutput lu, String string) {
         if (string.equals("Core") || string.equals("Non-Core") ||string.equals("All")) {
             List<String> selectedEl = new ArrayList<String>();
             selectedEl.add(string);
@@ -95,22 +100,20 @@ public class LexUnitController implements Serializable {
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
      * selected sentences.
      */
-    public String realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
+    public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
         for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
             insertSentence(lu, annotationSet);
         }
-        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**
      * This method is called when a user wants to add all of the sentences of a group realization to the list of the
      * selected sentences.
      */
-    public String totalGroup (LUOutput lu,FEGroupRealization group) {
+    public void totalGroup (LUOutput lu,FEGroupRealization group) {
         for (AnnotationSet annotationSet : group.getAllAnnotations()) {
             insertSentence(lu, annotationSet);
         }
-        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**
@@ -136,9 +139,8 @@ public class LexUnitController implements Serializable {
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
-    public String removeSentence (LUOutput lu, SentenceDisplay sentence) {
+    public void removeSentence (LUOutput lu, SentenceDisplay sentence) {
         lu.getSelectedSentences().remove(sentence);
-        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
 
@@ -251,9 +253,8 @@ public class LexUnitController implements Serializable {
         return lu.getValencePatterns();
     }
 
-    public String clearAllSentences(LUOutput lu) {
+    public void clearAllSentences(LUOutput lu) {
         lu.setSelectedSentences(new ArrayList<SentenceDisplay>());
-        return "lexUnitOutput?faces-redirect=true&i=1";
     }
 
     /**

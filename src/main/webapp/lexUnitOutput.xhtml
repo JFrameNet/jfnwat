@@ -69,9 +69,9 @@
                                             <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" styleClass="valence-pattern" emptyMessage=""> 
                                                 <p:column styleClass="total-vp-column"> 
                                                     <f:facet name="header"> 
-                                                        <p:commandLink value="#{group.totalOccurences}" action="#{lexUnitController.totalGroup(lu,group)}" styleClass="total-vp"/> 
+                                                        <p:commandLink value="#{group.totalOccurences}" action="#{lexUnitController.totalGroup(lu,group)}" styleClass="total-vp" update="@(.dialog-sentences)"/> 
                                                     </f:facet> 
-                                                    <p:commandLink value="[#{realization.annoSet.size()}]" action="#{lexUnitController.realPatterEntry(lu,realization)}"/> 
+                                                    <p:commandLink value="[#{realization.annoSet.size()}]" action="#{lexUnitController.realPatterEntry(lu,realization)}" update="@(.dialog-sentences)"/> 
                                                 </p:column> 
                                                 <p:columns var="fe" value="#{group.frameElements}" styleClass="list-fe-vp"> 
                                                     <f:facet name="header"> 
@@ -86,13 +86,13 @@
                             </p:panel>
                             <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" draggable="false" resizable="false" closable="false" styleClass="dialog-sentences">
                                 <f:facet name="header">
-                                    <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" style="font-size: smaller"/>
+                                    <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" style="font-size: smaller" update="@(.dialog-sentences)"/>
                                 </f:facet>
                                 <c:forEach items="#{lexUnitController.showAnnotation(lu)}" var="line" varStatus="loop">
                                     <p:fieldset styleClass="display-sent">
-                                        <p:commandLink value="x" styleClass="remove-link" update="@(.display-sent)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left"/>
+                                        <p:commandLink value="x" styleClass="remove-link" update="@(.dialog-sentences)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left"/>
                                         <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                            <ui:include src="WEB-INF/#{tabController.getTagType(tag)}.xhtml" >
+                                            <ui:include src="WEB-INF/luTag.xhtml" >
                                                 <ui:param name="tag" value="#{tag}"/>
                                             </ui:include>
                                         </c:forEach>

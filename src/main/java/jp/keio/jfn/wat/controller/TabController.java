@@ -3,8 +3,14 @@ package jp.keio.jfn.wat.controller;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 
+import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.annotation.Tag;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.DocumentOutput;
+import jp.keio.jfn.wat.webreport.FrameOutput;
+import jp.keio.jfn.wat.webreport.LUOutput;
+import jp.keio.jfn.wat.webreport.LightLU;
 import org.hibernate.Hibernate;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
@@ -273,16 +279,11 @@ public class TabController {
         return orderedLU;
     }
 
-    public String getTagType(Tag tag) {
-        if (tag == null) {
-            return "blankTag";
-        }
+    public boolean whichTagType(Tag tag, String type) {
         if (tag.getFrameElement() != null) {
-            return "frameElementTag";
-        } else if (tag.getTarget().isValid()) {
-            return "targetTag";
+            return type.equals("frameElement");
         }
-        return "blankTag";
+        return type.equals("blank");
     }
 
     public List<DocumentOutput> getLoadedDocs() {

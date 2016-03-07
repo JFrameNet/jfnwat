@@ -1,0 +1,41 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:panelGrid columns="1" styleClass="noborder" style="float: left">
+        <p:row>
+            <ui:repeat var="word" value="#{tag.associated}">
+                <p:column rendered="#{tag.target == null}">
+                    <p:commandLink rendered="#{word.isValid()}"
+                                   style="background-color: #{word.bkg};font-weight: bold"
+                                   value="#{word.text}"
+                                   action="#{documentController.setAnnotationSentence(tag,word)}"
+                                   disabled="#{!tag.parentSentenceDisplay.fullText}"
+                                   update="@(.dialog-sentences)"/>
+                    <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
+                </p:column>
+            </ui:repeat>
+            <p:column rendered="#{tag.target != null}">
+                <h:outputText value="#{tag.target.text}" rendered="#{!tag.target.valid}"/>
+                <p:commandLink rendered="#{tag.target.valid}"
+                               style="background-color: #{tag.target.bkg};font-weight: bold"
+                               value="#{tag.target.text}"
+                               action="#{documentController.setAnnotationSentence(tag, tag.target)}"
+                               disabled="#{!tag.parentSentenceDisplay.fullText}"
+                               update="@(.dialog-sentences)"/>
+            </p:column>
+        </p:row>
+        <p:row >
+            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{tag.myBackgroundColor()}">
+                <h:outputLink value="#" disabled="#{(tag.frameElement eq null)}">
+                    <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                </h:outputLink>
+                <f:facet name="inline">
+                    <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                </f:facet>
+            </p:lightBox>
+        </p:row>
+    </p:panelGrid>
+</ui:composition>
