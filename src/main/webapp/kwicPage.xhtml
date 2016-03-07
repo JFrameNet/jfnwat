@@ -1,0 +1,51 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/kwicTemplate.xhtml">
+
+    <ui:define name="search">
+        <div class="Fleft OvHidden">
+            <h1>KWIC</h1>
+        </div>
+    </ui:define>
+
+    <ui:define name="filter">
+        <h:form>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{frameController.filter}">
+                <p:ajax event="keyup" listener="#{frameController.orderFrames()}" update="frameList"/>
+            </p:inputText>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="indexList">
+        <div>
+            <p:scrollPanel id="frameList" style="width:auto;max-height:750px"><!--auto adjust to content of "output" block -->
+                    <p:accordionPanel id="framePanel" value="#{frameController.orderedFrames}" var="frame" multiple="true" dynamic="true" cache="true" activeIndex="">
+                        <p:tab title="#{frame}">
+                            <h:form>
+                                <p:growl autoUpdate="true"/>
+                                <p:panelMenu model="#{kwicMenu.model(frame)}" />
+                            </h:form>
+                        </p:tab>
+                    </p:accordionPanel>
+            </p:scrollPanel>
+
+  <!--                  <h:form>
+                        <p:growl autoUpdate="true"/>
+                        <p:panelMenu model="#{kwicMenu.model(frame)}" />
+                    </h:form>  -->
+
+  <!--                  <h:form>
+                        <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" styleClass="element-index"/>
+                    </h:form>   -->
+        </div>
+
+
+
+    </ui:define>
+
+
+</ui:composition>
