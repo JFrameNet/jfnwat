@@ -116,7 +116,7 @@ public class TabController {
                 Hibernate.initialize(layer.getLabels());
             }
         }
-        loadedLUs.add(new LUOutput(mainLU, true));
+        loadedLUs.add(new LUOutput(mainLU));
         index = loadedLUs.size() -1;
     }
 
@@ -279,11 +279,24 @@ public class TabController {
         return orderedLU;
     }
 
-    public boolean whichTagType(Tag tag, String type) {
-        if (tag.getFrameElement() != null) {
-            return type.equals("frameElement");
+    /**
+     * Returns the type of the tag for the ui:include elements during view build time.
+     */
+    public String getTagType(Tag tag, boolean fullText) {
+        if (tag == null) {
+            return "blankTag";
         }
-        return type.equals("blank");
+        if (fullText) {
+            if (tag.getFrameElement() != null) {
+                return "frameElementTag";
+            } else if (tag.getTarget().isValid()) {
+                return "targetTag";
+            }
+        } else if (tag.getFrameElement() != null) {
+            return "luTag";
+        }
+
+        return "blankTag";
     }
 
     public List<DocumentOutput> getLoadedDocs() {

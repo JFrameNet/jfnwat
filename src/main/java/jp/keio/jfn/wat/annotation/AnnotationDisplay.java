@@ -10,16 +10,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is used to represent an annotation. A SentenceDisplay object is associated with one annotation set,
+ * This class is used to represent an annotation. A AnnotationDisplay object is associated with one annotation set,
  * from which a list of tags is created. The annotation can be done in "normal" or "fullText" mode.
  */
-public class SentenceDisplay {
+public class AnnotationDisplay {
     private Sentence sentence;
-    private AnnotationSet displayedAnnotationSet;
+    private AnnotationSet annotationSet;
     private List<Tag> elements;
     private List<Label> focus = new ArrayList<Label>();
     private List<Label> allTargets = new ArrayList<Label>();
     private boolean fullText;
+    private boolean displayed;
 
     /**
      * Initialization.
@@ -27,11 +28,11 @@ public class SentenceDisplay {
      * @param annotationSet the chosen annotation set, can be null in fullText mode
      * @param fullText set to true for documents
      */
-    public SentenceDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText) {
+    public AnnotationDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText, List<String> allFE) {
         this.sentence = sentence;
-        this.displayedAnnotationSet = annotationSet;
+        this.annotationSet = annotationSet;
         this.fullText = fullText;
-        getAllTargetAndFocus();
+        getAnnotation(allFE);
     }
 
     /**
@@ -40,13 +41,13 @@ public class SentenceDisplay {
      *              within the same page (a frame element in the view will be displayed in the same colour for
      *              every sentence).
      */
-    public void getAnnotation(List<String> allFE) {
+    private void getAnnotation(List<String> allFE) {
         getAllTargetAndFocus();
         List<Tag> tags = new ArrayList<Tag>();
         // Creates the list of all the labels related to a frame element (i.e. labels belonging to a layer of type 1)
         List<Label> allLabels = new ArrayList<Label>();
-        if (displayedAnnotationSet != null) {
-            for (Layer layer : displayedAnnotationSet.getLayers()){
+        if (annotationSet != null) {
+            for (Layer layer : annotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 1) {
                     allLabels.addAll(layer.getLabels());
                 }
@@ -101,8 +102,8 @@ public class SentenceDisplay {
     private void getAllTargetAndFocus() {
         List<Label> allLabels = new ArrayList<Label>();
         this.focus = new ArrayList<Label>();
-        if (displayedAnnotationSet != null) {
-            for (Layer layer : displayedAnnotationSet.getLayers()){
+        if (annotationSet != null) {
+            for (Layer layer : annotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 2) {
                     this.focus.addAll(layer.getLabels());
                 }
@@ -130,7 +131,8 @@ public class SentenceDisplay {
     }
 
     /**
-     * Checks if an annotation set is empty.
+     * Checks if an annotation set is empty (the annotation set exists but no frame elemets have been tagged).
+     * If it is the case, the annotation set willl be ignored.
      */
     private boolean isEmptyAnnoSet (AnnotationSet annotationSet) {
         for (Layer layer : annotationSet.getLayers()){
@@ -173,12 +175,7 @@ public class SentenceDisplay {
                         result.add(new Target(text.substring(aux,i)));
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
-                    t.setValid(true);
-                    for (Label on : this.focus) {
-                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                            t.setBkg("#66BB6A");
-                        }
-                    }
+                    confTarget(t,label);
                     t.setAnnotationSet(label.getLayer().getAnnotationSet());
                     result.add(t);
                     i = label.getEndChar();
@@ -214,12 +211,7 @@ public class SentenceDisplay {
                         }
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
-                    t.setValid(true);
-                    for (Label on : this.focus) {
-                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                            t.setBkg("#66BB6A");
-                        }
-                    }
+                    confTarget(t,label);
                     t.setAnnotationSet(label.getLayer().getAnnotationSet());
                     tags.add(new Tag(this,".",t));
                     i = label.getEndChar();
@@ -239,12 +231,25 @@ public class SentenceDisplay {
         return tags;
     }
 
-    public AnnotationSet getDisplayedAnnotationSet() {
-        return displayedAnnotationSet;
+    /**
+     * Sets the background color of a LU target to green if it is the LU target of an LU output page or if the LU have
+     * been selected by a user in fullText mode.
+     */
+    private void confTarget(Target t, Label label) {
+        t.setValid(true);
+        if (!fullText) {
+            t.setBkg("#66BB6A");
+        } else {
+            for (Label on : this.focus) {
+                if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
+                    t.setBkg("#66BB6A");
+                }
+            }
+        }
     }
 
-    public void setDisplayedAnnotationSet(AnnotationSet displayedAnnotationSet) {
-        this.displayedAnnotationSet = displayedAnnotationSet;
+    public AnnotationSet getAnnotationSet() {
+        return annotationSet;
     }
 
     public void setSentence(Sentence sentence) {
@@ -254,6 +259,7 @@ public class SentenceDisplay {
     public List<Tag> getElements() {
         return elements;
     }
+
     public void setElements(List<Tag> elements) {
         this.elements = elements;
     }
@@ -264,5 +270,13 @@ public class SentenceDisplay {
 
     public boolean isFullText() {
         return fullText;
+    }
+
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        this.displayed = displayed;
     }
 }

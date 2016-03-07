@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 
-import jp.keio.jfn.wat.annotation.SentenceDisplay;
+import jp.keio.jfn.wat.annotation.AnnotationDisplay;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
 import jp.keio.jfn.wat.webreport.FEGroupRealization;
@@ -102,7 +102,7 @@ public class LexUnitController implements Serializable {
      */
     public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
         for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
-            insertSentence(lu, annotationSet);
+            enableSentence(lu, annotationSet);
         }
     }
 
@@ -112,35 +112,31 @@ public class LexUnitController implements Serializable {
      */
     public void totalGroup (LUOutput lu,FEGroupRealization group) {
         for (AnnotationSet annotationSet : group.getAllAnnotations()) {
-            insertSentence(lu, annotationSet);
+            enableSentence(lu, annotationSet);
         }
     }
 
     /**
-     * Adds a new SentenceDisplay object corresponding to an annotation set to the list of the selected sentences.
+     * Adds a new AnnotationDisplay object corresponding to an annotation set to the list of the selected sentences.
      * The insert is not performed if the annotation set has already been selected.
      */
-    private void insertSentence (LUOutput lu, AnnotationSet annotationSet) {
-        boolean insert = true;
-        for (SentenceDisplay s : lu.getSelectedSentences()) {
-            if (s.getDisplayedAnnotationSet().getId() == annotationSet.getId()) {
-                insert = false;
-                break;
+    private void enableSentence (LUOutput lu, AnnotationSet annotationSet) {
+        for (AnnotationDisplay s : lu.getAllSentences()) {
+            if (s.getAnnotationSet().getId() == annotationSet.getId()) {
+                s.setDisplayed(true);
             }
         }
-        if (insert) {
-            SentenceDisplay sentenceDisplay = new SentenceDisplay(annotationSet.getSentence(), annotationSet, false);
-            sentenceDisplay.getAnnotation(lu.getFrameElements());
-            lu.getSelectedSentences().add(sentenceDisplay);
-        }
-
     }
 
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
-    public void removeSentence (LUOutput lu, SentenceDisplay sentence) {
-        lu.getSelectedSentences().remove(sentence);
+    public void removeSentence (LUOutput lu, AnnotationDisplay sentence) {
+        for (AnnotationDisplay s : lu.getAllSentences()) {
+            if (s.getAnnotationSet().getId() == sentence.getAnnotationSet().getId()) {
+                s.setDisplayed(false);
+            }
+        }
     }
 
 
@@ -245,6 +241,13 @@ public class LexUnitController implements Serializable {
         return sortedList;
     }
 
+    /**
+     * Gets all AnnotationDisplay objects associated to the annotation sets of one lexical unit.
+     */
+    public List<AnnotationDisplay> getAnnotations (LUOutput lu) {
+        return lu.getAllSentences();
+    }
+
     public List<String> getSelectedEl(LUOutput lu) {
         return lu.getSelectedEl();
     }
@@ -253,8 +256,13 @@ public class LexUnitController implements Serializable {
         return lu.getValencePatterns();
     }
 
+    /**
+     * Disable all of the sentences for on LUOutput object.
+     */
     public void clearAllSentences(LUOutput lu) {
-        lu.setSelectedSentences(new ArrayList<SentenceDisplay>());
+        for (AnnotationDisplay s : lu.getAllSentences()) {
+            s.setDisplayed(false);
+        }
     }
 
     /**
@@ -273,10 +281,6 @@ public class LexUnitController implements Serializable {
 
     public String getFilter () {
         return filter;
-    }
-
-    public List<SentenceDisplay> showAnnotation (LUOutput lu) {
-        return lu.getSelectedSentences();
     }
 
     public void setLexUnitRepository(LexUnitRepository l) {

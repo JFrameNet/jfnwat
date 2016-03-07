@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.annotation.SentenceDisplay;
+import jp.keio.jfn.wat.annotation.AnnotationDisplay;
 import jp.keio.jfn.wat.domain.*;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class LUOutput {
 
     private List<FEGroupRealization> valencePatterns = new ArrayList<FEGroupRealization>();
 
-    private List<SentenceDisplay> selectedSentences = new ArrayList<SentenceDisplay>();
+    private List<AnnotationDisplay> allSentences = new ArrayList<AnnotationDisplay>();
 
     private List<String> selectedEl = new ArrayList<String>();
 
@@ -39,20 +39,21 @@ public class LUOutput {
 
     /**
      * Initialization.
-     *
-     * @param real defines if we want to retrieve the group realizations associated with the Lexical Unit or not.
      */
-    public LUOutput(LexUnit lexUnit, boolean real) {
+    public LUOutput(LexUnit lexUnit) {
         this.def = lexUnit.getSenseDesc();
         this.lightLU = new LightLU(lexUnit.getId(), lexUnit.getName(), lexUnit.getFrame().getName());
         this.annotations = lexUnit.getAnnotationSets();
-        if (real) {
-            findRealizations();
-        }
+        findRealizations();
         findALlFE();
         this.hasCore = this.feCoreRealizations.isEmpty()?"none":"inline";
         this.hasNonCore = this.feNonCoreRealizations.isEmpty()?"none":"inline";
         this.hasEl = this.feGroupRealizations.isEmpty()?"none":"inline";
+        for (AnnotationSet annotationSet : this.annotations) {
+            AnnotationDisplay annotationDisplay = new AnnotationDisplay(annotationSet.getSentence(), annotationSet, false, frameElements);
+            annotationDisplay.setDisplayed(false);
+            allSentences.add(annotationDisplay);
+        }
     }
 
     /**
@@ -217,8 +218,12 @@ public class LUOutput {
         return valencePatterns;
     }
 
-    public List<SentenceDisplay> getSelectedSentences() {
-        return selectedSentences;
+    public List<AnnotationDisplay> getAllSentences() {
+        return allSentences;
+    }
+
+    public void setAllSentences(List<AnnotationDisplay> allSentences) {
+        this.allSentences = allSentences;
     }
 
     public List<String> getSelectedEl() {
@@ -235,10 +240,6 @@ public class LUOutput {
 
     public String getDef() {
         return def;
-    }
-
-    public void setSelectedSentences(List<SentenceDisplay> selectedSentences) {
-        this.selectedSentences = selectedSentences;
     }
 
     public String getDisplayCore() {

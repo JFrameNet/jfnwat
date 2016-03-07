@@ -6,7 +6,8 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.annotation.SentenceDisplay;
+import jp.keio.jfn.wat.annotation.AnnotatedSentence;
+import jp.keio.jfn.wat.annotation.AnnotationDisplay;
 import jp.keio.jfn.wat.annotation.Tag;
 import jp.keio.jfn.wat.annotation.Target;
 import jp.keio.jfn.wat.domain.*;
@@ -65,29 +66,6 @@ public class DocumentController implements Serializable {
             allDocs = documentList;
         }
         return allDocs;
-    }
-
-    /**
-     * Returns a SentenceDisplay object with the corresponding list of tags.
-     */
-    public SentenceDisplay getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
-        sentenceDisplay.getAnnotation(doc.getAllFE());
-        return sentenceDisplay;
-    }
-
-    /**
-     * Sets the annotation set for a SentenceDisplay object.
-     * If the chosen annotation set is already being displayed, the future annotation set is set to null (hide annotation).
-     */
-    public void setAnnotationSentence(Tag tag, Target word) {
-        SentenceDisplay sentence = tag.getParentSentenceDisplay();
-        AnnotationSet annotationSet = word.getAnnotationSet();
-        AnnotationSet current = sentence.getDisplayedAnnotationSet();
-        if ((current != null) && (current.getId() == annotationSet.getId())) {
-            sentence.setDisplayedAnnotationSet(null);
-        } else {
-            sentence.setDisplayedAnnotationSet(annotationSet);
-        }
     }
 
     public void setFilter (String f) {

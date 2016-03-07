@@ -88,15 +88,17 @@
                                 <f:facet name="header">
                                     <p:commandLink value="#{text['clearAll']}" action="#{lexUnitController.clearAllSentences(lu)}" style="font-size: smaller" update="@(.dialog-sentences)"/>
                                 </f:facet>
-                                <c:forEach items="#{lexUnitController.showAnnotation(lu)}" var="line" varStatus="loop">
-                                    <p:fieldset styleClass="display-sent">
-                                        <p:commandLink value="x" styleClass="remove-link" update="@(.dialog-sentences)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left"/>
-                                        <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                            <ui:include src="WEB-INF/luTag.xhtml" >
-                                                <ui:param name="tag" value="#{tag}"/>
-                                            </ui:include>
-                                        </c:forEach>
-                                    </p:fieldset>
+                                <c:forEach items="#{lexUnitController.getAnnotations(lu)}" var="line" varStatus="loop">
+                                    <ui:fragment rendered="#{line.displayed}">
+                                        <p:fieldset styleClass="display-sent">
+                                            <p:commandLink value="x" styleClass="remove-link" update="@(.dialog-sentences)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left"/>
+                                            <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
+                                                <ui:include src="WEB-INF/#{tabController.getTagType(tag, false)}.xhtml" >
+                                                    <ui:param name="tag" value="#{tag}"/>
+                                                </ui:include>
+                                            </c:forEach>
+                                        </p:fieldset>
+                                    </ui:fragment>
                                 </c:forEach>
                                 <br/>
                             </p:dialog>

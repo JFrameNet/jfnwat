@@ -1,6 +1,7 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.annotation.SentenceDisplay;
+import jp.keio.jfn.wat.annotation.AnnotatedSentence;
+import jp.keio.jfn.wat.annotation.AnnotationDisplay;
 import jp.keio.jfn.wat.domain.*;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class DocumentOutput {
 
     private List<Sentence> sentences  = new ArrayList<Sentence>();
 
-    private List<SentenceDisplay> sentenceDisplay = new ArrayList<SentenceDisplay>();
+    private List<AnnotatedSentence> annotatedSentences = new ArrayList<AnnotatedSentence>();
 
     private String name;
 
@@ -22,18 +23,33 @@ public class DocumentOutput {
 
     /**
      * Instantiation with a Document object.
-     * It creates a list of SentenceDisplay objects in fullText mode, with the annotation set parameter initially set
-     * to null.
+     * It creates a list of AnnotatedSentence objects, associated to every sentence of the document.
      */
     public DocumentOutput(Document document) {
         for (Paragraph paragraph : document.getParagraphs()) {
             sentences.addAll(paragraph.getSentences());
         }
+        findALlFESentences();
         for (Sentence sentence : sentences) {
-            sentenceDisplay.add(new SentenceDisplay(sentence, null, true));
+            List<AnnotationDisplay> annotationDisplays = new ArrayList<AnnotationDisplay>();
+            annotationDisplays.add(new AnnotationDisplay(sentence, null, true, allFE));
+            for (AnnotationSet annotationSet : sentence.getAnnotationSets()) {
+                boolean empty = true;
+                for (Layer layer : annotationSet.getLayers()){
+                    if (layer.getLayerType().getId() == 1) {
+                        if (layer.getLabels().size() > 0) {
+                            empty = false;
+                            break;
+                        }
+                    }
+                }
+                if (!empty) {
+                    annotationDisplays.add(new AnnotationDisplay(sentence, annotationSet, true, allFE));
+                }
+            }
+            annotatedSentences.add(new AnnotatedSentence(annotationDisplays));
         }
         this.name = document.getName();
-        findALlFESentences();
     }
 
     /**
@@ -58,15 +74,11 @@ public class DocumentOutput {
         }
     }
 
-    public List<String> getAllFE() {
-        return allFE;
-    }
-
     public String getName() {
         return name;
     }
 
-    public List<SentenceDisplay> getSentenceDisplay() {
-        return sentenceDisplay;
+    public List<AnnotatedSentence> getAnnotatedSentences() {
+        return annotatedSentences;
     }
 }

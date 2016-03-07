@@ -22,7 +22,7 @@ public class Tag {
     private List<Target> associated = new ArrayList<Target>();
     private Target target;
     private String color;
-    private SentenceDisplay parentSentenceDisplay;
+    private AnnotationDisplay parentAnnotationDisplay;
 
     /**
      * Initialization with a list of targets ("frameElement type tags).
@@ -30,12 +30,12 @@ public class Tag {
      *
      * @param value the name of the frame element, can be empty if the FE is null.
      * @param words a list of targets associated
-     * @param parent the SentenceDisplay object the tag belongs to.
+     * @param parent the AnnotationDisplay object the tag belongs to.
      */
-    public Tag (SentenceDisplay parent, String value, List<Target> words) {
+    public Tag (AnnotationDisplay parent, String value, List<Target> words) {
         this.associated = words;
         this.value = value;
-        this.parentSentenceDisplay = parent;
+        this.parentAnnotationDisplay = parent;
         this.color = myBackgroundColor();
     }
 
@@ -45,17 +45,17 @@ public class Tag {
      *
      * @param value the name of the frame element, can be empty if the FE is null.
      * @param word the unique target associated
-     * @param parent the SentenceDisplay object the tag belongs to
+     * @param parent the AnnotationDisplay object the tag belongs to
      */
-    public Tag (SentenceDisplay parent, String value, Target word) {
+    public Tag (AnnotationDisplay parent, String value, Target word) {
         this.target = word;
         this.value = value;
-        this.parentSentenceDisplay = parent;
+        this.parentAnnotationDisplay = parent;
         this.color = myBackgroundColor();
     }
 
     public String myBackgroundColor () {
-        if (this.parentSentenceDisplay.isFullText()) {
+        if (this.parentAnnotationDisplay.isFullText()) {
             return "#FFFFFF";
         } else {
             return "#F5F5F5";
@@ -102,7 +102,7 @@ public class Tag {
         this.frameElement = frameElement;
     }
 
-    public SentenceDisplay getParentSentenceDisplay() {
-        return parentSentenceDisplay;
+    public AnnotationDisplay getParentAnnotationDisplay() {
+        return parentAnnotationDisplay;
     }
 }
