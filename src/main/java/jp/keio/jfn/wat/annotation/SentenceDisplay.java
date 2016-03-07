@@ -31,7 +31,7 @@ public class SentenceDisplay {
         this.sentence = sentence;
         this.displayedAnnotationSet = annotationSet;
         this.fullText = fullText;
-        getPosFocus();
+        getAllTargetAndFocus();
     }
 
     /**
@@ -41,7 +41,7 @@ public class SentenceDisplay {
      *              every sentence).
      */
     public void getAnnotation(List<String> allFE) {
-        getPosFocus();
+        getAllTargetAndFocus();
         List<Tag> tags = new ArrayList<Tag>();
         // Creates the list of all the labels related to a frame element (i.e. labels belonging to a layer of type 1)
         List<Label> allLabels = new ArrayList<Label>();
@@ -98,7 +98,7 @@ public class SentenceDisplay {
      * If the annotation is "fullText", allTarget list contains all of the label targets for every annotation set
      * associated to the sentence. Otherwise, allTarget list equals the focus list.
      */
-    private void getPosFocus() {
+    private void getAllTargetAndFocus() {
         List<Label> allLabels = new ArrayList<Label>();
         this.focus = new ArrayList<Label>();
         if (displayedAnnotationSet != null) {
@@ -110,9 +110,11 @@ public class SentenceDisplay {
         }
         if (this.fullText) {
             for (AnnotationSet annoSet : sentence.getAnnotationSets()) {
-                for (Layer layer : annoSet.getLayers()){
-                    if (layer.getLayerType().getId() == 2) {
-                        allLabels.addAll(layer.getLabels());
+                if (!isEmptyAnnoSet(annoSet)) {
+                    for (Layer layer : annoSet.getLayers()){
+                        if (layer.getLayerType().getId() == 2) {
+                            allLabels.addAll(layer.getLabels());
+                        }
                     }
                 }
             }
@@ -125,6 +127,20 @@ public class SentenceDisplay {
             insertAtPos(sorted, label);
         }
         this.allTargets = sorted;
+    }
+
+    /**
+     * Checks if an annotation set is empty.
+     */
+    private boolean isEmptyAnnoSet (AnnotationSet annotationSet) {
+        for (Layer layer : annotationSet.getLayers()){
+            if (layer.getLayerType().getId() == 1) {
+               if (layer.getLabels().size() > 0) {
+                   return false;
+               }
+            }
+        }
+        return true;
     }
 
     /**
