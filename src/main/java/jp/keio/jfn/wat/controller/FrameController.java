@@ -93,7 +93,7 @@ public class FrameController implements Serializable {
             String color = "";
             int index = frameOutput.getAllFENames().indexOf(word);
             if (index != -1) {
-                color = Utils.allColors.get(index);
+                color = Utils.allColors.get(index % Utils.allColors.size());
             }
             def = def.replaceAll("<fen>"+word+"</fen>", "<font color="+color+">" + word + "</font>");
         }
@@ -111,7 +111,7 @@ public class FrameController implements Serializable {
         Matcher matcher = pattern.matcher(def);
         while (matcher.find()) {
             String word = matcher.group(1);
-            String color = Utils.allColors.get(frameOutput.getAllFENames().indexOf(fe));
+            String color = Utils.allColors.get(frameOutput.getAllFENames().indexOf(fe) % Utils.allColors.size());
             def = def.replaceAll("<fex name="+'"'+fe+'"'+">"+word+"</fex>", "<font color="+color+">" + word + "</font>");
         }
         return def;

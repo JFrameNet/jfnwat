@@ -10,7 +10,7 @@
                 <p:column rendered="#{tag.target == null}">
                     <p:commandLink rendered="#{word.isValid()}"
                                    style="background-color: #{word.bkg};font-weight: bold" value="#{word.text}"
-                                   action="#{sent.switchAnnoSet(tag.target.annotationSet)}"
+                                   action="#{sent.switchAnnoSet(word.annotationSet)}"
                                    disabled="#{!tag.parentAnnotationDisplay.fullText}"
                                     update="form2:doc-tabs:sent#{index}"/>
                     <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>

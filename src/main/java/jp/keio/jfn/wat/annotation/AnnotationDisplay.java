@@ -66,7 +66,7 @@ public class AnnotationDisplay {
                     String s = label.getLabelType().getFrameElement().getName();
                     // regular tag (associated to a frame element)
                     Tag t = new Tag(this,s, findTargets(i, label.getEndChar() + 1));
-                    t.setColor(Utils.allColors.get(allFE.indexOf(s)));
+                    t.setColor(Utils.allColors.get(allFE.indexOf(s) % Utils.allColors.size()));
                     t.setFrameElement(label.getLabelType().getFrameElement());
                     tags.add(t);
                     i = label.getEndChar();
@@ -87,7 +87,7 @@ public class AnnotationDisplay {
                 String el = label.getLabelType().getFrameElement().getName();
                 Tag tag = new Tag(this,el, new Target(word));
                 tag.setFrameElement(label.getLabelType().getFrameElement());
-                tag.setColor(Utils.allColors.get(allFE.indexOf(el)));
+                tag.setColor(Utils.allColors.get(allFE.indexOf(el) % Utils.allColors.size()));
                 tags.add(tag);
             }
         }
@@ -176,7 +176,6 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     confTarget(t,label);
-                    t.setAnnotationSet(label.getLayer().getAnnotationSet());
                     result.add(t);
                     i = label.getEndChar();
                     aux = i + 1;
@@ -212,7 +211,6 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     confTarget(t,label);
-                    t.setAnnotationSet(label.getLayer().getAnnotationSet());
                     tags.add(new Tag(this,".",t));
                     i = label.getEndChar();
                     aux = i + 1;
@@ -246,6 +244,7 @@ public class AnnotationDisplay {
                 }
             }
         }
+        t.setAnnotationSet(label.getLayer().getAnnotationSet());
     }
 
     public AnnotationSet getAnnotationSet() {
