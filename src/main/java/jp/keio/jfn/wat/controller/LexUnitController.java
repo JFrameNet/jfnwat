@@ -266,7 +266,7 @@ public class LexUnitController implements Serializable {
     }
 
     /**
-     * Gets all the satuses for the lexical unit.
+     * Gets all the statuses for the lexical unit.
      */
     @Transactional
     public List<Status> lexUnitStatus (LUOutput luOutput) {

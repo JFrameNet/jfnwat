@@ -77,7 +77,7 @@ public class LUOutput {
     /**
      * Finds all frame elements realizations and frame element group realizations for the lexical unit.
      */
-    public void findRealizations () {
+    private void findRealizations () {
         for (AnnotationSet annoSet : this.annotations) {
             Layer layerFE = null;
             Layer layerPT = null;
