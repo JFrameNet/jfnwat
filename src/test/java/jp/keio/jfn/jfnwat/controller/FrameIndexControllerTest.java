@@ -2,7 +2,7 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 
-import jp.keio.jfn.wat.controller.FrameController;
+import jp.keio.jfn.wat.controller.FrameIndexController;
 import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.repository.FrameRepository;
 import org.junit.After;
@@ -24,17 +24,17 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(JFNWAT.class)
 @ActiveProfiles("test")
-public class FrameControllerTest {
+public class FrameIndexControllerTest {
     @Autowired
     FrameRepository frameRepository;
 
-    private FrameController controller;
+    private FrameIndexController controller;
 
     Frame mainFrame;
 
     @Before
     public void setup () {
-        controller = new FrameController();
+        controller = new FrameIndexController();
         controller.setFrameRepository(frameRepository);
 
         mainFrame = new Frame();
