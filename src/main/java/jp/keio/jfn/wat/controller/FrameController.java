@@ -53,7 +53,9 @@ public class FrameController implements Serializable {
         List <String> sortedNames = new ArrayList<String>();
         for (Frame frame : frameRepository.findAll()) {
             if (Utils.matchSearch(filter, frame.getName())) {
-                sortedNames.add(frame.getName());
+                if (!frame.getName().isEmpty()) {
+                    sortedNames.add(frame.getName());
+                }
             }
         }
         Collections.sort(sortedNames);
@@ -124,7 +126,9 @@ public class FrameController implements Serializable {
         if (orderedFrames.isEmpty() && filter.isEmpty()) {
             List <String> sortedNames = new ArrayList<String>();
             for (Frame frame : frameRepository.findAll()) {
-                sortedNames.add(frame.getName());
+                if (!frame.getName().isEmpty()) {
+                    sortedNames.add(frame.getName());
+                }
             }
             Collections.sort(sortedNames);
             orderedFrames = sortedNames;
