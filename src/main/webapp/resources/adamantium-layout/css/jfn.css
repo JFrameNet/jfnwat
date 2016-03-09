@@ -32,9 +32,6 @@
 .btn-home {
   margin: 1px;
 }
-.btn-search {
-  margin-left: 20px;
-}
 /*Search */
 .tooltip-status {
   border-bottom: 1px dashed #999;
@@ -52,7 +49,6 @@
   margin-top: 5px;
 }
 .frame-list {
-  font-size: small;
   padding: 10px 10px 0px 3px;
 }
 .result-lu {
@@ -99,6 +95,7 @@
   color: #2b2b2b;
   font-weight: bold;
   margin-right: 10px;
+  font-size: large;
 }
 .lex-unit-name {
   margin-right: 10px;
@@ -168,9 +165,11 @@
 }
 .main-btn {
   width: 20%;
+  text-align: left;
 }
 .element-btn {
   width: 90%;
+  text-align: left;
 }
 .element-column {
   border: none!important;

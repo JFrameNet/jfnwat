@@ -52,7 +52,7 @@ public class TabController {
         colors.add("darkblue");
         colors.add("darkmagenta");
         colors.add("peru");
-        colors.add("sandybrown");
+        colors.add("#1ED626");
         colors.add("steelblue");
         colors.add("tomato");
         colors.add("plum");

@@ -7,9 +7,11 @@ import java.util.regex.Pattern;
 import javax.faces.bean.ManagedBean;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 @ManagedBean
@@ -105,5 +107,18 @@ public class FrameController implements Serializable {
             def = def.replaceAll("<fex name="+'"'+fe+'"'+">"+word+"</fex>", "<font color="+color+">" + word + "</font>");
         }
         return def;
+    }
+
+    @Transactional
+    public List<LightLU> lexUnitsByFrame (FrameOutput frameOutput) {
+        List<LightLU> list = new ArrayList<LightLU>();
+        Frame mainFrame = frameRepository.findByName(frameOutput.getName()).get(0);
+        for (LexUnit lu : mainFrame.getLexUnits()) {
+            Hibernate.initialize(lu.getStatuses());
+            LightLU lightLU = new LightLU(lu.getId(), lu.getName(), mainFrame.getName());
+            lightLU.setStatuses(lu.getStatuses());
+            list.add(lightLU);
+        }
+        return list;
     }
 }

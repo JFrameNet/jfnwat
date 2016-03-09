@@ -7,11 +7,13 @@ import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import org.hibernate.Hibernate;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.RequestContext;
 import sun.security.x509.AttributeNameEnumeration;
@@ -81,32 +83,70 @@ public class LexUnitController implements Serializable {
 
     private void filterValencePatterns (LUOutput lu) {
         List<FEGroupRealization> result = new ArrayList<FEGroupRealization>();
+        if (lu.getSelectedEl().isEmpty()) {
+            lu.setValencePatterns( sortGroupRealizations(result));
+            return;
+        }
         if (lu.getSelectedEl().contains("All")) {
             lu.setValencePatterns(sortGroupRealizations(lu.getFeGroupRealizations()));
             return;
         }
-        for (FEGroupRealization group : lu.getFeGroupRealizations()) {
-            boolean in = false;
-            for (FrameElement frameElement : group.getFrameElements()) {
-                if ((lu.getSelectedEl().contains(frameElement.getType()))||(lu.getSelectedEl().contains("Non-Core")&&(!frameElement.getType().equals("Core")))||(lu.getSelectedEl().contains(frameElement.getName()))) {
-                    result.add(group);
-                    in = true;
-                    break;
-                }
-            }
-            if (!in) {
-                for (PatternEntry patternEntry : group.getPatterns()) {
-                    if (!in) {
-                        for (LayerTriplet layerTriplet : patternEntry.getValenceUnits()) {
-                            String aux = layerTriplet.getLabelFE().getLabelType().getFrameElement().getName() + "." +layerTriplet.outputString();
-                            if (lu.getSelectedEl().contains(aux)) {
-                                result.add(group);
-                                in = true;
-                                break;
-                            }
-                        }
+        if (lu.getSelectedEl().contains("Core")) {
+            for (FEGroupRealization group : lu.getFeGroupRealizations()) {
+                for (FrameElement frameElement : group.getFrameElements()) {
+                    if (frameElement.getType().equals("Core")) {
+                        result.add(group);
+                        break;
                     }
                 }
+            }
+            lu.setValencePatterns( sortGroupRealizations(result));
+            return;
+        }
+        if (lu.getSelectedEl().contains("Non-Core")) {
+            for (FEGroupRealization group : lu.getFeGroupRealizations()) {
+                for (FrameElement frameElement : group.getFrameElements()) {
+                    if (!frameElement.getType().equals("Core")) {
+                        result.add(group);
+                        break;
+                    }
+                }
+            }
+            lu.setValencePatterns( sortGroupRealizations(result));
+            return;
+        }
+        for (FEGroupRealization group : lu.getFeGroupRealizations()) {
+            boolean good = true;
+            for (String filter : lu.getSelectedEl()) {
+                boolean contains = false;
+                for (FrameElement frameElement : group.getFrameElements()) {
+                    if (filter.equals(frameElement.getName())) {
+                        contains = true;
+                        break;
+                    }
+                }
+                if (!contains) {
+                    for (PatternEntry patternEntry : group.getPatterns()) {
+                        if (!contains) {
+                            for (LayerTriplet layerTriplet : patternEntry.getValenceUnits()) {
+                                String aux = layerTriplet.getLabelFE().getLabelType().getFrameElement().getName() + "." +layerTriplet.outputString();
+                                if (filter.equals(aux)) {
+                                    contains = true;
+                                    break;
+                                }
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                    if (!contains) {
+                        good = false;
+                        break;
+                    }
+                }
+            }
+            if (good) {
+                result.add(group);
             }
         }
         lu.setValencePatterns( sortGroupRealizations(result));
@@ -181,12 +221,23 @@ public class LexUnitController implements Serializable {
         filterValencePatterns(lu);
     }
 
+    public void clearAllSentences(LUOutput lu) {
+        lu.setSelectedSentences(new ArrayList<SentenceOutput>());
+    }
+
     public void setScreenWidth(String screenWidth) {
         this.screenWidth = screenWidth;
     }
 
     public String getScreenWidth() {
         return screenWidth;
+    }
+
+    @Transactional
+    public List<Status> lexUnitStatus (LUOutput luOutput) {
+        LexUnit lu = lexUnitRepository.findById(luOutput.getLightLU().getId());
+        Hibernate.initialize(lu.getStatuses());
+        return lu.getStatuses();
     }
 
     //    public LazyDataModel<LightLU> getModel() {
