@@ -1,0 +1,25 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout.xhtml">
+    <ui:define name="content">
+        <div class="Container100 TexAlCenter">
+            <div class="EmptyBox140"></div>
+            <div class="ContainerIndent">
+                <ui:insert name="image">Default content</ui:insert>
+            </div>
+            <div class="ContainerIndent">
+                <ui:insert name="search">Default content</ui:insert>
+            </div>
+            <div class="ContainerIndent">
+                <ui:insert name="language">Default content</ui:insert>
+            </div>
+            <div class="ContainerIndent">
+                <ui:insert name="indexes">Default content</ui:insert>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,4 +1,6 @@
 target
+bin
 .idea
+doc
 jfnwat.iml
 src/main/webapp/WEB-INF/classes

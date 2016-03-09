@@ -1,5 +1,32 @@
 /*Style sheet for the JFN WebReport */
 
+p {
+  font-family: 'latoregular', sans-serif;
+  color: #455a64;
+}
+
+input[type=submit]{
+  font-family: 'latoregular', sans-serif;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+input[type=reset]{
+  font-family: 'latoregular', sans-serif;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+input[type=text]{
+  font-family: 'latoregular', sans-serif!important;
+}
+
+#error-msg {
+  font-family: 'latoregular', sans-serif;
+  color: red;
+  font-size: small;
+}
+
 /*General */
 .ui-datalist-empty-message {font-size: 14px !important;}
 
@@ -14,6 +41,21 @@
 .hide-column-names table thead tr { display: none; }
 
 .general-tooltip{font-size: smaller}
+
+.hidden-width-helper{display: none;}
+
+.ui-dialog .ui-dialog-titlebar{padding:0 !important; padding-left: 5px !important; padding-right: 5px !important; background-color: #66bb6a;}
+
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover{padding-right: 5px; padding-left: 5px;}
+
+.ui-panelgrid{border: none!important;}
+.ui-panelgrid tbody tr td{border: none !important;}
+
+.ui-panelgrid .ui-panelgrid-cell{padding: 0!important; text-align: center}
+
+.ui-fieldset{padding-top: 10px!important; padding-right: 0 !important;; padding-left: 0 !important; padding-bottom: 0 !important;}
+
+.dialog-sentences{position: fixed; bottom: 0 !important; left: 0!important; right: 0!important; display: inline-table}
 
 /*Tabs*/
 .tab-layout {border: none !important;}
@@ -33,7 +75,8 @@
 .tooltip-status-mark{font-size: x-small; padding-left: 3px; padding-right: 10px}
 
 /*Index */
-.element-index {line-height: 20px; padding-left: 5px ;}
+.element-index {line-height: 20px; padding-left: 5px ; text-decoration: none !important;}
+.element-index:hover{line-height: 20px; padding-left: 5px ; text-decoration: underline !important;}
 .sub-element-index {margin-left: 10px; font-size: smaller;}
 
 /*Annotated Sentences */
@@ -51,6 +94,7 @@
 /*Document*/
 .paragraph{width: auto!important; text-align: center!important; border: none!important;}
 .paragraph-link{text-decoration: underline; font-weight: normal; white-space: nowrap;}
+.doc{width: 100%}
 
 /*Frame*/
 .frame-element{background-color: transparent!important; border: none!important; width: 20%; vertical-align: top}
@@ -66,10 +110,10 @@
 .core-btn:hover{background-color:#C6E3F5 }
 .non-core-btn{background-color: #EEF5ED;}
 .non-core-btn:hover{background-color:#CBF5C6}
-.main-btn{width: 20%; text-align: left}
-.element-btn{width: 90%; text-align: left}
-.element-column{border:none!important; background-color: transparent!important; text-align: left!important; width: 25%}
-.real-column{border: none!important; background-color: transparent!important; text-align: left}
+.main-btn{width: 20%;}
+.element-btn{width: 90%;}
+.element-column{border:none!important; background-color: transparent!important; width: 25%}
+.real-column{border: none!important; background-color: transparent!important;}
 .selected-filter{margin: 2px}
 .allReal{padding-bottom: 10px}
 .valence-pattern-column{background-color: transparent!important; border: none!important;}
@@ -77,3 +121,4 @@
 .total-vp-column{text-align: center; border: none!important; background-color: transparent!important; width: 30px}
 .total-vp{color: #546E7A; font-weight: bold;}
 .list-fe-vp{text-align: center; background-color: transparent !important; border: none!important; width: 120px; padding: 0}
+.underline-tag{border-bottom: solid 1px !important;}

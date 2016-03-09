@@ -1,0 +1,40 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/indexTemplate.xhtml">
+
+    <ui:define name="topic">
+        #{text['lexUnitIndexCardTopic']} <br/>
+        <span class="CardSubTopic"><h:outputText value="#{text['lexUnitIndexCardSubTopic']}" escape="false"/></span>
+    </ui:define>
+
+    <ui:define name="filter">
+        <h:form>
+            <p:inputText placeholder="#{text['luFilter']}" value="#{lexUnitController.filter}">
+                <p:ajax event="keyup" listener="#{tabController.orderLU(lexUnitController.filter)}" update="list" oncomplete="heightLUList()"/>
+            </p:inputText>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="indexList">
+        <div>
+            <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="100" liveScroll="true" scrollHeight="2500" emptyMessage="#{text['emptyMessage']}">
+                <p:column>
+                    <h:form>
+                        <p:commandLink action="#{tabController.addLU(lu.id)}" value="#{lu.name}" styleClass="element-index" update="form2" oncomplete="heightLUList()"/>
+                        <h:outputText value="[#{lu.frame}]" styleClass="sub-element-index"/>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </ui:define>
+
+    <ui:define name="indexOutput">
+        <h:form id="form2">
+            <ui:insert id="output" name="lexUnitOutput"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

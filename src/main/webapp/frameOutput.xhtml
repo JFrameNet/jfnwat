@@ -4,11 +4,12 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/frameIndex.xhtml">
+                template="/WEB-INF/frameIndex.xhtml">
     <ui:define name="frameOutput">
         <h:form>
             <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" styleClass="tab-layout">
-                <p:ajax event="tabClose" listener="#{tabController.onTabClose}" update="output"/>
+                <p:ajax event="tabClose" listener="#{tabController.onTabClose}" oncomplete="heightFrameList()"/>
+                <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightFrameList()"/>
                 <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
                     <p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="output">
                         <p:tab title="#{text['definition']}" >
@@ -55,7 +56,7 @@
                                         </div>
                                         <div class="Wid70 OvHidden">
                                             <p:dataList var="related" value="#{rel.value}" type="definition">
-                                                <p:commandLink styleClass="horizontal core-set" action="#{tabController.addFrame(related.name)}" value="#{related.name}"/>
+                                                <p:commandLink styleClass="horizontal core-set" action="#{tabController.addFrame(related.name)}" value="#{related.name}" update="@(.tab-layout)"/>
                                             </p:dataList>
                                         </div>
                                     </div>
@@ -64,11 +65,11 @@
                         </p:tab>
                         <p:tab title="#{text['lexUnits']}">
                             <p:dataList var="lexUnit" type="definition" value="#{frameController.lexUnitsByFrame(frame)}" emptyMessage="#{text['emptyMessage']}">
-                                <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" style="font-size: larger"/>
+                                <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLURedirect(lexUnit.id)}" value="#{lexUnit.name}" style="font-size: larger"/>
                                 <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" styleClass="horizontal">
                                     <h:outputText styleClass="horizontal general-tooltip" value="#{status.statusType.name}" />
                                 </p:dataList>
-                                <br></br><br/>
+                                <br/><br/>
                             </p:dataList>
                         </p:tab>
                     </p:accordionPanel>

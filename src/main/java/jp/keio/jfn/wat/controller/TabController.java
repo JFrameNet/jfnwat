@@ -1,24 +1,33 @@
 package jp.keio.jfn.wat.controller;
 
 import java.util.*;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
+import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.annotation.Tag;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.DocumentOutput;
+import jp.keio.jfn.wat.webreport.FrameOutput;
+import jp.keio.jfn.wat.webreport.LUOutput;
+import jp.keio.jfn.wat.webreport.LightLU;
 import org.hibernate.Hibernate;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 @ManagedBean
 @RestController
-//@Scope("session")
+@Component
+@Scope("session")
 /**
- * Created by jfn on 1/14/16.
+ * This class controls the tabulations in the Web Report.
+ * It keeps all the loaded frames, lexical units and documents.
  */
 public class TabController {
     private List<FrameOutput> loadedFrames = new ArrayList<FrameOutput>();
@@ -37,39 +46,7 @@ public class TabController {
 
     private int index = 0;
 
-    private String screenWidth = "";
-
-    public static List<String> allColors = new ArrayList<String>();
-
-    @PostConstruct
-    void initColors () {
-        List<String> colors = new ArrayList<String>();
-        colors.add("#4db6ac");
-        colors.add("#F7941E");
-        colors.add("#EA5753");
-        colors.add("#EF9A9A");
-        colors.add("#F7D100");
-        colors.add("darkblue");
-        colors.add("darkmagenta");
-        colors.add("peru");
-        colors.add("#1ED626");
-        colors.add("steelblue");
-        colors.add("tomato");
-        colors.add("plum");
-        colors.add("#43BF9C");
-        colors.add("darkgoldenrod");
-        colors.add("firebrick");
-        colors.add("#F700A2");
-        colors.add("#25A1A1");
-        colors.add("#E08D8D");
-        colors.add("#E08D8D");
-        colors.add("#43BF64");
-        allColors = colors;
-        allColors.addAll(colors);
-    }
-
     private List<LightLU> lightLUs = new ArrayList<LightLU>();
-    private List<String> frameName = new ArrayList<String>();
 
     @Autowired
     FrameRepository frameRepository;
@@ -80,12 +57,17 @@ public class TabController {
     @Autowired
     DocumentRepository documentRepository;
 
+    /**
+     * Adds a new FrameOutput object to the loaded frames list.
+     *
+     * @param name is the name of the frame to be added
+     */
     @Transactional
-    public String addFrame(String name) {
+    public void addFrame(String name) {
         for (FrameOutput frameOutput : loadedFrames) {
             if (frameOutput.getName().equals(name)) {
                 index = loadedFrames.indexOf(frameOutput);
-                return "frameOutput?faces-redirect=true&i-0&frame=" + name;
+                return;
             }
         }
         mainFrame = frameRepository.findByName(name).get(0);
@@ -98,18 +80,35 @@ public class TabController {
         Hibernate.initialize(mainFrame.getFrameRelations2());
         loadedFrames.add(new FrameOutput(mainFrame));
         index = loadedFrames.size() -1;
-        return "frameOutput?faces-redirect=true&i-0&frame=" + name;
     }
 
+    /**
+     * Adds a new FrameOutput object to the loaded frames list and returns the address of the Frame Index for
+     * redirection.
+     *
+     * @param name is the name of the frame to be added
+     */
     @Transactional
-    public String addLU(LightLU lu) {
+    public String addFrameRedirect (String name) {
+        addFrame(name);
+        return "frameOutput?faces-redirect=true&i-0";
+    }
+
+    /**
+     * Adds a new LUOutput object to the loaded lexical units list.
+     *
+     * @param id is the id of the lexical unit to be added
+     */
+    @Transactional
+    public void addLU(int id) {
+        // TODO: 2/3/16 change to check id instead of name (many LUs can have the same name)
         for (LUOutput luOutput : loadedLUs) {
-            if (luOutput.getLightLU().getName().equals(lu.getName())) {
+            if (luOutput.getLightLU().getId() == id) {
                 index = loadedLUs.indexOf(luOutput);
-                return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
+                return;
             }
         }
-        mainLU = lexUnitRepository.findById(lu.getId());
+        mainLU = lexUnitRepository.findById(id);
         Hibernate.initialize(mainLU.getAnnotationSets());
         for (AnnotationSet annotationSet : mainLU.getAnnotationSets()) {
             Hibernate.initialize(annotationSet.getLayers());
@@ -117,17 +116,33 @@ public class TabController {
                 Hibernate.initialize(layer.getLabels());
             }
         }
-        loadedLUs.add(new LUOutput(mainLU, true));
+        loadedLUs.add(new LUOutput(mainLU));
         index = loadedLUs.size() -1;
-        return "lexUnitOutput?faces-redirect=true&i=1&lu=" + lu.getId();
     }
 
+    /**
+     * Adds a new LUOutput object to the loaded lexical units list and returns the address of the Lexical Unit Index for
+     * redirection.
+     *
+     * @param id is the id of the lexical unit to be added
+     */
     @Transactional
-    public String addDoc(Document document) {
+    public String addLURedirect(int id) {
+        addLU(id);
+        return "lexUnitOutput?faces-redirect=true&i=1";
+    }
+
+    /**
+     * Adds a new DocumentOutput object to the loaded documents list.
+     *
+     * @param document is the id of the document to be added
+     */
+    @Transactional
+    public void addDoc(Document document) {
         for (DocumentOutput documentOutput : loadedDocs) {
             if (documentOutput.getName().equals(document.getName())) {
                 index = loadedDocs.indexOf(documentOutput);
-                return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
+                return;
             }
         }
         mainDocument = documentRepository.findById(document.getId());
@@ -146,9 +161,23 @@ public class TabController {
         }
         loadedDocs.add(new DocumentOutput(mainDocument));
         index = loadedDocs.size() -1;
-        return "documentOutput?faces-redirect=true&i=2&doc=" + document.getName();
     }
 
+    /**
+     * Adds a new DocumentOutput object to the loaded documents list and returns the address of the Document Index for
+     * redirection.
+     *
+     * @param document is the id of the document to be added
+     */
+    @Transactional
+    public String addDocRedirect(Document document) {
+        addDoc(document);
+        return "documentOutput?faces-redirect=true&i=2";
+    }
+
+    /**
+     * Removes a frame from the loaded frames list when a user closes the corresponding tab.
+     */
     public void onTabClose(TabCloseEvent event) {
         String name = event.getTab().getTitle();
         for (FrameOutput frame : loadedFrames) {
@@ -159,6 +188,13 @@ public class TabController {
         }
     }
 
+    public void onTabChange(TabChangeEvent event) {
+    }
+
+    /**
+     * Removes a lexical unit from the loaded lexical unit list when a user closes the corresponding tab.
+     */
+    // TODO: 2/3/16 change to check id instead of name (many LUs can have the same name)
     public void onTabLUClose(TabCloseEvent event) {
         String id = event.getTab().getTitle();
         for (LUOutput ouput : loadedLUs) {
@@ -169,6 +205,9 @@ public class TabController {
         }
     }
 
+    /**
+     * Removes a document from the loaded documents list when a user closes the corresponding tab.
+     */
     public void onTabDocClose(TabCloseEvent event) {
         String id = event.getTab().getTitle(); {
             for (DocumentOutput output : loadedDocs) {
@@ -195,6 +234,9 @@ public class TabController {
         return "documentOutput?faces-redirect=true&i=2";
     }
 
+    /**
+     * Called when the users goes back to the home page. It resets all the loaded elements (frames, LUs, documents).
+     */
     private void clear() {
         loadedFrames = new ArrayList<FrameOutput>();
         loadedLUs = new ArrayList<LUOutput>();
@@ -204,55 +246,25 @@ public class TabController {
         mainDocument = null;
     }
 
-    public List<FrameOutput> getLoadedFrames() {
-        return loadedFrames;
-    }
-
-
-    public List<LUOutput> getLoadedLUs() {
-        return loadedLUs;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public List<LightLU> getLightLUs() {
-        if (lightLUs.isEmpty()) {
-            for (LexUnit lu : lexUnitRepository.findAll()) {
-                lightLUs.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-            }
-        }
-        return lightLUs;
-    }
-
-    public List<String> getFrameName() {
-        if (frameName.isEmpty()) {
-            for (Frame frame : frameRepository.findAll()) {
-                frameName.add(frame.getName());
-            }
-
-        }
-        Collections.sort(frameName);
-        return frameName;
-    }
-
+    /**
+     * Filter lexical units when a user types a search string in the input field of the lexical unit index.
+     * Updates this.orderedLU with all the lexical units whose name or frame name matches the search string.
+     */
     public void orderLU (String filter) {
         List<LightLU> allLU= new ArrayList<LightLU>();
         for (LexUnit lu : lexUnitRepository.findAll()) {
-            if (matchSearch(filter, lu.getName())) {
+            if (Utils.matchSearch(filter, lu.getName())) {
                 allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
-            } else if (matchSearch(filter, lu.getFrame().getName())) {
+            } else if (Utils.matchSearch(filter, lu.getFrame().getName())) {
                 allLU.add(new LightLU(lu.getId(), lu.getName(), lu.getFrame().getName()));
             }
         }
         orderedLU = allLU;
     }
 
+    /**
+     * Getter for this.orderedLU. If the list if empty and the string search is empty it returns all lexical units.
+     */
     public List<LightLU> getOrderedLU (String filter) {
         if (orderedLU.isEmpty() && filter.isEmpty()) {
             List <LightLU> allLu = new ArrayList<LightLU>();
@@ -267,21 +279,47 @@ public class TabController {
         return orderedLU;
     }
 
-    private boolean matchSearch (String query, String name) {
-        return ((name.equalsIgnoreCase(query))
-                ||(name.toLowerCase().contains(query.toLowerCase()))
-                ||(query.toLowerCase().contains(name.toLowerCase())));
+    /**
+     * Returns the type of the tag for the ui:include elements during view build time.
+     */
+    public String getTagType(Tag tag, boolean fullText) {
+        if (tag == null) {
+            return "blankTag";
+        }
+        if (fullText) {
+            if (tag.getFrameElement() != null) {
+                return "frameElementTag";
+            } else if (tag.getTarget().isValid()) {
+                return "targetTag";
+            }
+        } else if (tag.getFrameElement() != null) {
+            return "luTag";
+        }
+
+        return "blankTag";
     }
 
     public List<DocumentOutput> getLoadedDocs() {
         return loadedDocs;
     }
 
-    public String getScreenWidth() {
-        return screenWidth;
+    public List<FrameOutput> getLoadedFrames() {
+        return loadedFrames;
     }
 
-    public void setScreenWidth(String screenWidth) {
-        this.screenWidth = screenWidth;
+    public void setIndex(int index) {
+        this.index = index;
+    }
+
+    public List<LUOutput> getLoadedLUs() {
+        return loadedLUs;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setLexUnitRepository(LexUnitRepository l) {
+        lexUnitRepository = l;
     }
 }

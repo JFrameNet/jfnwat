@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/searchTemplate.xhtml">
+                template="/WEB-INF/searchTemplate.xhtml">
     <f:metadata>
         <f:viewParam name="search" value="#{searchViewController.search}" />
     </f:metadata>
@@ -24,17 +24,17 @@
     <ui:define name="frame">
         <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
             <h:form>
-                <p:commandLink styleClass="horizontal frame-list" action="#{tabController.addFrame(frame.name)}" value="#{frame.name}" ajax="false"/>
+                <p:commandLink styleClass="horizontal frame-list" action="#{tabController.addFrameRedirect(frame.name)}" value="#{frame.name}" />
             </h:form>
         </p:dataList>
     </ui:define>
     <ui:define name="lexunit">
         <p:dataTable var="lexUnit" value="#{searchViewController.findLUKeyword()}" emptyMessage="#{text['emptyMessage']}">
             <p:column headerText="#{text['lexUnit']}">
-                <p:commandLink action="#{tabController.addLU(lexUnit)}" value="#{lexUnit.name}" styleClass="result-lu"/>
+                <p:commandLink action="#{tabController.addLURedirect(lexUnit.id)}" value="#{lexUnit.name}" styleClass="result-lu"/>
             </p:column>
             <p:column headerText="#{text['frame']}">
-                <p:commandLink action="#{tabController.addFrame(lexUnit.frame)}" value="#{lexUnit.frame}"/>
+                <p:commandLink action="#{tabController.addFrameRedirect(lexUnit.frame)}" value="#{lexUnit.frame}"/>
             </p:column>
 
             <p:column headerText="#{text['LUStatus']}">
@@ -47,11 +47,11 @@
         </p:dataTable>
     </ui:define>
     <ui:define name="docs">
-        <p:accordionPanel value="#{searchViewController.findCorpusKeyword()}" activeIndex="-1" var="corpus">
+        <p:accordionPanel value="#{searchViewController.findCorpusKeyword()}" activeIndex="-1" var="corpus" styleClass="noborder">
             <p:tab title="#{corpus.name}">
                 <p:dataTable value="#{corpus.documents}" var="doc" styleClass="hide-column-names">
                     <p:column>
-                        <p:commandLink action="#{tabController.addDoc(doc)}" value="#{doc.name}"/>
+                        <p:commandLink action="#{tabController.addDocRedirect(doc)}" value="#{doc.name}"/>
                     </p:column>
                 </p:dataTable>
             </p:tab>

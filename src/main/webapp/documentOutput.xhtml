@@ -4,57 +4,35 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/docIndex.xhtml">
-    <ui:define name="frameOutput">
-        <h:form>
-            <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" styleClass="tab-layout">
-                <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
+                template="/WEB-INF/docIndex.xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="docOutput">
+        <p:tabView id="doc-tabs" activeIndex="#{tabController.index}" dynamic="false" cache="true" styleClass="tab-layout">
+            <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" oncomplete="heightDocList()"/>
+            <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightDocList()"/>
+            <c:forEach varStatus="loop" items="#{tabController.loadedDocs}" var="doc" >
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                    <p:panel styleClass="NoBorder">
-                        <div >
-                            <p:dataList id="output" value="#{documentController.showAnnotatedLU(tabController.screenWidth, doc).elements}" var="line" type="definition" emptyMessage=""> 
-                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="paragraph"> 
-                                    <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
-                                        <f:facet name="header"> 
-                                            <p:commandLink id="fade" disabled="#{!tag.isLU()}" action="#{documentController.selectLU(doc, tag.annotationSet, tabController.screenWidth)}" value="#{tag.word}" styleClass="paragraph-link" style="color: #{tag.wordColor}" update="@(.display-sent)"/> 
-                                            <p:tooltip id="toolTipFade" for="fade" rendered="#{tag.isLU()}">
-                                                <h:outputText value="#{tag.tag}" styleClass="general-tooltip"/>
-                                            </p:tooltip>
-                                        </f:facet> 
-                                    </p:columns> 
-                                </p:dataTable> 
-                            </p:dataList> 
-                        </div>
-                    </p:panel>
-                    <p:panel styleClass="NoBorder bottom-panel">
-                        <p:dataList styleClass="display-sent" var="proc" value="#{documentController.showAnnotation(doc)}" type="definition" emptyMessage="">  
-                            <p:commandLink styleClass="horizontal remove-link" value="x" update="@(.display-sent)" action="#{documentController.removeSentence(doc,proc)}"/>
-                            <h:outputText styleClass="horizontal lex-unit-name" value="#{proc.annotationSet.lexUnit.name}"/>
-                            <h:outputText value="#{proc.annotationSet.lexUnit.frame.name}" styleClass="general-tooltip"/>
-                            <p:dataList value="#{proc.elements}" var="line" type="definition" emptyMessage=""> 
-                                <p:dataTable var="output" value="" tableStyle="width:100%; table-layout: auto" styleClass="annotation-table" rowStyleClass="annotation"> 
-                                    <p:columns var="tag" value="#{line}" styleClass="column-annotation"> 
-                                        <f:facet name="header"> 
-                                            <h:outputText rendered="#{tag.isLU()}" value="#{tag.word}" styleClass="word lu-el" escape="false"/>
-                                            <h:outputText rendered="#{!tag.isLU()}" value="#{tag.word}" styleClass="word normal-el" escape="false"/> 
-                                        </f:facet> 
-                                        <p:lightBox rendered="#{!tag.isLU()}" style="border-top: solid 1px #{tag.tagColor}">
-                                            <h:outputLink value="#">
-                                                <h:outputText value="#{tag.tag}" style="color: #{tag.tagColor}"/>
-                                            </h:outputLink>
-                                            <f:facet name="inline">
-                                                <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
-                                            </f:facet>
-                                        </p:lightBox>
-                                    </p:columns> 
-                                </p:dataTable> 
-                            </p:dataList> 
-                            <div class="EmptyBox20"/> 
-                        </p:dataList> 
-                    </p:panel>
-
+                    <c:forEach items="#{doc.annotatedSentences}" var="sent" varStatus="loop">
+                        <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" styleClass="display-sent">
+                            <c:forEach items="#{sent.allAnnotations}" var="line" varStatus="loop">
+                                <ui:fragment rendered="#{line.displayed}">
+                                    <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
+                                        <ui:include src="WEB-INF/#{tabController.getTagType(tag, true)}.xhtml" >
+                                            <ui:param name="tag" value="#{tag}"/>
+                                            <ui:param name="sent" value="#{sent}"/>
+                                            <ui:param name="index" value="#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}"/>
+                                        </ui:include>
+                                    </c:forEach>
+                                    <c:if test="#{!(line.annotationSet eq null)}">
+                                        <ui:include src="WEB-INF/frameTag.xhtml" >
+                                            <ui:param name="line" value="#{line}"/>
+                                        </ui:include>
+                                    </c:if>
+                                </ui:fragment>
+                            </c:forEach>
+                        </p:fieldset>
+                    </c:forEach>
                 </p:tab>
-            </p:tabView>
-        </h:form>
+            </c:forEach>
+        </p:tabView>
     </ui:define>
 </ui:composition>
