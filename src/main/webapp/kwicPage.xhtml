@@ -14,24 +14,24 @@
 
     <ui:define name="filter">
         <h:form>
-            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicIndex.filter}">
-                <p:ajax event="keyup" listener="#{kwicIndex.orderFrames()}" update="frameList"/>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
+                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="frameList"/>
             </p:inputText>
         </h:form>
     </ui:define>
 
     <ui:define name="indexList">
         <div>
-            <p:accordionPanel id="frameList" value="#{kwicIndex.orderedFrames}" var="frame" dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="noborder" >
+            <p:accordionPanel id="frameList" value="#{kwicFrameIndexController.orderedFrames}" var="frame" dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="noborder, indent" >
                 <p:tab title="#{frame}">
-                    <h1>Test</h1>
- <!--                   <h:form>
-                        <p:treeTable value="#{kwicIndex.getFrameTree(frame).root}" var="elementName">
+                    <h:form>
+                        <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName" styleClass="tree-table-no-header">
                              <p:column>
                                  <h:outputText value="#{elementName}"/>
                             </p:column>
                         </p:treeTable>
-                    </h:form> -->
+                    </h:form>
+
                 </p:tab>
             </p:accordionPanel>
         </div>

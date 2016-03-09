@@ -97,9 +97,4 @@ public class FrameController implements Serializable {
         }
         return def;
     }
-
-
-    public void setFrameRepository(FrameRepository f) {
-        frameRepository = f;
-    }
 }

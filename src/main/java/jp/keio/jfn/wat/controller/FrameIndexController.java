@@ -20,7 +20,7 @@ import java.util.List;
 @Scope("view")
 public class FrameIndexController implements Serializable {
     @Autowired
-    FrameRepository frameRepository;
+    protected FrameRepository frameRepository;
 
     protected String filter = "";
 
