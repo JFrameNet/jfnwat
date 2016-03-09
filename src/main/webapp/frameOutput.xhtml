@@ -8,8 +8,8 @@
     <ui:define name="frameOutput">
         <h:form>
             <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" styleClass="tab-layout">
-                <p:ajax event="tabClose" listener="#{tabController.onTabClose}"/>
-                <p:ajax event="tabChange" listener="#{tabController.onTabChange}"/>
+                <p:ajax event="tabClose" listener="#{tabController.onTabClose}" oncomplete="heightFrameList()"/>
+                <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightFrameList()"/>
                 <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
                     <p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="output">
                         <p:tab title="#{text['definition']}" >

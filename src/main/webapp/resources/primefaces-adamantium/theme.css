@@ -896,6 +896,7 @@ label {
   border: 0px solid #000000;
 }
 .ui-datatable .ui-datatable-scrollable-footer {
+  display: none;
   border-radius: 0px 0px 1px 1px;
   -moz-border-radius: 0px 0px 1px 1px;
   -webkit-border-radius: 0px 0px 1px 1px;

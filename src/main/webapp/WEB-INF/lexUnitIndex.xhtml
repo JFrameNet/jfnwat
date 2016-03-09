@@ -14,7 +14,7 @@
     <ui:define name="filter">
         <h:form>
             <p:inputText placeholder="#{text['luFilter']}" value="#{lexUnitController.filter}">
-                <p:ajax event="keyup" listener="#{tabController.orderLU(lexUnitController.filter)}" update="list"/>
+                <p:ajax event="keyup" listener="#{tabController.orderLU(lexUnitController.filter)}" update="list" oncomplete="heightLUList()"/>
             </p:inputText>
         </h:form>
     </ui:define>
@@ -24,7 +24,7 @@
             <p:dataTable id="list" value="#{tabController.getOrderedLU(lexUnitController.filter)}" var="lu" scrollable="true" scrollRows="100" liveScroll="true" scrollHeight="2500" emptyMessage="#{text['emptyMessage']}">
                 <p:column>
                     <h:form>
-                        <p:commandLink action="#{tabController.addLU(lu.id)}" value="#{lu.name}" styleClass="element-index" update="form2"/>
+                        <p:commandLink action="#{tabController.addLU(lu.id)}" value="#{lu.name}" styleClass="element-index" update="form2" oncomplete="heightLUList()"/>
                         <h:outputText value="[#{lu.frame}]" styleClass="sub-element-index"/>
                     </h:form>
                 </p:column>
