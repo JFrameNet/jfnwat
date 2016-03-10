@@ -27,6 +27,7 @@ public class FrameIndexController implements Serializable {
 
     protected List<String> orderedFrames = new ArrayList<String>();
 
+
     /**
      * Filter frames when a user types a search string in the input field of the frame index.
      * Updates this.orderedFrames with all the frames whose name matches the search string.
@@ -74,5 +75,9 @@ public class FrameIndexController implements Serializable {
 
     public String getFilter () {
         return filter;
+    }
+
+    public void setFrameRepository(FrameRepository f) {
+        frameRepository = f;
     }
 }
