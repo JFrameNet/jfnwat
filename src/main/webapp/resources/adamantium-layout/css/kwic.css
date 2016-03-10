@@ -1,5 +1,30 @@
 /*Style sheet for the JFN kwic */
-.tree-table-no-header thead {
+/*.tree-table-no-header thead {
   display: none;
+}*/
+.frame-tree table {
+  margin-left: 16px;
+}
+.frame-tree thead {
+  display: none;
+}
+.frame-tree table tbody tr td {
+  border: none;
+}
+.frame-tree [role='tab'] {
+  background-color: #ffffff;
+}
+.frame-tree [role='tab'].ui-state-active {
+  background-color: #ffffff;
+  /*TODO keep color when hover*/
+}
+.frame-tree [role='tabpanel'] {
+  padding: 0px!important;
+}
+.tree-table-no-header {
+  border: none;
+}
+.tree-table-no-header span {
+  /*TODO make arrow the same */
 }
 

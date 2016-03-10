@@ -15,17 +15,19 @@
     <ui:define name="filter">
         <h:form>
             <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
-                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="frameList"/>
+                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="frameTree"/>
             </p:inputText>
         </h:form>
     </ui:define>
 
     <ui:define name="indexList">
         <div>
-            <p:accordionPanel id="frameList" value="#{kwicFrameIndexController.orderedFrames}" var="frame" dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="noborder, indent" >
+            <p:accordionPanel id="frameTree" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
+                              dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-tree">
                 <p:tab title="#{frame}">
                     <h:form>
-                        <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName" styleClass="tree-table-no-header">
+                        <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
+                                     styleClass="tree-table-no-header">
                              <p:column>
                                  <h:outputText value="#{elementName}"/>
                             </p:column>

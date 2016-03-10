@@ -11,6 +11,8 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @ApplicationScoped
 public class FrameAssociatesService {
     private Frame mainFrame;
@@ -20,29 +22,27 @@ public class FrameAssociatesService {
         System.out.println(frame.getName()); //TODO why does it get called so often??
         mainFrame = frame;
         root = new DefaultTreeNode("frame", null);
-        TreeNode fe = new DefaultTreeNode(frame.getName(), root);
-        TreeNode lu = new DefaultTreeNode("LU", fe);
         addFEs();
-   //   addLUs();
+        addLUs();
         return root;
     }
 
-    @Transactional
     private void addFEs() {
-    //    Hibernate.initialize(mainFrame.getFrameElements());
-
         for (FrameElement fe : mainFrame.getFrameElements()) {
-            TreeNode fet = new DefaultTreeNode(fe.getName(), root);
+            TreeNode feTN = new DefaultTreeNode(fe.getName(), root);
            // fet.setType(fe.getCore());
         }
     }
 
-    @Transactional
     private void addLUs() {
-        TreeNode LUs = new DefaultTreeNode("LU's", root);
-    //    Hibernate.initialize(mainFrame.getLexUnits());
-        for (LexUnit lu : mainFrame.getLexUnits()) {
-            new DefaultTreeNode(lu.getName(), LUs);
+        List<LexUnit> lus = mainFrame.getLexUnits();
+        if(lus.isEmpty()){
+            TreeNode LUs = new DefaultTreeNode("- No LU's", root);
+        } else {
+            TreeNode LUs = new DefaultTreeNode("LU's", root);
+            for (LexUnit lu : mainFrame.getLexUnits()) {
+                TreeNode luTN = new DefaultTreeNode(lu.getName(), LUs);
+            }
         }
     }
 }
