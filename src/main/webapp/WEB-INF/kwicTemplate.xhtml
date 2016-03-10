@@ -1,0 +1,51 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout.xhtml">
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Fleft OvHidden">
+                    <p:link outcome="index">
+                        <h:graphicImage name="logo/jfn_logo_only.jpg" width="60" styleClass="toolbar-jfn"/>
+                    </p:link>
+                </div>
+                <div class="Fleft OvHidden">
+                    <ui:insert name="search">Search bar</ui:insert>
+                </div>
+            </div>
+        </div>
+        <div class="Container100 BorderTop BorderBottom">
+            <div class="ContainerIndent">
+                <div class="Card">
+                    <div class="CardTopic">
+                        <ui:insert name="topic"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Container100">
+            <div class="Card NoPadding">
+                <div class="Wid20 Fleft OvHidden BorderRight">
+                    <div class="Container100">
+                        <ui:insert name="filter"/>
+                    </div>
+                    <div class="Container100 BorderBottom">
+                        <div class="ContainerIndent">
+                            <ui:insert name="indexList"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="Wid70 OvHidden">
+                    <div class="ContainerIndent">
+                        <ui:insert name="indexOutput"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

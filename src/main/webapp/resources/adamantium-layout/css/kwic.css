@@ -1,0 +1,5 @@
+/*Style sheet for the JFN kwic */
+.tree-table-no-header thead {
+  display: none;
+}
+

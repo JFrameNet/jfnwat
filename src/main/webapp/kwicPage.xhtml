@@ -1,0 +1,44 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/kwicTemplate.xhtml">
+
+    <ui:define name="search">
+        <div class="Fleft OvHidden">
+            <h1>KWIC</h1>
+        </div>
+    </ui:define>
+
+    <ui:define name="filter">
+        <h:form>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
+                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="frameList"/>
+            </p:inputText>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="indexList">
+        <div>
+            <p:accordionPanel id="frameList" value="#{kwicFrameIndexController.orderedFrames}" var="frame" dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="noborder, indent" >
+                <p:tab title="#{frame}">
+                    <h:form>
+                        <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName" styleClass="tree-table-no-header">
+                             <p:column>
+                                 <h:outputText value="#{elementName}"/>
+                            </p:column>
+                        </p:treeTable>
+                    </h:form>
+
+                </p:tab>
+            </p:accordionPanel>
+        </div>
+
+
+
+    </ui:define>
+
+
+</ui:composition>

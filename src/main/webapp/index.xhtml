@@ -27,4 +27,10 @@
         <p:commandButton value="#{text['documentIndex']}" action="#{tabController.toDocuments}" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
     </ui:define>
 
+    <ui:define name="kwic">
+        <h:form>
+            <p:commandButton value="#{text['kwic']}" action="#{kwicViewController.toKwic}" styleClass="GreenButton FloatNoneOnMobile btn-home" style ="display: none;"/>
+        </h:form>
+    </ui:define>
+
 </ui:composition>
