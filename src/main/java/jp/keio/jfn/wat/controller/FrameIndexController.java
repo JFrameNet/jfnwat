@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.controller;
 
+import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.repository.FrameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,14 @@ public class FrameIndexController implements Serializable {
         List <String> sortedNames = new ArrayList<String>();
         for (Frame frame : frameRepository.findAll()) {
             if (Utils.matchSearch(filter, frame.getName())) {
-                sortedNames.add(frame.getName());
+                if (!frame.getName().isEmpty()) {
+                    sortedNames.add(frame.getName());
+                }
             }
         }
         Collections.sort(sortedNames);
         orderedFrames = sortedNames;
     }
-
 
     /**
      * Getter for orderedFrames. If the list if empty and the string search is empty it returns all frames.
@@ -50,7 +52,9 @@ public class FrameIndexController implements Serializable {
         if (orderedFrames.isEmpty() && filter.isEmpty()) {
             List <String> sortedNames = new ArrayList<String>();
             for (Frame frame : frameRepository.findAll()) {
-                sortedNames.add(frame.getName());
+                if (!frame.getName().isEmpty()) {
+                    sortedNames.add(frame.getName());
+                }
             }
             Collections.sort(sortedNames);
             orderedFrames = sortedNames;
@@ -70,9 +74,5 @@ public class FrameIndexController implements Serializable {
 
     public String getFilter () {
         return filter;
-    }
-
-    public void setFrameRepository(FrameRepository f) {
-        frameRepository = f;
     }
 }
