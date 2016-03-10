@@ -2,9 +2,8 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 
-import jp.keio.jfn.wat.controller.FEGroupRealization;
-import jp.keio.jfn.wat.controller.LayerTriplet;
-import jp.keio.jfn.wat.controller.PatternEntry;
+import jp.keio.jfn.wat.webreport.FEGroupRealization;
+import jp.keio.jfn.wat.webreport.PatternEntry;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
 import org.junit.After;
@@ -19,7 +18,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 /**
  * Created by jfn on 2/12/16.
  */

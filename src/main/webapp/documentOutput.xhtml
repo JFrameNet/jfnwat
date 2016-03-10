@@ -4,43 +4,35 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/docIndex.xhtml">
-    <ui:define name="frameOutput">
-        <h:form>
-            <p:tabView value="#{tabController.loadedDocs}" activeIndex="#{tabController.index}" var="doc" dynamic="false" cache="true" styleClass="tab-layout">
-                <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" update="output"/>
-                <p:ajax event="tabChange" listener="#{tabController.onTabChange}" update="output"/>
+                template="/WEB-INF/docIndex.xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <ui:define name="docOutput">
+        <p:tabView id="doc-tabs" activeIndex="#{tabController.index}" dynamic="false" cache="true" styleClass="tab-layout">
+            <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" oncomplete="heightDocList()"/>
+            <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightDocList()"/>
+            <c:forEach varStatus="loop" items="#{tabController.loadedDocs}" var="doc" >
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                    <p:dataList type="definition" id="output" value="#{doc.sentenceDisplay}" var="line" styleClass="display-sent doc"> 
-                        <p:fieldset>
-                            <ui:repeat var="tag" value="#{documentController.getAnnotation(doc, line).elements}">
-                                <p:panelGrid columns="1" styleClass="noborder display-sent" style="float: left">
-                                    <p:row>
-                                        <ui:repeat var="word" value="#{tag.associated}">
-                                            <p:column>
-                                                <p:commandLink rendered="#{word.isValid()}" style="background-color: #{word.bkg};font-weight: bold;" value="#{word.text}" action="#{documentController.setAnnotationSentence(line, word.annotationSet)}" update="@(.display-sent)" process="@this"/>
-                                                <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
-                                            </p:column>
-                                        </ui:repeat>
-                                    </p:row>
-                                    <p:row>
-                                        <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center">
-                                            <h:outputLink value="#">
-                                                <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
-                                            </h:outputLink>
-                                            <f:facet name="inline">
-                                                <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
-                                            </f:facet>
-                                        </p:lightBox>
-                                    </p:row>
-                                </p:panelGrid>
-                            </ui:repeat>
-                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addFrameRedirect(line.displayedAnnotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="float: left; color: #66BB6A" value="[#{line.displayedAnnotationSet.lexUnit.frame.name}" />
-                            <p:commandLink  rendered="#{line.displayedAnnotationSet != null}" action="#{tabController.addLURedirect(line.displayedAnnotationSet.lexUnit.id)}" styleClass="display-sent" style="float: left; color: #66BB6A" value=".#{line.displayedAnnotationSet.lexUnit.name}]" />
+                    <c:forEach items="#{doc.annotatedSentences}" var="sent" varStatus="loop">
+                        <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" styleClass="display-sent">
+                            <c:forEach items="#{sent.allAnnotations}" var="line" varStatus="loop">
+                                <ui:fragment rendered="#{line.displayed}">
+                                    <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
+                                        <ui:include src="WEB-INF/#{tabController.getTagType(tag, true)}.xhtml" >
+                                            <ui:param name="tag" value="#{tag}"/>
+                                            <ui:param name="sent" value="#{sent}"/>
+                                            <ui:param name="index" value="#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}"/>
+                                        </ui:include>
+                                    </c:forEach>
+                                    <c:if test="#{!(line.annotationSet eq null)}">
+                                        <ui:include src="WEB-INF/frameTag.xhtml" >
+                                            <ui:param name="line" value="#{line}"/>
+                                        </ui:include>
+                                    </c:if>
+                                </ui:fragment>
+                            </c:forEach>
                         </p:fieldset>
-                    </p:dataList> 
+                    </c:forEach>
                 </p:tab>
-            </p:tabView>
-        </h:form>
+            </c:forEach>
+        </p:tabView>
     </ui:define>
 </ui:composition>

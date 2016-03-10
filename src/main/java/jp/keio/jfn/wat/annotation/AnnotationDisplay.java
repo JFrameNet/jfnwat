@@ -1,25 +1,26 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.annotation;
 
+import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.Label;
 import jp.keio.jfn.wat.domain.Layer;
 import jp.keio.jfn.wat.domain.Sentence;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- * This class is used to represent an annotation. A SentenceDisplay object is associated with one annotation set,
+ * This class is used to represent an annotation. A AnnotationDisplay object is associated with one annotation set,
  * from which a list of tags is created. The annotation can be done in "normal" or "fullText" mode.
  */
-public class SentenceDisplay {
+public class AnnotationDisplay {
     private Sentence sentence;
-    private AnnotationSet displayedAnnotationSet;
+    private AnnotationSet annotationSet;
     private List<Tag> elements;
     private List<Label> focus = new ArrayList<Label>();
     private List<Label> allTargets = new ArrayList<Label>();
     private boolean fullText;
+    private boolean displayed;
 
     /**
      * Initialization.
@@ -27,11 +28,11 @@ public class SentenceDisplay {
      * @param annotationSet the chosen annotation set, can be null in fullText mode
      * @param fullText set to true for documents
      */
-    public SentenceDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText) {
+    public AnnotationDisplay(Sentence sentence, AnnotationSet annotationSet, boolean fullText, List<String> allFE) {
         this.sentence = sentence;
-        this.displayedAnnotationSet = annotationSet;
+        this.annotationSet = annotationSet;
         this.fullText = fullText;
-        getPosFocus();
+        getAnnotation(allFE);
     }
 
     /**
@@ -40,13 +41,13 @@ public class SentenceDisplay {
      *              within the same page (a frame element in the view will be displayed in the same colour for
      *              every sentence).
      */
-    public void getAnnotation(List<String> allFE) {
-        getPosFocus();
+    private void getAnnotation(List<String> allFE) {
+        getAllTargetAndFocus();
         List<Tag> tags = new ArrayList<Tag>();
         // Creates the list of all the labels related to a frame element (i.e. labels belonging to a layer of type 1)
         List<Label> allLabels = new ArrayList<Label>();
-        if (displayedAnnotationSet != null) {
-            for (Layer layer : displayedAnnotationSet.getLayers()){
+        if (annotationSet != null) {
+            for (Layer layer : annotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 1) {
                     allLabels.addAll(layer.getLabels());
                 }
@@ -60,17 +61,12 @@ public class SentenceDisplay {
             for (Label label : allLabels) {
                 if ((label.getInstantiationType().getId() == 1) && (i == label.getStartChar())) {
                     if (i > iaux) {
-                        // empty tag (no frame element associated)
-                        Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, i));
-                        if (!tag.isEmpty()) {
-                            tags.add(tag);
-                        }
-
+                        tags.addAll(singleTags(iaux,i));
                     }
                     String s = label.getLabelType().getFrameElement().getName();
                     // regular tag (associated to a frame element)
-                    Tag t = new Tag(s, findTargets(i, label.getEndChar() + 1));
-                    t.setColor(Utils.allColors.get(allFE.indexOf(s)));
+                    Tag t = new Tag(this,s, findTargets(i, label.getEndChar() + 1));
+                    t.setColor(Utils.allColors.get(allFE.indexOf(s) % Utils.allColors.size()));
                     t.setFrameElement(label.getLabelType().getFrameElement());
                     tags.add(t);
                     i = label.getEndChar();
@@ -82,20 +78,16 @@ public class SentenceDisplay {
             i ++;
         }
         if (iaux < max) {
-            // empty tag (no frame element associated)
-            Tag tag = new Tag(this.fullText?"":"LU", findTargets(iaux, max));
-            if (!tag.isEmpty()) {
-                tags.add(tag);
-            }
+            tags.addAll(singleTags(iaux,max));
         }
         // add all of the frame elements annotated but not instantiated in the sentence
         for (Label label : allLabels) {
             if (label.getInstantiationType().getId() != 1) {
                 String word = label.getInstantiationType().getName();
                 String el = label.getLabelType().getFrameElement().getName();
-                Tag tag = new Tag(el, new ArrayList<Target>(Arrays.asList(new Target(word))));
+                Tag tag = new Tag(this,el, new Target(word));
                 tag.setFrameElement(label.getLabelType().getFrameElement());
-                tag.setColor(Utils.allColors.get(allFE.indexOf(el)));
+                tag.setColor(Utils.allColors.get(allFE.indexOf(el) % Utils.allColors.size()));
                 tags.add(tag);
             }
         }
@@ -107,11 +99,11 @@ public class SentenceDisplay {
      * If the annotation is "fullText", allTarget list contains all of the label targets for every annotation set
      * associated to the sentence. Otherwise, allTarget list equals the focus list.
      */
-    private void getPosFocus() {
+    private void getAllTargetAndFocus() {
         List<Label> allLabels = new ArrayList<Label>();
         this.focus = new ArrayList<Label>();
-        if (displayedAnnotationSet != null) {
-            for (Layer layer : displayedAnnotationSet.getLayers()){
+        if (annotationSet != null) {
+            for (Layer layer : annotationSet.getLayers()){
                 if (layer.getLayerType().getId() == 2) {
                     this.focus.addAll(layer.getLabels());
                 }
@@ -119,9 +111,11 @@ public class SentenceDisplay {
         }
         if (this.fullText) {
             for (AnnotationSet annoSet : sentence.getAnnotationSets()) {
-                for (Layer layer : annoSet.getLayers()){
-                    if (layer.getLayerType().getId() == 2) {
-                        allLabels.addAll(layer.getLabels());
+                if (!isEmptyAnnoSet(annoSet)) {
+                    for (Layer layer : annoSet.getLayers()){
+                        if (layer.getLayerType().getId() == 2) {
+                            allLabels.addAll(layer.getLabels());
+                        }
                     }
                 }
             }
@@ -134,6 +128,21 @@ public class SentenceDisplay {
             insertAtPos(sorted, label);
         }
         this.allTargets = sorted;
+    }
+
+    /**
+     * Checks if an annotation set is empty (the annotation set exists but no frame elemets have been tagged).
+     * If it is the case, the annotation set willl be ignored.
+     */
+    private boolean isEmptyAnnoSet (AnnotationSet annotationSet) {
+        for (Layer layer : annotationSet.getLayers()){
+            if (layer.getLayerType().getId() == 1) {
+               if (layer.getLabels().size() > 0) {
+                   return false;
+               }
+            }
+        }
+        return true;
     }
 
     /**
@@ -151,7 +160,7 @@ public class SentenceDisplay {
     }
 
     /**
-     * Creates a list of targets.
+     * Creates a list of targets for frame elements type tags.
      * For every label in the focus list, the background color is changed.
      */
     private List<Target> findTargets (int start, int end) {
@@ -166,13 +175,7 @@ public class SentenceDisplay {
                         result.add(new Target(text.substring(aux,i)));
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
-                    t.setValid(true);
-                    for (Label on : this.focus) {
-                        if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                            t.setBkg("#66BB6A");
-                        }
-                    }
-                    t.setAnnotationSet(label.getLayer().getAnnotationSet());
+                    confTarget(t,label);
                     result.add(t);
                     i = label.getEndChar();
                     aux = i + 1;
@@ -186,12 +189,66 @@ public class SentenceDisplay {
         return result;
     }
 
-    public AnnotationSet getDisplayedAnnotationSet() {
-        return displayedAnnotationSet;
+    /**
+     * Creates a list of tags that can be "blank" or "target" tags.
+     */
+    private List<Tag> singleTags (int start, int end) {
+        List<Tag> tags = new ArrayList<Tag>();
+
+        String text = this.sentence.getText();
+        int i = start;
+        int aux = i;
+        while (i < end) {
+            for (Label label : this.allTargets) {
+                if (label.getStartChar() == i) {
+                    if (i > aux) {
+                        for (int x = aux; x < i; x ++) {
+                            Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
+                            if (!tag.isEmpty()) {
+                                tags.add(tag);
+                            }
+                        }
+                    }
+                    Target t = new Target(text.substring(i,label.getEndChar() + 1));
+                    confTarget(t,label);
+                    tags.add(new Tag(this,".",t));
+                    i = label.getEndChar();
+                    aux = i + 1;
+                }
+            }
+            i ++;
+        }
+        if (aux < end) {
+            for (int x = aux; x < end; x ++) {
+                Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
+                if (!tag.isEmpty()) {
+                    tags.add(tag);
+                }
+            }
+        }
+        return tags;
     }
 
-    public void setDisplayedAnnotationSet(AnnotationSet displayedAnnotationSet) {
-        this.displayedAnnotationSet = displayedAnnotationSet;
+    /**
+     * Sets the background color of a LU target to green if it is the LU target of an LU output page or if the LU have
+     * been selected by a user in fullText mode.
+     */
+    private void confTarget(Target t, Label label) {
+        t.setValid(true);
+        if (!fullText) {
+            t.setBkg("#66BB6A");
+        } else {
+            for (Label on : this.focus) {
+                if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
+                    t.setBkg("#66BB6A");
+                }
+            }
+        }
+        t.setAnnotationSet(label.getLayer().getAnnotationSet());
+    }
+
+    public AnnotationSet getAnnotationSet() {
+        return annotationSet;
     }
 
     public void setSentence(Sentence sentence) {
@@ -201,6 +258,7 @@ public class SentenceDisplay {
     public List<Tag> getElements() {
         return elements;
     }
+
     public void setElements(List<Tag> elements) {
         this.elements = elements;
     }
@@ -209,12 +267,15 @@ public class SentenceDisplay {
         return sentence;
     }
 
-
-    public void setFocus(List<Label> focus) {
-        this.focus = focus;
+    public boolean isFullText() {
+        return fullText;
     }
 
-    public List<Label> getFocus() {
-        return focus;
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    public void setDisplayed(boolean displayed) {
+        this.displayed = displayed;
     }
 }

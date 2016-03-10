@@ -2,8 +2,8 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 
-import jp.keio.jfn.wat.controller.LayerTriplet;
-import jp.keio.jfn.wat.controller.PatternEntry;
+import jp.keio.jfn.wat.webreport.LayerTriplet;
+import jp.keio.jfn.wat.webreport.PatternEntry;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
 import org.junit.After;

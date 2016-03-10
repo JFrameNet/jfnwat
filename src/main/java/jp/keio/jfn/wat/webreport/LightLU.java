@@ -1,4 +1,4 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.webreport;
 
 import jp.keio.jfn.wat.domain.Status;
 

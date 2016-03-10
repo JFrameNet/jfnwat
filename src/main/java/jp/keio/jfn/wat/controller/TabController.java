@@ -1,13 +1,17 @@
 package jp.keio.jfn.wat.controller;
 
 import java.util.*;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
+import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.annotation.Tag;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.DocumentOutput;
+import jp.keio.jfn.wat.webreport.FrameOutput;
+import jp.keio.jfn.wat.webreport.LUOutput;
+import jp.keio.jfn.wat.webreport.LightLU;
 import org.hibernate.Hibernate;
-import org.hibernate.procedure.internal.Util;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.TabCloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +116,7 @@ public class TabController {
                 Hibernate.initialize(layer.getLabels());
             }
         }
-        loadedLUs.add(new LUOutput(mainLU, true));
+        loadedLUs.add(new LUOutput(mainLU));
         index = loadedLUs.size() -1;
     }
 
@@ -273,6 +277,26 @@ public class TabController {
             orderedLU = lightLUs;
         }
         return orderedLU;
+    }
+
+    /**
+     * Returns the type of the tag for the ui:include elements during view build time.
+     */
+    public String getTagType(Tag tag, boolean fullText) {
+        if (tag == null) {
+            return "blankTag";
+        }
+        if (fullText) {
+            if (tag.getFrameElement() != null) {
+                return "frameElementTag";
+            } else if (tag.getTarget().isValid()) {
+                return "targetTag";
+            }
+        } else if (tag.getFrameElement() != null) {
+            return "luTag";
+        }
+
+        return "blankTag";
     }
 
     public List<DocumentOutput> getLoadedDocs() {

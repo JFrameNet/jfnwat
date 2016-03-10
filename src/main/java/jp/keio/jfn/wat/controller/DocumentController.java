@@ -2,24 +2,22 @@ package jp.keio.jfn.wat.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import javax.faces.bean.ManagedBean;
-import javax.annotation.PostConstruct;
 
+import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.annotation.AnnotatedSentence;
+import jp.keio.jfn.wat.annotation.AnnotationDisplay;
+import jp.keio.jfn.wat.annotation.Tag;
+import jp.keio.jfn.wat.annotation.Target;
 import jp.keio.jfn.wat.domain.*;
 import jp.keio.jfn.wat.repository.AnnotationSetRepository;
 import jp.keio.jfn.wat.repository.CorpusRepository;
 import jp.keio.jfn.wat.repository.DocumentRepository;
-import org.hibernate.Hibernate;
+import jp.keio.jfn.wat.webreport.DocumentOutput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-
-import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.TreeNode;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class is a controller for the document index. It handles operations on DocumentOutput objects.
@@ -68,27 +66,6 @@ public class DocumentController implements Serializable {
             allDocs = documentList;
         }
         return allDocs;
-    }
-
-    /**
-     * Returns a SentenceDisplay object with the corresponding list of tags.
-     */
-    public SentenceDisplay getAnnotation(DocumentOutput doc, SentenceDisplay sentenceDisplay) {
-        sentenceDisplay.getAnnotation(doc.getAllFE());
-        return sentenceDisplay;
-    }
-
-    /**
-     * Sets the annotation set for a SentenceDisplay object.
-     * If the chosen annotation set is already being displayed, the future annotation set is set to null (hide annotation).
-     */
-    public void setAnnotationSentence(SentenceDisplay sentence, AnnotationSet annotationSet) {
-        AnnotationSet current = sentence.getDisplayedAnnotationSet();
-        if ((current != null) && (current.getId() == annotationSet.getId())) {
-            sentence.setDisplayedAnnotationSet(null);
-        } else {
-            sentence.setDisplayedAnnotationSet(annotationSet);
-        }
     }
 
     public void setFilter (String f) {

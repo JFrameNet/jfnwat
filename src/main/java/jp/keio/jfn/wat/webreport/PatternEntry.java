@@ -1,8 +1,9 @@
-package jp.keio.jfn.wat.controller;
+package jp.keio.jfn.wat.webreport;
 
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import jp.keio.jfn.wat.domain.FrameElement;
 import jp.keio.jfn.wat.domain.Label;
+import jp.keio.jfn.wat.webreport.LayerTriplet;
 
 import java.util.ArrayList;
 import java.util.List;
