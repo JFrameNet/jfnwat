@@ -6,8 +6,8 @@
                 xmlns:p="http://primefaces.org/ui">
     <p:panelGrid columns="1" styleClass="noborder" style="float: left">
         <p:row>
-            <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="color: #66BB6A" value="[#{line.annotationSet.lexUnit.frame.name}" />
-            <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" styleClass="display-sent" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}]" />
+            <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="color: #66BB6A" value="#{line.annotationSet.lexUnit.frame.name}" />
+            <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" styleClass="display-sent" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}" />
         </p:row>
         <p:row >
             <div style="border-top: solid 1px white; text-align: center">

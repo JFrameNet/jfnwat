@@ -8,11 +8,13 @@
         <p:row>
             <ui:repeat var="word" value="#{tag.associated}">
                 <p:column rendered="#{tag.target == null}">
-                    <h:outputText value="#{word.text}" style="background-color: #{word.bkg}"/>
+                    <h:outputText value="#{word.text}"
+                                  styleClass="#{word.focus ?'lu-focus':''}"/>
                 </p:column>
             </ui:repeat>
             <p:column rendered="#{tag.target != null}">
-                <h:outputText value="#{tag.target.text}" style="background-color: #{tag.target.bkg}"/>
+                <h:outputText value="#{tag.target.text}"
+                              styleClass="#{tag.target.focus ?'lu-focus':''}"/>
             </p:column>
         </p:row>
         <p:row >

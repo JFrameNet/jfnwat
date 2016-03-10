@@ -14,7 +14,7 @@ public class Target {
     private String text;
     private AnnotationSet annotationSet;
     private boolean valid;
-    private String bkg;
+    private boolean focus;
 
     /**
      * Initialization with a String object.
@@ -23,7 +23,7 @@ public class Target {
     public Target (String text) {
         this.text = text;
         this.valid = false;
-        this.bkg = "#ffffff";
+        this.focus = false;
     }
 
     public AnnotationSet getAnnotationSet() {
@@ -50,11 +50,12 @@ public class Target {
         this.valid = valid;
     }
 
-    public String getBkg() {
-        return bkg;
+
+    public boolean isFocus() {
+        return focus;
     }
 
-    public void setBkg(String bkg) {
-        this.bkg = bkg;
+    public void setFocus(boolean focus) {
+        this.focus = focus;
     }
 }

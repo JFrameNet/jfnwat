@@ -6,7 +6,8 @@
                 xmlns:p="http://primefaces.org/ui">
     <p:panelGrid columns="1" styleClass="noborder" style="float: left">
         <p:row>
-            <h:outputText value="#{tag.target.text}" style="background-color: #{tag.target.bkg}"/>
+            <h:outputText value="#{tag.target.text}"
+            styleClass="#{tag.target.focus ?'lu-focus':''}"/>
         </p:row>
         <p:row >
             <p:row >

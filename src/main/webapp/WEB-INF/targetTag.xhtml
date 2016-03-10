@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui">
     <p:panelGrid columns="1" styleClass="noborder" style="float: left">
         <p:row>
-            <p:commandLink style="background-color: #{tag.target.bkg};font-weight: bold"
+            <p:commandLink styleClass="#{tag.target.focus ?'focus':'target'}"
                            value="#{tag.target.text}"
                            action="#{sent.switchAnnoSet(tag.target.annotationSet)}"
                            disabled="#{!tag.parentAnnotationDisplay.fullText}"

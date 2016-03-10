@@ -236,11 +236,11 @@ public class AnnotationDisplay {
     private void confTarget(Target t, Label label) {
         t.setValid(true);
         if (!fullText) {
-            t.setBkg("#66BB6A");
+            t.setFocus(true);
         } else {
             for (Label on : this.focus) {
                 if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                    t.setBkg("#66BB6A");
+                    t.setFocus(true);
                 }
             }
         }

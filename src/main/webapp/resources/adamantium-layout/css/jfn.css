@@ -168,11 +168,17 @@ input[type=text] {
 .word {
   white-space: nowrap;
 }
-.lu-el {
+.target {
   font-weight: bold;
 }
-.normal-el {
-  font-weight: normal;
+.focus {
+  font-weight: bold;
+  border: solid 1px #66BB6A;
+}
+.lu-focus {
+  border: solid 1px #66BB6A;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 /*Document*/
 .paragraph {

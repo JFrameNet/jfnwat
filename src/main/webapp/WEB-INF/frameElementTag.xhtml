@@ -9,7 +9,8 @@
             <ui:repeat var="word" value="#{tag.associated}">
                 <p:column rendered="#{tag.target == null}">
                     <p:commandLink rendered="#{word.isValid()}"
-                                   style="background-color: #{word.bkg};font-weight: bold" value="#{word.text}"
+                                   styleClass="#{word.focus?'focus':'target'}"
+                                   value="#{word.text}"
                                    action="#{sent.switchAnnoSet(word.annotationSet)}"
                                    disabled="#{!tag.parentAnnotationDisplay.fullText}"
                                     update="form2:doc-tabs:sent#{index}"/>
