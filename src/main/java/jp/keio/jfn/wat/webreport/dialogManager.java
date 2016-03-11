@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @Component
 @Scope("session")
-public class dialogManager {
+public class DialogManager {
     private List<AnnotationDisplay> selectedSentences = new ArrayList<AnnotationDisplay>();
 
     /**
@@ -51,6 +51,14 @@ public class dialogManager {
                     this.selectedSentences.add(s);
                 }
             }
+        }
+    }
+
+    public String hasSentences() {
+        if (this.selectedSentences.size() > 0) {
+            return "";
+        } else {
+            return "none";
         }
     }
 

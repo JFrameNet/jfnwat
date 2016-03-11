@@ -60,7 +60,20 @@ input[type=text] {
   display: none;
 }
 .ui-dialog .ui-dialog-titlebar {
-  display: none;
+  background-color: #66bb6a;
+  padding: 0!important;
+  padding-bottom: 3px !important;
+}
+.ui-dialog .ui-dialog-titlebar .ui-icon {
+  height: 12px;
+  width: 12px;
+}
+.ui-dialog .ui-dialog-title {
+  margin: 0!important;
+}
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover {
+  padding-right: 5px;
+  padding-left: 5px;
 }
 .ui-panelgrid {
   border: none!important;
@@ -91,6 +104,8 @@ input[type=text] {
 .clear-btn {
   color: white !important;
   background-color: #66bb6a;
+  font-size: smaller;
+  padding-left: 4px;
 }
 .clear-btn:hover {
   text-decoration: none;
