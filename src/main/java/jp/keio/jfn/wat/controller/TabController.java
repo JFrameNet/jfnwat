@@ -280,23 +280,33 @@ public class TabController {
     }
 
     /**
-     * Returns the type of the tag for the ui:include elements during view build time.
+     * Returns the type of the tag for the ui:include elements during view build time for the LU output page.
      */
-    public String getTagType(Tag tag, boolean fullText) {
+    public String getTagType(Tag tag) {
+        if (tag == null) {
+            return "";
+        }
+        if (tag.getFrameElement() != null) {
+            return "luTag";
+        } else {
+            return "luBlank";
+        }
+    }
+
+    /**
+     * Returns the type of the tag for the ui:include elements during view build time for the document output.
+     */
+    public String getTagTypeFullText(Tag tag) {
         if (tag == null) {
             return "blankTag";
         }
-        if (fullText) {
-            if (tag.getFrameElement() != null) {
-                return "frameElementTag";
-            } else if (tag.getTarget().isValid()) {
-                return "targetTag";
-            }
-        } else if (tag.getFrameElement() != null) {
-            return "luTag";
+        if (tag.getFrameElement() != null) {
+            return "frameElementTag";
+        } else if (tag.getTarget().isValid()) {
+            return "targetTag";
+        } else {
+            return "blankTag";
         }
-
-        return "blankTag";
     }
 
     public List<DocumentOutput> getLoadedDocs() {

@@ -13,14 +13,20 @@ import java.util.List;
 public class AnnotatedSentence {
     private List<AnnotationDisplay> allAnnotations = new ArrayList<AnnotationDisplay>();
     private AnnotationSet currentAnnoSet = null;
+    private String bkgColor;
 
     /**
      * Initialization with the list of annotated objects. By default, enable the "null" annotation set (when no LU
      * target has been selected).
      */
-    public AnnotatedSentence(List<AnnotationDisplay> annotations) {
+    public AnnotatedSentence(List<AnnotationDisplay> annotations, int type) {
         this.allAnnotations = annotations;
         enableAnnoSet();
+        if (type == 0) {
+            this.bkgColor = "#ffffff";
+        } else {
+            this.bkgColor = "#f5f5f5";
+        }
     }
 
     /**
@@ -56,5 +62,9 @@ public class AnnotatedSentence {
 
     public List<AnnotationDisplay> getAllAnnotations() {
         return allAnnotations;
+    }
+
+    public String getBkgColor() {
+        return bkgColor;
     }
 }

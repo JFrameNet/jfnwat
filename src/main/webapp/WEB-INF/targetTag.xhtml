@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
-    <p:panelGrid columns="1" styleClass="noborder" style="float: left">
+    <p:panelGrid columns="1" styleClass="noborder" style="float: left; background-color: #{sent.bkgColor}">
         <p:row>
             <p:commandLink styleClass="#{tag.target.focus ?'focus':'target'}"
                            value="#{tag.target.text}"
@@ -13,8 +13,8 @@
                            update="form2:doc-tabs:sent#{index}"/>
         </p:row>
         <p:row >
-            <div style="border-top: solid 1px #{tag.myBackgroundColor()}; text-align: center; background-color: #{tag.myBackgroundColor()}">
-                <h:outputText value="." style="color: #{tag.myBackgroundColor()}"/>
+            <div style="border-top: solid 1px #{sent.bkgColor}; text-align: center; background-color: #{sent.bkgColor}">
+                <h:outputText value="." style="color: #{sent.bkgColor}"/>
             </div>
         </p:row>
     </p:panelGrid>

@@ -110,7 +110,7 @@
                                         <ui:fragment rendered="#{line.displayed}">
                                             <p:fieldset styleClass="display-sent">
                                                 <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                                    <ui:include src="WEB-INF/#{tabController.getTagType(tag, false)}.xhtml" >
+                                                    <ui:include src="WEB-INF/#{tabController.getTagType(tag)}.xhtml" >
                                                         <ui:param name="tag" value="#{tag}"/>
                                                     </ui:include>
                                                 </c:forEach>

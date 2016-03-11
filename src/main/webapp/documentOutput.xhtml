@@ -13,11 +13,11 @@
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
                     <div style="width: 80%">
                         <c:forEach items="#{doc.annotatedSentences}" var="sent" varStatus="loop">
-                            <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" styleClass="display-sent">
+                            <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" style="background-color: #{sent.bkgColor}">
                                 <c:forEach items="#{sent.allAnnotations}" var="line" varStatus="loop">
                                     <ui:fragment rendered="#{line.displayed}">
                                         <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                            <ui:include src="WEB-INF/#{tabController.getTagType(tag, true)}.xhtml" >
+                                            <ui:include src="WEB-INF/#{tabController.getTagTypeFullText(tag)}.xhtml" >
                                                 <ui:param name="tag" value="#{tag}"/>
                                                 <ui:param name="sent" value="#{sent}"/>
                                                 <ui:param name="index" value="#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}"/>
@@ -26,6 +26,7 @@
                                         <c:if test="#{!(line.annotationSet eq null)}">
                                             <ui:include src="WEB-INF/frameTag.xhtml" >
                                                 <ui:param name="line" value="#{line}"/>
+                                                <ui:param name="sent" value="#{sent}"/>
                                             </ui:include>
                                         </c:if>
                                     </ui:fragment>
