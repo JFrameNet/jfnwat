@@ -28,6 +28,8 @@ input[type=text]{
 }
 
 /*General */
+
+.ui-datatable table tbody td {padding: 5px 0px !important;  }
 .ui-datalist-empty-message {font-size: 14px !important;}
 
 .ui-lightbox-content {background-color: #FFFFFF !important;}
@@ -44,9 +46,11 @@ input[type=text]{
 
 .hidden-width-helper{display: none;}
 
-.ui-dialog .ui-dialog-titlebar{padding:0 !important; padding-left: 5px !important; padding-right: 5px !important; background-color: #66bb6a;}
+.ui-datatable-scrollable .ui-datatable-scrollable-footer{display: none;}
 
-.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover{padding-right: 5px; padding-left: 5px;}
+.ui-dialog .ui-dialog-titlebar{display: none}
+
+//.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover{padding-right: 5px; padding-left: 5px;}
 
 .ui-panelgrid{border: none!important;}
 .ui-panelgrid tbody tr td{border: none !important;}
@@ -57,11 +61,15 @@ input[type=text]{
 
 .dialog-sentences{position: fixed; bottom: 0 !important; left: 0!important; right: 0!important; display: inline-table}
 
+.my-icon {background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;}
+.clear-btn{color: white !important; background-color:  #66bb6a;}
+.clear-btn:hover{text-decoration: none;background-color:  #66bb6a}
+
 /*Tabs*/
 .tab-layout {border: none !important;}
 
 /*Home page*/
-.btn-home{margin: 1px}
+.btn-home{margin: 1px;}
 .btn-search{}
 
 /*Search */
@@ -85,7 +93,7 @@ input[type=text]{
 .column-annotation{text-align: center; border: none!important; padding: 0!important; background-color: transparent!important; width: auto}
 .display-sent {background-color: transparent!important;}
 .bottom-panel{position: relative; bottom: 0}
-.remove-link{color: #2b2b2b; font-weight: bold; margin-right: 10px; font-size: large}
+.remove-link{}
 .lex-unit-name {margin-right: 10px; font-size: smaller}
 .word{ white-space: nowrap}
 .target{font-weight: bold;}
@@ -104,15 +112,16 @@ input[type=text]{
 .list-lu{padding-left: 5px; padding-right: 10px}
 
 /*LexUnit*/
-.filter-btn {border: solid 1px #E0E0E0; color: #546E7A;}
+.filter-btn {border: solid 1px #E0E0E0; color: #546E7A}
 .all-btn{background-color: #FCF2F2}
 .all-btn:hover{background-color: #F5D8C6}
 .core-btn{background-color: #EDF2F5;}
 .core-btn:hover{background-color:#C6E3F5 }
 .non-core-btn{background-color: #EEF5ED;}
 .non-core-btn:hover{background-color:#CBF5C6}
-.main-btn{width: 20%;}
-.element-btn{width: 90%;}
+.main-btn{width: 20%;margin-bottom:4px;}
+.real-btn{margin-left: 2px; }
+.element-btn{width:100%;}
 .element-column{border:none!important; background-color: transparent!important; width: 25%}
 .real-column{border: none!important; background-color: transparent!important;}
 .selected-filter{margin: 2px}
@@ -120,6 +129,9 @@ input[type=text]{
 .valence-pattern-column{background-color: transparent!important; border: none!important;}
 .valence-pattern{border-top: solid 1px #D9E3E8}
 .total-vp-column{text-align: center; border: none!important; background-color: transparent!important; width: 30px}
-.total-vp{color: #546E7A; font-weight: bold;}
+.total-vp{color: #546E7A; font-weight: bold; text-decoration: none!important;}
 .list-fe-vp{text-align: center; background-color: transparent !important; border: none!important; width: 120px; padding: 0}
 .underline-tag{border-bottom: solid 1px !important;}
+.real-button:hover div{background-color: #F5F5F5;}
+.vpstyle{float:left; width: 100px; text-align: center;  padding-top: 5px; padding-bottom: 5px;}
+.vpstyleNumber{float:left; width: 30px; text-align: center;  padding-top: 5px; padding-bottom: 5px;}

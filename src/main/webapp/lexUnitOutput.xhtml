@@ -34,7 +34,7 @@
                                     <p:column styleClass="real-column"> 
                                         <p:dataList var="var" value="#{element.patterns}" emptyMessage="" type="definition"> 
                                             <h:form>
-                                                <p:commandButton process="@this" oncomplete="heightLUList()" styleClass="horizontal filter-btn core-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
+                                                <p:commandButton process="@this" oncomplete="heightLUList()" styleClass="horizontal filter-btn core-btn real-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
                                             </h:form>
                                         </p:dataList> 
                                     </p:column> 
@@ -48,7 +48,7 @@
                                     <p:column styleClass="real-column"> 
                                         <p:dataList var="var" value="#{element.patterns}" emptyMessage="" type="definition"> 
                                             <h:form>
-                                                <p:commandButton process="@this" oncomplete="heightLUList()" styleClass="horizontal filter-btn non-core-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
+                                                <p:commandButton process="@this" oncomplete="heightLUList()" styleClass="horizontal filter-btn non-core-btn real-btn" value="#{var.valenceUnits.get(0).outputString()}" action="#{lexUnitController.addFilterReal(lu,element.frameElement, var.valenceUnits.get(0).outputString())}" update="@(.allReal)"/> 
                                             </h:form>
                                         </p:dataList> 
                                     </p:column> 
@@ -66,41 +66,60 @@
                                 <div >
                                     <p:dataTable id="patterns" styleClass="allReal" var="group" value="#{lexUnitController.getValencePatterns(lu)}" emptyMessage=""> 
                                         <p:column styleClass="valence-pattern-column"> 
-                                            <p:dataTable var="realization" value="#{group.patterns}" tableStyle="width:auto" styleClass="valence-pattern" emptyMessage=""> 
-                                                <p:column styleClass="total-vp-column"> 
-                                                    <f:facet name="header"> 
-                                                        <p:commandLink value="#{group.totalOccurences}" oncomplete="heightLUList()" action="#{lexUnitController.totalGroup(lu,group)}" styleClass="total-vp" update="@(.dialog-sentences)"/> 
-                                                    </f:facet> 
-                                                    <p:commandLink value="[#{realization.annoSet.size()}]" oncomplete="heightLUList()" action="#{lexUnitController.realPatterEntry(lu,realization)}" update="@(.dialog-sentences)"/> 
-                                                </p:column> 
-                                                <p:columns var="fe" value="#{group.frameElements}" styleClass="list-fe-vp"> 
-                                                    <f:facet name="header"> 
-                                                        <h:outputText value="#{fe.name}" styleClass="total-vp"/> 
-                                                    </f:facet> 
-                                                    <h:outputText value="#{realization.outputFE(fe)}" />  
-                                                </p:columns> 
-                                            </p:dataTable> 
+                                            <f:facet name="header">
+                                                <h:outputText id="title" value="Sentences per Valence Patterns" style="float: left;" rendered="#{lu.valencePatterns.size() > 0}"/>
+                                            </f:facet>
+                                            <p:commandLink action="#{lexUnitController.totalGroup(lu,group)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
+                                                <div class="real-button" style="border-top: solid 1px #e0e0e0">
+                                                    <div class="vpstyleNumber">
+                                                        <h:outputText value="#{group.totalOccurences}" style="font-weight: bold"/>
+                                                    </div>
+                                                    <ui:repeat value="#{group.frameElements}" var="fe">
+                                                        <div class="vpstyle">
+                                                            <h:outputText value="#{fe.name}" style="font-weight: bold"/>
+                                                        </div>
+                                                    </ui:repeat>
+                                                </div>
+                                            </p:commandLink>
+                                            <br/><br/>
+                                            <ui:repeat value="#{group.patterns}" var="real">
+                                                <div class="real-button">
+                                                    <p:commandLink action="#{lexUnitController.realPatterEntry(lu,real)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
+                                                        <div class="vpstyleNumber">
+                                                            <h:outputText value="#{real.annoSet.size()}"/>
+                                                        </div>
+                                                        <ui:repeat value="#{group.frameElements}" var="var">
+                                                            <div class="vpstyle">
+                                                                #{real.outputFE(var)}
+                                                            </div>
+                                                        </ui:repeat>
+                                                        <br/><br/>
+                                                    </p:commandLink>
+                                                </div>
+                                            </ui:repeat>
                                         </p:column> 
                                     </p:dataTable>
                                 </div>
                             </p:panel>
                             <p:dialog widgetVar="dlg#{lu.lightLU.id}" id="wind" width="100%" draggable="false" resizable="false" closable="false" styleClass="dialog-sentences">
-                                <f:facet name="header">
-                                    <p:commandLink value="#{text['clearAll']}" oncomplete="heightLUList()" action="#{lexUnitController.clearAllSentences(lu)}" style="font-size: smaller" update="@(.dialog-sentences)"/>
-                                </f:facet>
-                                <c:forEach items="#{lexUnitController.getAnnotations(lu)}" var="line" varStatus="loop">
-                                    <ui:fragment rendered="#{line.displayed}">
-                                        <p:fieldset styleClass="display-sent">
-                                            <p:commandLink value="x" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left"/>
-                                            <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                                <ui:include src="WEB-INF/#{tabController.getTagType(tag, false)}.xhtml" >
-                                                    <ui:param name="tag" value="#{tag}"/>
-                                                </ui:include>
-                                            </c:forEach>
-                                        </p:fieldset>
-                                    </ui:fragment>
-                                </c:forEach>
-                                <br/>
+                                <h:panelGroup rendered="#{lu.hasSent}">
+                                    <div style="background-color: #66bb6a">
+                                        <p:commandLink value="Clear" oncomplete="heightLUList()" action="#{lexUnitController.clearAllSentences(lu)}" styleClass="clear-btn" update="@(.dialog-sentences)"/>
+                                    </div>
+                                    <c:forEach items="#{lexUnitController.getAnnotations(lu)}" var="line" varStatus="loop">
+                                        <ui:fragment rendered="#{line.displayed}">
+                                            <p:fieldset styleClass="display-sent">
+                                                <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
+                                                    <ui:include src="WEB-INF/#{tabController.getTagType(tag, false)}.xhtml" >
+                                                        <ui:param name="tag" value="#{tag}"/>
+                                                    </ui:include>
+                                                </c:forEach>
+                                                <p:commandButton icon="my-icon ui-icon-minus" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{lexUnitController.removeSentence(lu, line)}" style="float: left; background-color: white"/>
+                                            </p:fieldset>
+                                        </ui:fragment>
+                                    </c:forEach>
+                                    <br/>
+                                </h:panelGroup>
                             </p:dialog>
                         </p:tab>
                     </c:forEach>

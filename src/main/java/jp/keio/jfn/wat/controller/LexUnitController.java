@@ -126,6 +126,7 @@ public class LexUnitController implements Serializable {
                 s.setDisplayed(true);
             }
         }
+        lu.hasDisplayedSentences();
     }
 
     /**
@@ -137,6 +138,7 @@ public class LexUnitController implements Serializable {
                 s.setDisplayed(false);
             }
         }
+        lu.hasDisplayedSentences();
     }
 
 
@@ -263,6 +265,7 @@ public class LexUnitController implements Serializable {
         for (AnnotationDisplay s : lu.getAllSentences()) {
             s.setDisplayed(false);
         }
+        lu.hasDisplayedSentences();
     }
 
     /**

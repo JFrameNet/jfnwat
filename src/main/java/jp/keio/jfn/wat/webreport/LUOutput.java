@@ -31,6 +31,8 @@ public class LUOutput {
 
     private String def = "";
 
+    private boolean hasSent = false;
+
     private String displayCore = "none";
     private String displayNonCore = "none";
     private String hasCore = "";
@@ -191,6 +193,21 @@ public class LUOutput {
         if (insert) {
             this.feGroupRealizations.add( new FEGroupRealization(groupFE, patternEntries));
         }
+    }
+
+
+    public void hasDisplayedSentences() {
+        for (AnnotationDisplay s : allSentences) {
+            if (s.isDisplayed()) {
+                hasSent = true;
+                return;
+            }
+        }
+        hasSent = false;
+    }
+
+    public boolean isHasSent() {
+        return hasSent;
     }
 
     public List<FEGroupRealization> getFeGroupRealizations() {
