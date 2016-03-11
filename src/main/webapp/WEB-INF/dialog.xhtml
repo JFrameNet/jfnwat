@@ -1,0 +1,45 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog widgetVar="dlg" id="wind" width="100%" draggable="false" resizable="false" closable="false" styleClass="dialog-sentences">
+        <h:panelGroup rendered="#{dialogManager.selectedSentences.size() > 0}">
+            <div style="background-color: #66bb6a">
+                <p:commandLink value="Clear" oncomplete="heightLUList()" action="#{dialogManager.clearAllSentences()}" styleClass="clear-btn" update="@(.dialog-sentences)"/>
+            </div>
+            <ui:repeat value="#{dialogManager.getSelectedSentences()}" var="line">
+                <p:fieldset styleClass="display-sent">
+                    <ui:repeat value="#{line.elements}" var="tag">
+                        <p:panelGrid columns="1" styleClass="noborder" style="float: left">
+                            <p:row>
+                                <ui:repeat var="word" value="#{tag.associated}">
+                                    <p:column>
+                                        <h:outputText value="#{word.text}" styleClass="#{word.focus ?'lu-focus':''}"/>
+                                    </p:column>
+                                </ui:repeat>
+                            </p:row>
+                            <p:row >
+                                <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{tag.myBackgroundColor()}">
+                                    <h:outputLink value="#" disabled="#{(tag.frameElement eq null)}">
+                                        <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                                    </h:outputLink>
+                                    <f:facet name="inline">
+                                        <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                                    </f:facet>
+                                </p:lightBox>
+                            </p:row>
+                        </p:panelGrid>
+                    </ui:repeat>
+                    <div style="float: left; padding-top: 10px">
+                        <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="color: #66BB6A" value="#{line.annotationSet.lexUnit.frame.name}" />
+                        <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" styleClass="display-sent" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}" />
+                    </div>
+                    <p:commandButton icon="my-icon ui-icon-minus" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{dialogManager.removeSentence(line)}" style="float: left; background-color: white"/>
+                </p:fieldset>
+            </ui:repeat>
+            <br/>
+        </h:panelGroup>
+    </p:dialog>
+</ui:composition>

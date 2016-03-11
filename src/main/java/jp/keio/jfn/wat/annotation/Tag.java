@@ -48,7 +48,11 @@ public class Tag {
      * @param parent the AnnotationDisplay object the tag belongs to
      */
     public Tag (AnnotationDisplay parent, String value, Target word) {
-        this.target = word;
+        if (parent.isFullText()) {
+            this.target = word;
+        } else {
+            this.associated.add(word);
+        }
         this.value = value;
         this.parentAnnotationDisplay = parent;
         this.color = myBackgroundColor();
@@ -63,7 +67,16 @@ public class Tag {
     }
 
     public boolean isEmpty() {
-        return target.getText().equals(" ");
+        if (target != null) {
+            return target.getText().equals(" ");
+        } else {
+            for (Target t : associated) {
+                if (!t.getText().equals(" ")) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public Target getTarget() {

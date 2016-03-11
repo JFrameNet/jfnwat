@@ -97,52 +97,6 @@ public class LexUnitController implements Serializable {
     }
 
     /**
-     * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
-     * selected sentences.
-     */
-    public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
-        for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
-            enableSentence(lu, annotationSet);
-        }
-    }
-
-    /**
-     * This method is called when a user wants to add all of the sentences of a group realization to the list of the
-     * selected sentences.
-     */
-    public void totalGroup (LUOutput lu,FEGroupRealization group) {
-        for (AnnotationSet annotationSet : group.getAllAnnotations()) {
-            enableSentence(lu, annotationSet);
-        }
-    }
-
-    /**
-     * Adds a new AnnotationDisplay object corresponding to an annotation set to the list of the selected sentences.
-     * The insert is not performed if the annotation set has already been selected.
-     */
-    private void enableSentence (LUOutput lu, AnnotationSet annotationSet) {
-        for (AnnotationDisplay s : lu.getAllSentences()) {
-            if (s.getAnnotationSet().getId() == annotationSet.getId()) {
-                s.setDisplayed(true);
-            }
-        }
-        lu.hasDisplayedSentences();
-    }
-
-    /**
-     * Removes a sentence from the list of the selected sentences of the LUOutput object.
-     */
-    public void removeSentence (LUOutput lu, AnnotationDisplay sentence) {
-        for (AnnotationDisplay s : lu.getAllSentences()) {
-            if (s.getAnnotationSet().getId() == sentence.getAnnotationSet().getId()) {
-                s.setDisplayed(false);
-            }
-        }
-        lu.hasDisplayedSentences();
-    }
-
-
-    /**
      * Retrieves the group realizations corresponding to the filters in the selectedEl list.
      * It operates an "and" operation : a group realization is displayed only if its list of frame elements contains all
      * of the elements in the selectedEl list. If the user selected filters of the format FE.PT.GF, a group realization
@@ -243,29 +197,12 @@ public class LexUnitController implements Serializable {
         return sortedList;
     }
 
-    /**
-     * Gets all AnnotationDisplay objects associated to the annotation sets of one lexical unit.
-     */
-    public List<AnnotationDisplay> getAnnotations (LUOutput lu) {
-        return lu.getAllSentences();
-    }
-
     public List<String> getSelectedEl(LUOutput lu) {
         return lu.getSelectedEl();
     }
 
     public List<FEGroupRealization> getValencePatterns(LUOutput lu) {
         return lu.getValencePatterns();
-    }
-
-    /**
-     * Disable all of the sentences for on LUOutput object.
-     */
-    public void clearAllSentences(LUOutput lu) {
-        for (AnnotationDisplay s : lu.getAllSentences()) {
-            s.setDisplayed(false);
-        }
-        lu.hasDisplayedSentences();
     }
 
     /**

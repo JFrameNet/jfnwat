@@ -195,16 +195,16 @@ public class LUOutput {
         }
     }
 
-
-    public void hasDisplayedSentences() {
-        for (AnnotationDisplay s : allSentences) {
-            if (s.isDisplayed()) {
-                hasSent = true;
-                return;
-            }
-        }
-        hasSent = false;
-    }
+//
+//    public void hasDisplayedSentences() {
+//        for (AnnotationDisplay s : allSentences) {
+//            if (s.isDisplayed()) {
+//                hasSent = true;
+//                return;
+//            }
+//        }
+//        hasSent = false;
+//    }
 
     public boolean isHasSent() {
         return hasSent;
@@ -290,4 +290,5 @@ public class LUOutput {
     public List<String> getFrameElements() {
         return frameElements;
     }
+
 }
