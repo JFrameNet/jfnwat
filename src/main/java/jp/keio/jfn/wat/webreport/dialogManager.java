@@ -2,12 +2,19 @@ package jp.keio.jfn.wat.webreport;
 
 import jp.keio.jfn.wat.annotation.AnnotationDisplay;
 import jp.keio.jfn.wat.annotation.Tag;
+import jp.keio.jfn.wat.annotation.Target;
 import jp.keio.jfn.wat.domain.AnnotationSet;
+import jp.keio.jfn.wat.domain.LexUnit;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.faces.bean.ManagedBean;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +28,41 @@ import java.util.List;
 public class DialogManager {
     private List<AnnotationDisplay> selectedSentences = new ArrayList<AnnotationDisplay>();
     private boolean mini = false;
+
+    public StreamedContent downloadSentencesFile() {
+        String exampleString = "";
+        int i = 0;
+        for (AnnotationDisplay annotationDisplay : selectedSentences) {
+            i ++;
+            exampleString += i + ") " + annotationToString(annotationDisplay);
+        }
+        InputStream stream = new ByteArrayInputStream(exampleString.getBytes(StandardCharsets.UTF_8));
+        return  new DefaultStreamedContent(stream, "txt", "web-report.txt");
+    }
+
+    private String annotationToString(AnnotationDisplay annotationDisplay) {
+        String result = "";
+        for (Tag tag : annotationDisplay.getElements()) {
+            if (!tag.getValue().isEmpty()) {
+                result += "[";
+            }
+            for (Target target : tag.getAssociated()) {
+                if (target.isFocus()) {
+                    result += "{";
+                }
+                result += target.getText();
+                if (target.isFocus()) {
+                    result += " TargetLU}";
+                }
+            }
+            if (!tag.getValue().isEmpty()) {
+                result += " " +tag.getValue() + "]";
+            }
+        }
+        LexUnit lu = annotationDisplay.getAnnotationSet().getLexUnit();
+        result += " " + lu.getFrame().getName()+"."+lu.getName();
+        return result + "\n\n";
+    }
 
     /**
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
@@ -68,6 +110,7 @@ public class DialogManager {
      */
     public void clearAllSentences() {
         this.selectedSentences = new ArrayList<AnnotationDisplay>();
+        this.mini = false;
     }
 
     public void setSelectedSentences(List<AnnotationDisplay> selectedSentences) {
