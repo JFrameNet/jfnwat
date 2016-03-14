@@ -107,7 +107,7 @@ input[type=text] {
   max-height: 45vh;
 }
 .dialog-mini {
-  width: 220px !important;
+  width: 250px !important;
   position: fixed;
   bottom: 0 !important;
   left: 0!important;

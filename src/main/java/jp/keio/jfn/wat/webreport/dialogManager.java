@@ -1,6 +1,7 @@
 package jp.keio.jfn.wat.webreport;
 
 import jp.keio.jfn.wat.annotation.AnnotationDisplay;
+import jp.keio.jfn.wat.annotation.Tag;
 import jp.keio.jfn.wat.domain.AnnotationSet;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -75,6 +76,23 @@ public class DialogManager {
 
     public void toggleMini() {
         this.mini = !this.mini;
+    }
+
+    public String getBkgColor(AnnotationDisplay line) {
+        int type = selectedSentences.indexOf(line) % 2;
+        if (type == 0) {
+            return "#ffffff";
+        } else {
+            return "#f5f5f5";
+        }
+    }
+
+    public String getTagColor(Tag tag, AnnotationDisplay line) {
+        if (tag.getFrameElement() == null) {
+            return getBkgColor(line);
+        } else {
+            return tag.getColor();
+        }
     }
 
     public List<AnnotationDisplay> getSelectedSentences() {

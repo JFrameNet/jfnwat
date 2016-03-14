@@ -20,7 +20,7 @@
             <h:outputText value="#{tag.target.text}" rendered="#{tag.target != null}"/>
         </p:row>
         <p:row >
-            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{sent.bkgColor}">
+            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{sent.bkgColor}; margin-top: 2px; min-height: 16px">
                 <h:outputLink value="#">
                     <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
                 </h:outputLink>

@@ -14,14 +14,15 @@
         <p:ajax event="close" update="@(.dialog-sentences)" listener="#{dialogManager.clearAllSentences()}" oncomplete="heightLUList()"/>
         <f:facet name="header">
             <h:outputText value="Annotated Sentences" styleClass="clear-btn"/>
-            <p:commandButton action="#{dialogManager.clearAllSentences()}" icon="ui-icon-closethick my-icon-close" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
-            <p:commandButton action="#{dialogManager.toggleMini()}" icon="ui-icon-minusthick icon-mini" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
+            <p:commandButton id="close" action="#{dialogManager.clearAllSentences()}" icon="ui-icon-closethick my-icon-close" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
+            <p:tooltip for="close" value="Remove all sentences" style="font-size: smaller; color: #4C626D; background-color: white" />
+            <p:commandButton id="min" action="#{dialogManager.toggleMini()}" icon="ui-icon-minusthick icon-mini" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
         </f:facet>
         <ui:fragment rendered="#{!dialogManager.mini}">
             <ui:repeat value="#{dialogManager.getSelectedSentences()}" var="line">
-                <p:fieldset styleClass="display-sent">
+                <p:fieldset style="background-color: #{dialogManager.getBkgColor(line)}">
                     <ui:repeat value="#{line.elements}" var="tag">
-                        <p:panelGrid columns="1" styleClass="noborder" style="float: left">
+                        <p:panelGrid columns="1" styleClass="noborder" style="float: left;background-color: #{dialogManager.getBkgColor(line)}">
                             <p:row>
                                 <ui:repeat var="word" value="#{tag.associated}">
                                     <p:column>
@@ -30,9 +31,9 @@
                                 </ui:repeat>
                             </p:row>
                             <p:row >
-                                <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{tag.myBackgroundColor()}">
+                                <p:lightBox style="border-top: solid 1px #{dialogManager.getTagColor(tag, line)}; text-align: center; background-color: #{dialogManager.getBkgColor(line)}; margin-top: 2px; min-height: 16px">
                                     <h:outputLink value="#" disabled="#{(tag.frameElement eq null)}">
-                                        <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
+                                        <h:outputText value="#{tag.value}" style="color: #{tag.color}" escape="false"/>
                                     </h:outputLink>
                                     <f:facet name="inline">
                                         <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
@@ -42,10 +43,10 @@
                         </p:panelGrid>
                     </ui:repeat>
                     <div style="float: left; padding-top: 10px">
-                        <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}" styleClass="display-sent" style="color: #66BB6A" value="#{line.annotationSet.lexUnit.frame.name}" />
-                        <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" styleClass="display-sent" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}" />
+                        <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}"  style="color: #66BB6A" value="#{line.annotationSet.lexUnit.frame.name}" />
+                        <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}" />
                     </div>
-                    <p:commandButton icon="my-icon ui-icon-minusthick" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{dialogManager.removeSentence(line)}" style="float: left; background-color: white"/>
+                    <p:commandButton icon="my-icon ui-icon-minusthick" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{dialogManager.removeSentence(line)}" style="float: left; background-color: #{dialogManager.getBkgColor(line)}"/>
                 </p:fieldset>
             </ui:repeat>
         </ui:fragment>
