@@ -19,6 +19,7 @@ import java.util.List;
 @Scope("session")
 public class DialogManager {
     private List<AnnotationDisplay> selectedSentences = new ArrayList<AnnotationDisplay>();
+    private boolean mini = false;
 
     /**
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
@@ -54,14 +55,6 @@ public class DialogManager {
         }
     }
 
-    public String hasSentences() {
-        if (this.selectedSentences.size() > 0) {
-            return "";
-        } else {
-            return "none";
-        }
-    }
-
     /**
      * Removes a sentence from the list of the selected sentences of the LUOutput object.
      */
@@ -80,7 +73,19 @@ public class DialogManager {
         this.selectedSentences = selectedSentences;
     }
 
+    public void toggleMini() {
+        this.mini = !this.mini;
+    }
+
     public List<AnnotationDisplay> getSelectedSentences() {
         return selectedSentences;
+    }
+
+    public boolean isMini() {
+        return mini;
+    }
+
+    public void setMini(boolean mini) {
+        this.mini = mini;
     }
 }
