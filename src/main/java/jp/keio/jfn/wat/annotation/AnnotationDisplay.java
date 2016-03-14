@@ -204,9 +204,7 @@ public class AnnotationDisplay {
                     if (i > aux) {
                         for (int x = aux; x < i; x ++) {
                             Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
-                            if (!tag.isEmpty()) {
-                                tags.add(tag);
-                            }
+                            auxInsertTag(tag, tags);
                         }
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
@@ -221,12 +219,45 @@ public class AnnotationDisplay {
         if (aux < end) {
             for (int x = aux; x < end; x ++) {
                 Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
-                if (!tag.isEmpty()) {
+                auxInsertTag(tag, tags);
+            }
+        }
+        return tags;
+    }
+
+    private void auxInsertTag(Tag tag, List<Tag> tags) {
+        if (!tag.isEmpty()) {
+            Target t;
+            if (tag.getTarget() != null) {
+                t = tag.getTarget();
+                if ((tags.size() > 0) && (t.getText().equals("。"))) {
+                    Tag last = tags.get(tags.size() -1);
+                    if (last.getTarget() != null) {
+                        last.getTarget().setText(last.getTarget().getText() + "。");
+                    } else if (last.getAssociated().size() == 1) {
+                        last.getAssociated().get(0).setText(last.getAssociated().get(0).getText() +"。" );
+                    } else {
+                        tags.add(tag);
+                    }
+                } else {
+                    tags.add(tag);
+                }
+            } else if (tag.getAssociated().size() == 1) {
+                t = tag.getAssociated().get(0);
+                if ((tags.size() > 0) && (t.getText().equals("。"))) {
+                    Tag last = tags.get(tags.size() -1);
+                    if (last.getTarget() != null) {
+                        last.getTarget().setText(last.getTarget().getText() + "。");
+                    } else if (last.getAssociated().size() == 1) {
+                        last.getAssociated().get(0).setText(last.getAssociated().get(0).getText() +"。" );
+                    } else {
+                        tags.add(tag);
+                    }
+                } else {
                     tags.add(tag);
                 }
             }
         }
-        return tags;
     }
 
     /**
