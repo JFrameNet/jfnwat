@@ -103,6 +103,9 @@ input[type=text] {
   right: 0!important;
   display: inline-table;
 }
+.dialog-sentences .ui-dialog-content {
+  max-height: 45vh;
+}
 .dialog-mini {
   width: 220px !important;
   position: fixed;
