@@ -4,12 +4,13 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
-    <p:panelGrid columns="1" styleClass="noborder" style="float: left" >
+    <p:panelGrid columns="1" styleClass="noborder" style="float: left; background-color: #{sent.bkgColor}">
         <p:row>
             <ui:repeat var="word" value="#{tag.associated}">
                 <p:column rendered="#{tag.target == null}">
                     <p:commandLink rendered="#{word.isValid()}"
-                                   style="background-color: #{word.bkg};font-weight: bold" value="#{word.text}"
+                                   styleClass="#{word.focus?'focus':'target'}"
+                                   value="#{word.text}"
                                    action="#{sent.switchAnnoSet(word.annotationSet)}"
                                    disabled="#{!tag.parentAnnotationDisplay.fullText}"
                                     update="form2:doc-tabs:sent#{index}"/>
@@ -19,7 +20,7 @@
             <h:outputText value="#{tag.target.text}" rendered="#{tag.target != null}"/>
         </p:row>
         <p:row >
-            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{tag.myBackgroundColor()}">
+            <p:lightBox style="border-top: solid 1px #{tag.color}; text-align: center; background-color: #{sent.bkgColor}; margin-top: 2px; min-height: 16px">
                 <h:outputLink value="#">
                     <h:outputText value="#{tag.value}" style="color: #{tag.color}"/>
                 </h:outputLink>

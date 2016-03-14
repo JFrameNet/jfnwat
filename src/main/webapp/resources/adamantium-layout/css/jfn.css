@@ -22,6 +22,13 @@ input[type=text] {
   font-size: small;
 }
 /*General */
+.ui-tabs .ui-tabs-nav li a {
+  padding-top: 2px !important;
+  padding-bottom: 4px !important;
+}
+.ui-datatable table tbody td {
+  padding: 5px 0px !important;
+}
 .ui-datalist-empty-message {
   font-size: 14px !important;
 }
@@ -49,11 +56,24 @@ input[type=text] {
 .hidden-width-helper {
   display: none;
 }
+.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+  display: none;
+}
 .ui-dialog .ui-dialog-titlebar {
-  padding: 0 !important;
-  padding-left: 5px !important;
-  padding-right: 5px !important;
   background-color: #66bb6a;
+  padding: 0!important;
+  padding-bottom: 3px !important;
+}
+.ui-dialog .ui-dialog-titlebar .ui-icon {
+  height: 12px;
+  width: 12px;
+}
+.ui-dialog .ui-dialog-title {
+  margin: 0!important;
+  width: 100%;
+}
+.ui-dialog .ui-dialog-titlebar .ui-button.ui-button-icon-only .ui-button-text {
+  display: none;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover {
   padding-right: 5px;
@@ -76,11 +96,47 @@ input[type=text] {
   padding-bottom: 0 !important;
 }
 .dialog-sentences {
+  width: 100%;
   position: fixed;
   bottom: 0 !important;
   left: 0!important;
   right: 0!important;
   display: inline-table;
+}
+.dialog-sentences .ui-dialog-content {
+  max-height: 45vh;
+}
+.dialog-mini {
+  width: 250px !important;
+  position: fixed;
+  bottom: 0 !important;
+  left: 0!important;
+  right: 0!important;
+  display: inline-table;
+}
+.dialog-mini .icon-mini {
+  background-position: -32px -128px !important;
+  padding-top: 2px !important;
+  padding-right: 1px!important;
+}
+.dialog-sentences .icon-mini {
+  padding: 0;
+}
+.my-icon-close {
+  padding-top: 3px !important;
+  padding-right: 2px!important;
+}
+.my-icon {
+  background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
+}
+.clear-btn {
+  color: white !important;
+  background-color: #66bb6a;
+  font-size: smaller;
+  padding-left: 4px;
+}
+.clear-btn:hover {
+  text-decoration: none;
 }
 /*Tabs*/
 .tab-layout {
@@ -155,11 +211,8 @@ input[type=text] {
   position: relative;
   bottom: 0;
 }
-.remove-link {
-  color: #2b2b2b;
-  font-weight: bold;
-  margin-right: 10px;
-  font-size: large;
+.remove-link:hover .ui-icon-minusthick {
+  background-position: -96px -128px !important;
 }
 .lex-unit-name {
   margin-right: 10px;
@@ -168,11 +221,17 @@ input[type=text] {
 .word {
   white-space: nowrap;
 }
-.lu-el {
+.target {
   font-weight: bold;
 }
-.normal-el {
-  font-weight: normal;
+.focus {
+  font-weight: bold;
+  border: solid 1px #66BB6A;
+}
+.lu-focus {
+  border: solid 1px #66BB6A;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 /*Document*/
 .paragraph {
@@ -210,7 +269,7 @@ input[type=text] {
 /*LexUnit*/
 .filter-btn {
   border: solid 1px #E0E0E0;
-  color: #546E7A;
+  color: #546e7a;
 }
 .all-btn {
   background-color: #fcf2f2;
@@ -232,9 +291,13 @@ input[type=text] {
 }
 .main-btn {
   width: 20%;
+  margin-bottom: 4px;
+}
+.real-btn {
+  margin-left: 2px;
 }
 .element-btn {
-  width: 90%;
+  width: 100%;
 }
 .element-column {
   border: none!important;
@@ -267,6 +330,7 @@ input[type=text] {
 .total-vp {
   color: #546E7A;
   font-weight: bold;
+  text-decoration: none!important;
 }
 .list-fe-vp {
   text-align: center;
@@ -277,5 +341,22 @@ input[type=text] {
 }
 .underline-tag {
   border-bottom: solid 1px !important;
+}
+.real-button:hover div {
+  background-color: #F5F5F5;
+}
+.vpstyle {
+  float: left;
+  width: 130px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.vpstyleNumber {
+  float: left;
+  width: 30px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 

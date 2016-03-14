@@ -1,0 +1,54 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <p:dialog widgetVar="dlg" id="wind" width="100%"
+              draggable="false"
+              resizable="false"
+              closable="false"
+              styleClass="#{dialogManager.isMini() ?'dialog-mini':''} dialog-sentences"
+              minimizable="false"
+              showHeader="#{dialogManager.selectedSentences.size() > 0}">
+        <p:ajax event="close" update="@(.dialog-sentences)" listener="#{dialogManager.clearAllSentences()}" oncomplete="heightLUList()"/>
+        <f:facet name="header">
+            <h:outputText value="Annotated Sentences" styleClass="clear-btn"/>
+            <p:commandButton id="close" action="#{dialogManager.clearAllSentences()}" icon="ui-icon-closethick my-icon-close" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
+            <p:tooltip for="close" value="Remove all sentences" style="font-size: smaller; color: #4C626D; background-color: white" />
+            <p:commandButton id="min" action="#{dialogManager.toggleMini()}" icon="ui-icon-minusthick icon-mini" style="float: right; background-color: #66BB6A; padding-top: 20px" update="@(.dialog-sentences)" oncomplete="heightLUList()"/>
+        </f:facet>
+        <ui:fragment rendered="#{!dialogManager.mini}">
+            <ui:repeat value="#{dialogManager.getSelectedSentences()}" var="line">
+                <p:fieldset style="background-color: #{dialogManager.getBkgColor(line)}">
+                    <ui:repeat value="#{line.elements}" var="tag">
+                        <p:panelGrid columns="1" styleClass="noborder" style="float: left;background-color: #{dialogManager.getBkgColor(line)}">
+                            <p:row>
+                                <ui:repeat var="word" value="#{tag.associated}">
+                                    <p:column>
+                                        <h:outputText value="#{word.text}" styleClass="#{word.focus ?'lu-focus':''}"/>
+                                    </p:column>
+                                </ui:repeat>
+                            </p:row>
+                            <p:row >
+                                <p:lightBox style="border-top: solid 1px #{dialogManager.getTagColor(tag, line)}; text-align: center; background-color: #{dialogManager.getBkgColor(line)}; margin-top: 2px; min-height: 16px">
+                                    <h:outputLink value="#" disabled="#{(tag.frameElement eq null)}">
+                                        <h:outputText value="#{tag.value}" style="color: #{tag.color}" escape="false"/>
+                                    </h:outputLink>
+                                    <f:facet name="inline">
+                                        <h:outputText value="#{tag.frameElement.definition}" escape="false"/>  
+                                    </f:facet>
+                                </p:lightBox>
+                            </p:row>
+                        </p:panelGrid>
+                    </ui:repeat>
+                    <div style="float: left; padding-top: 10px">
+                        <p:commandLink action="#{tabController.addFrameRedirect(line.annotationSet.lexUnit.frame.name)}"  style="color: #66BB6A" value="#{line.annotationSet.lexUnit.frame.name}" />
+                        <p:commandLink action="#{tabController.addLURedirect(line.annotationSet.lexUnit.id)}" style="color: #66BB6A" value=".#{line.annotationSet.lexUnit.name}" />
+                    </div>
+                    <p:commandButton icon="my-icon ui-icon-minusthick" oncomplete="heightLUList()" styleClass="remove-link" update="@(.dialog-sentences)" action="#{dialogManager.removeSentence(line)}" style="float: left; background-color: #{dialogManager.getBkgColor(line)}"/>
+                </p:fieldset>
+            </ui:repeat>
+        </ui:fragment>
+    </p:dialog>
+</ui:composition>

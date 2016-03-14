@@ -203,7 +203,7 @@ public class AnnotationDisplay {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
                         for (int x = aux; x < i; x ++) {
-                            Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
+                            Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
                             if (!tag.isEmpty()) {
                                 tags.add(tag);
                             }
@@ -211,7 +211,7 @@ public class AnnotationDisplay {
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     confTarget(t,label);
-                    tags.add(new Tag(this,".",t));
+                    tags.add(new Tag(this,"",t));
                     i = label.getEndChar();
                     aux = i + 1;
                 }
@@ -220,7 +220,7 @@ public class AnnotationDisplay {
         }
         if (aux < end) {
             for (int x = aux; x < end; x ++) {
-                Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
+                Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
                 if (!tag.isEmpty()) {
                     tags.add(tag);
                 }
@@ -236,11 +236,11 @@ public class AnnotationDisplay {
     private void confTarget(Target t, Label label) {
         t.setValid(true);
         if (!fullText) {
-            t.setBkg("#66BB6A");
+            t.setFocus(true);
         } else {
             for (Label on : this.focus) {
                 if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                    t.setBkg("#66BB6A");
+                    t.setFocus(true);
                 }
             }
         }

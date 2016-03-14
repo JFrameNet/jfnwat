@@ -11,28 +11,32 @@
             <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightDocList()"/>
             <c:forEach varStatus="loop" items="#{tabController.loadedDocs}" var="doc" >
                 <p:tab title="#{doc.name}" closable="true" titleStyle="font-weight: bold">
-                    <c:forEach items="#{doc.annotatedSentences}" var="sent" varStatus="loop">
-                        <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" styleClass="display-sent">
-                            <c:forEach items="#{sent.allAnnotations}" var="line" varStatus="loop">
-                                <ui:fragment rendered="#{line.displayed}">
-                                    <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
-                                        <ui:include src="WEB-INF/#{tabController.getTagType(tag, true)}.xhtml" >
-                                            <ui:param name="tag" value="#{tag}"/>
-                                            <ui:param name="sent" value="#{sent}"/>
-                                            <ui:param name="index" value="#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}"/>
-                                        </ui:include>
-                                    </c:forEach>
-                                    <c:if test="#{!(line.annotationSet eq null)}">
-                                        <ui:include src="WEB-INF/frameTag.xhtml" >
-                                            <ui:param name="line" value="#{line}"/>
-                                        </ui:include>
-                                    </c:if>
-                                </ui:fragment>
-                            </c:forEach>
-                        </p:fieldset>
-                    </c:forEach>
+                    <div style="width: 80%">
+                        <c:forEach items="#{doc.annotatedSentences}" var="sent" varStatus="loop">
+                            <p:fieldset id="sent#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}" style="background-color: #{sent.bkgColor}">
+                                <c:forEach items="#{sent.allAnnotations}" var="line" varStatus="loop">
+                                    <ui:fragment rendered="#{line.displayed}">
+                                        <c:forEach items="#{line.elements}" var="tag" varStatus="loop">
+                                            <ui:include src="WEB-INF/#{tabController.getTagTypeFullText(tag)}.xhtml" >
+                                                <ui:param name="tag" value="#{tag}"/>
+                                                <ui:param name="sent" value="#{sent}"/>
+                                                <ui:param name="index" value="#{tabController.loadedDocs.indexOf(doc)}_#{doc.annotatedSentences.indexOf(sent)}"/>
+                                            </ui:include>
+                                        </c:forEach>
+                                        <c:if test="#{!(line.annotationSet eq null)}">
+                                            <ui:include src="WEB-INF/frameTag.xhtml" >
+                                                <ui:param name="line" value="#{line}"/>
+                                                <ui:param name="sent" value="#{sent}"/>
+                                            </ui:include>
+                                        </c:if>
+                                    </ui:fragment>
+                                </c:forEach>
+                            </p:fieldset>
+                        </c:forEach>
+                    </div>
                 </p:tab>
             </c:forEach>
         </p:tabView>
+        <ui:include src="WEB-INF/dialog.xhtml"/>
     </ui:define>
 </ui:composition>
