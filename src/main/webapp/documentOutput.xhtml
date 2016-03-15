@@ -30,7 +30,7 @@
                                                                        value="#{word.text}"
                                                                        action="#{sent.switchAnnoSet(word)}"
                                                                        disabled="#{!tag.parentAnnotationDisplay.fullText}"
-                                                                       update="form2:doc:display#{tabController.loadedDocs.indexOf(doc)}_#{sent.rank}"
+                                                                       update="form2:doc-tabs:display#{tabController.loadedDocs.indexOf(doc)}_#{sent.rank}"
                                                         />
                                                         <h:outputText rendered="#{!word.isValid()}" value="#{word.text}"/>
                                                     </p:column>
