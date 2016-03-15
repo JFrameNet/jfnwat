@@ -20,7 +20,6 @@ public class Tag {
     private String value;
     private FrameElement frameElement;
     private List<Target> associated = new ArrayList<Target>();
-    private Target target;
     private String color;
     private AnnotationDisplay parentAnnotationDisplay;
 
@@ -48,11 +47,7 @@ public class Tag {
      * @param parent the AnnotationDisplay object the tag belongs to
      */
     public Tag (AnnotationDisplay parent, String value, Target word) {
-        if (parent.isFullText()) {
-            this.target = word;
-        } else {
-            this.associated.add(word);
-        }
+        this.associated.add(word);
         this.value = value;
         this.parentAnnotationDisplay = parent;
         this.color = myBackgroundColor();
@@ -67,21 +62,14 @@ public class Tag {
     }
 
     public boolean isEmpty() {
-        if (target != null) {
-            return target.getText().equals(" ");
-        } else {
-            for (Target t : associated) {
-                if (!t.getText().equals(" ")) {
-                    return false;
-                }
+        for (Target t : associated) {
+            if((!t.getText().equals(""))&& (!t.getText().equals(" "))) {
+                return false;
             }
         }
         return true;
     }
 
-    public Target getTarget() {
-        return target;
-    }
 
     public List<Target> getAssociated() {
         return associated;

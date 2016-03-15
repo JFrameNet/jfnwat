@@ -20,7 +20,7 @@ public class AnnotationDisplay {
     private List<Label> focus = new ArrayList<Label>();
     private List<Label> allTargets = new ArrayList<Label>();
     private boolean fullText;
-    private boolean displayed;
+//    private boolean displayed;
 
     /**
      * Initialization.
@@ -227,35 +227,19 @@ public class AnnotationDisplay {
 
     private void auxInsertTag(Tag tag, List<Tag> tags) {
         if (!tag.isEmpty()) {
-            Target t;
-            if (tag.getTarget() != null) {
-                t = tag.getTarget();
+            boolean in = true;
+            if (tag.getAssociated().size() == 1) {
+                 Target t = tag.getAssociated().get(0);
                 if ((tags.size() > 0) && (t.getText().equals("。"))) {
                     Tag last = tags.get(tags.size() -1);
-                    if (last.getTarget() != null) {
-                        last.getTarget().setText(last.getTarget().getText() + "。");
-                    } else if (last.getAssociated().size() == 1) {
+                    if (last.getAssociated().size() == 1) {
                         last.getAssociated().get(0).setText(last.getAssociated().get(0).getText() +"。" );
-                    } else {
-                        tags.add(tag);
+                        in = false;
                     }
-                } else {
-                    tags.add(tag);
                 }
-            } else if (tag.getAssociated().size() == 1) {
-                t = tag.getAssociated().get(0);
-                if ((tags.size() > 0) && (t.getText().equals("。"))) {
-                    Tag last = tags.get(tags.size() -1);
-                    if (last.getTarget() != null) {
-                        last.getTarget().setText(last.getTarget().getText() + "。");
-                    } else if (last.getAssociated().size() == 1) {
-                        last.getAssociated().get(0).setText(last.getAssociated().get(0).getText() +"。" );
-                    } else {
-                        tags.add(tag);
-                    }
-                } else {
-                    tags.add(tag);
-                }
+            }
+            if (in) {
+                tags.add(tag);
             }
         }
     }
@@ -302,11 +286,4 @@ public class AnnotationDisplay {
         return fullText;
     }
 
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
-    public void setDisplayed(boolean displayed) {
-        this.displayed = displayed;
-    }
 }

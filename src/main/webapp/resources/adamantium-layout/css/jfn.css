@@ -189,9 +189,6 @@ input[type=text] {
   background-color: transparent!important;
   width: auto;
 }
-.display-sent {
-  background-color: transparent!important;
-}
 .bottom-panel {
   position: relative;
   bottom: 0;

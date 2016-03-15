@@ -68,6 +68,14 @@ public class DocumentController implements Serializable {
         return allDocs;
     }
 
+    public String getTagColor(Tag tag, AnnotatedSentence sentence) {
+        if (tag.getFrameElement() == null) {
+            return sentence.getBkgColor();
+        } else {
+            return tag.getColor();
+        }
+    }
+
     public void setFilter (String f) {
         filter = f;
     }

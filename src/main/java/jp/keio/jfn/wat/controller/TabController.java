@@ -279,22 +279,6 @@ public class TabController {
         return orderedLU;
     }
 
-    /**
-     * Returns the type of the tag for the ui:include elements during view build time for the document output.
-     */
-    public String getTagTypeFullText(Tag tag) {
-        if (tag == null) {
-            return "blankTag";
-        }
-        if (tag.getFrameElement() != null) {
-            return "frameElementTag";
-        } else if (tag.getTarget().isValid()) {
-            return "targetTag";
-        } else {
-            return "blankTag";
-        }
-    }
-
     public List<DocumentOutput> getLoadedDocs() {
         return loadedDocs;
     }

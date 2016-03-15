@@ -47,7 +47,7 @@ public class DocumentOutput {
                     annotationDisplays.add(new AnnotationDisplay(sentence, annotationSet, true, allFE));
                 }
             }
-            annotatedSentences.add(new AnnotatedSentence(annotationDisplays, (sentences.indexOf(sentence) % 2)));
+            annotatedSentences.add(new AnnotatedSentence(annotationDisplays, (sentences.indexOf(sentence) % 2), sentences.indexOf(sentence)));
         }
         this.name = document.getName();
     }

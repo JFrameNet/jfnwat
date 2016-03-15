@@ -51,7 +51,6 @@ public class LUOutput {
         this.hasEl = this.feGroupRealizations.isEmpty()?"none":"inline";
         for (AnnotationSet annotationSet : this.annotations) {
             AnnotationDisplay annotationDisplay = new AnnotationDisplay(annotationSet.getSentence(), annotationSet, false, frameElements);
-            annotationDisplay.setDisplayed(false);
             allSentences.add(annotationDisplay);
         }
     }
