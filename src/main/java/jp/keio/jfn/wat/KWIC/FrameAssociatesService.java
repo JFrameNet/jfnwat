@@ -1,15 +1,10 @@
 package jp.keio.jfn.wat.KWIC;
 
 import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.domain.FrameElement;
-import jp.keio.jfn.wat.domain.LexUnit;
-import org.hibernate.Hibernate;
+import jp.keio.jfn.wat.domain.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,7 +17,7 @@ public class FrameAssociatesService {
         System.out.println(frame.getName()); //TODO why does it get called so often??
         mainFrame = frame;
         root = new DefaultTreeNode("frame", null);
-        addFEs();
+        // addFEs();
         addLUs();
         return root;
     }
@@ -30,19 +25,39 @@ public class FrameAssociatesService {
     private void addFEs() {
         for (FrameElement fe : mainFrame.getFrameElements()) {
             TreeNode feTN = new DefaultTreeNode(fe.getName(), root);
-           // fet.setType(fe.getCore());
         }
     }
 
     private void addLUs() {
         List<LexUnit> lus = mainFrame.getLexUnits();
-        if(lus.isEmpty()){
-            TreeNode LUs = new DefaultTreeNode("- No LU's", root);
-        } else {
-            TreeNode LUs = new DefaultTreeNode("LU's", root);
-            for (LexUnit lu : mainFrame.getLexUnits()) {
-                TreeNode luTN = new DefaultTreeNode(lu.getName(), LUs);
+        if(!lus.isEmpty()){
+            for (LexUnit lu : lus) {
+                TreeNode luTN = new DefaultTreeNode(lu.getName(), root);
+                addLemma(luTN, lu);
+                addSentences(luTN, lu);
             }
         }
+    }
+
+    private void addLemma(TreeNode luTN, LexUnit lu) {
+        List<LexemeEntry> lexemes = lu.getLemma().getLexemeEntries();
+        String pOS = lu.getLemma().getPartOfSpch().getName();
+        TreeNode lemma = new DefaultTreeNode("Lemma("+pOS+")", luTN);
+        for (LexemeEntry lexE: lexemes) {
+            Lexeme lex = lexE.getLexeme();
+            TreeNode lexTN = new DefaultTreeNode("Lexeme: "+lex.getName(), lemma);
+            addForms(lexTN, lex);
+        }
+    }
+
+    private void addForms(TreeNode lexTN, Lexeme lex) {
+        for (WordForm wF: lex.getWordForms()) {
+            new DefaultTreeNode("Form: "+wF.getForm(), lexTN);
+        }
+    }
+
+
+    private void addSentences(TreeNode luTN, LexUnit lu) {
+
     }
 }

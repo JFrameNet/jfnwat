@@ -15,32 +15,37 @@
     <ui:define name="filter">
         <h:form>
             <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
-                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="frameTree"/>
+                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="kwicIndex"/>
             </p:inputText>
         </h:form>
     </ui:define>
 
     <ui:define name="indexList">
         <div>
-            <p:accordionPanel id="frameTree" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
+            <p:accordionPanel id="kwicIndex" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
                               dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-tree">
                 <p:tab title="#{frame}">
+
+
+                    <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe">
+                        <p:column>
+                            <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="icon-btn"/>
+                        </p:column>
+                    </p:dataTable>
+
+
                     <h:form>
                         <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
-                                     styleClass="tree-table-no-header">
+                                     styleClass="tree-table-no-border">
                              <p:column>
                                  <h:outputText value="#{elementName}"/>
                             </p:column>
                         </p:treeTable>
                     </h:form>
-
                 </p:tab>
             </p:accordionPanel>
         </div>
-
-
-
     </ui:define>
-
-
 </ui:composition>
+
+<!-- icon="#{frame_element_icons[fe.getType()]}" -->
