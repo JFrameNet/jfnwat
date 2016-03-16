@@ -59,26 +59,6 @@ input[type=text] {
 .ui-datatable-scrollable .ui-datatable-scrollable-footer {
   display: none;
 }
-.ui-dialog .ui-dialog-titlebar {
-  background-color: #66bb6a;
-  padding: 0!important;
-  padding-bottom: 3px !important;
-}
-.ui-dialog .ui-dialog-titlebar .ui-icon {
-  height: 12px;
-  width: 12px;
-}
-.ui-dialog .ui-dialog-title {
-  margin: 0!important;
-  width: 100%;
-}
-.ui-dialog .ui-dialog-titlebar .ui-button.ui-button-icon-only .ui-button-text {
-  display: none;
-}
-.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover {
-  padding-right: 5px;
-  padding-left: 5px;
-}
 .ui-panelgrid {
   border: none!important;
 }
@@ -102,12 +82,16 @@ input[type=text] {
   left: 0!important;
   right: 0!important;
   display: inline-table;
+  padding: 0!important;
 }
-.dialog-sentences .ui-dialog-content {
-  max-height: 45vh;
+.dialog-sentences .ui-panel-content {
+  padding: 0 !important;
+}
+.dialog-sentences .icon-mini {
+  padding: 0;
 }
 .dialog-mini {
-  width: 250px !important;
+  width: 280px !important;
   position: fixed;
   bottom: 0 !important;
   left: 0!important;
@@ -115,16 +99,16 @@ input[type=text] {
   display: inline-table;
 }
 .dialog-mini .icon-mini {
-  background-position: -32px -128px !important;
+  background-position: -16px -128px !important;
   padding-top: 2px !important;
   padding-right: 1px!important;
-}
-.dialog-sentences .icon-mini {
-  padding: 0;
 }
 .my-icon-close {
   padding-top: 3px !important;
   padding-right: 2px!important;
+}
+.my-icon {
+  background-image: url("/web-report/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
 }
 .my-icon {
   background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
@@ -132,8 +116,9 @@ input[type=text] {
 .clear-btn {
   color: white !important;
   background-color: #66bb6a;
-  font-size: smaller;
+  padding-right: 14px;
   padding-left: 4px;
+  font-weight: normal;
 }
 .clear-btn:hover {
   text-decoration: none;
@@ -203,9 +188,6 @@ input[type=text] {
   padding: 0!important;
   background-color: transparent!important;
   width: auto;
-}
-.display-sent {
-  background-color: transparent!important;
 }
 .bottom-panel {
   position: relative;

@@ -31,8 +31,6 @@ public class LUOutput {
 
     private String def = "";
 
-    private boolean hasSent = false;
-
     private String displayCore = "none";
     private String displayNonCore = "none";
     private String hasCore = "";
@@ -53,7 +51,6 @@ public class LUOutput {
         this.hasEl = this.feGroupRealizations.isEmpty()?"none":"inline";
         for (AnnotationSet annotationSet : this.annotations) {
             AnnotationDisplay annotationDisplay = new AnnotationDisplay(annotationSet.getSentence(), annotationSet, false, frameElements);
-            annotationDisplay.setDisplayed(false);
             allSentences.add(annotationDisplay);
         }
     }
@@ -195,20 +192,6 @@ public class LUOutput {
         }
     }
 
-//
-//    public void hasDisplayedSentences() {
-//        for (AnnotationDisplay s : allSentences) {
-//            if (s.isDisplayed()) {
-//                hasSent = true;
-//                return;
-//            }
-//        }
-//        hasSent = false;
-//    }
-
-    public boolean isHasSent() {
-        return hasSent;
-    }
 
     public List<FEGroupRealization> getFeGroupRealizations() {
         return feGroupRealizations;
