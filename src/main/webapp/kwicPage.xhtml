@@ -23,20 +23,20 @@
     <ui:define name="indexList">
         <div>
             <p:accordionPanel id="kwicIndex" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
-                              dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-tree">
+                              dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-accordion">
                 <p:tab title="#{frame}">
 
 
-                    <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe">
+                    <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe" styleClass="structural-table compact-table">
                         <p:column>
-                            <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="icon-btn"/>
+                            <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="fe-btn"/>
                         </p:column>
                     </p:dataTable>
 
 
                     <h:form>
                         <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
-                                     styleClass="tree-table-no-border">
+                                     styleClass="structural-table">
                              <p:column>
                                  <h:outputText value="#{elementName}"/>
                             </p:column>
