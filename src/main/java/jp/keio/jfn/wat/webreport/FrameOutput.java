@@ -44,11 +44,10 @@ public class FrameOutput {
         for (FrameElement fe : currentFrame.getFrameElements()) {
             if (fe.getType().equals("Core")) {
                 coreFrameEl.add(fe);
-                allFENames.add(fe.getName());
             } else {
                 nonCoreFrameEl.add(fe);
-                allFENames.add(fe.getName());
             }
+            allFENames.add(fe.getName());
         }
     }
 
