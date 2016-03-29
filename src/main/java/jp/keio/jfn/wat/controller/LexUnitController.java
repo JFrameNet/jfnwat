@@ -4,9 +4,8 @@ import java.io.Serializable;
 import java.util.*;
 import javax.faces.bean.ManagedBean;
 
-import jp.keio.jfn.wat.annotation.AnnotationDisplay;
-import jp.keio.jfn.wat.domain.*;
-import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.webreport.repository.*;
 import jp.keio.jfn.wat.webreport.FEGroupRealization;
 import jp.keio.jfn.wat.webreport.LUOutput;
 import jp.keio.jfn.wat.webreport.LayerTriplet;

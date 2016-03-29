@@ -4,9 +4,8 @@ import java.util.*;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.annotation.Tag;
-import jp.keio.jfn.wat.domain.*;
-import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.webreport.repository.*;
 import jp.keio.jfn.wat.webreport.DocumentOutput;
 import jp.keio.jfn.wat.webreport.FrameOutput;
 import jp.keio.jfn.wat.webreport.LUOutput;

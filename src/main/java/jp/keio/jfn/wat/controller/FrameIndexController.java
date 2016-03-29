@@ -1,8 +1,8 @@
 package jp.keio.jfn.wat.controller;
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.repository.FrameRepository;
+import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.webreport.repository.FrameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.RestController;

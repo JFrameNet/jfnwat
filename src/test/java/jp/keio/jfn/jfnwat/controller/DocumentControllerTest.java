@@ -2,10 +2,10 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 import jp.keio.jfn.wat.controller.DocumentController;
-import jp.keio.jfn.wat.domain.Corpus;
-import jp.keio.jfn.wat.domain.Document;
-import jp.keio.jfn.wat.repository.CorpusRepository;
-import jp.keio.jfn.wat.repository.DocumentRepository;
+import jp.keio.jfn.wat.webreport.domain.Corpus;
+import jp.keio.jfn.wat.webreport.domain.Document;
+import jp.keio.jfn.wat.webreport.repository.CorpusRepository;
+import jp.keio.jfn.wat.webreport.repository.DocumentRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +15,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import javax.print.Doc;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 

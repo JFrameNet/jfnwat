@@ -2,15 +2,19 @@ package jp.keio.jfn.wat.controller;
 
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.domain.*;
+import jp.keio.jfn.wat.webreport.domain.*;
 import jp.keio.jfn.wat.webreport.LightLU;
+import jp.keio.jfn.wat.webreport.domain.Corpus;
+import jp.keio.jfn.wat.webreport.domain.Document;
+import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.webreport.domain.LexUnit;
 import org.hibernate.Hibernate;
 import org.springframework.context.annotation.Scope;
 
-import jp.keio.jfn.wat.repository.CorpusRepository;
-import jp.keio.jfn.wat.repository.DocumentRepository;
-import jp.keio.jfn.wat.repository.FrameRepository;
-import jp.keio.jfn.wat.repository.LexUnitRepository;
+import jp.keio.jfn.wat.webreport.repository.CorpusRepository;
+import jp.keio.jfn.wat.webreport.repository.DocumentRepository;
+import jp.keio.jfn.wat.webreport.repository.FrameRepository;
+import jp.keio.jfn.wat.webreport.repository.LexUnitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;

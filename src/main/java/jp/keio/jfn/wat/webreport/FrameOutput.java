@@ -1,8 +1,7 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.domain.*;
-import org.hibernate.Hibernate;
-import org.springframework.transaction.annotation.Transactional;
+import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.webreport.domain.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

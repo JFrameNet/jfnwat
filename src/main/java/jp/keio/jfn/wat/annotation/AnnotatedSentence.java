@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.annotation;
 
-import jp.keio.jfn.wat.domain.AnnotationSet;
+import jp.keio.jfn.wat.webreport.domain.AnnotationSet;
 
 
 import java.util.ArrayList;

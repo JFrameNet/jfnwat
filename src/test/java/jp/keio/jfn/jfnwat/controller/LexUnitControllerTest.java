@@ -2,21 +2,17 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 import jp.keio.jfn.wat.controller.LexUnitController;
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.domain.LexUnit;
-import jp.keio.jfn.wat.repository.FrameRepository;
-import jp.keio.jfn.wat.repository.LexUnitRepository;
+import jp.keio.jfn.wat.webreport.domain.LexUnit;
+import jp.keio.jfn.wat.webreport.repository.FrameRepository;
+import jp.keio.jfn.wat.webreport.repository.LexUnitRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runner.notification.RunListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.sql.Timestamp;
 
 import static org.junit.Assert.*;
 

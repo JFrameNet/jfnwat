@@ -2,13 +2,12 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 
-import jp.keio.jfn.wat.controller.FrameController;
 import jp.keio.jfn.wat.controller.TabController;
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.domain.Lemma;
-import jp.keio.jfn.wat.domain.LexUnit;
-import jp.keio.jfn.wat.domain.PartOfSpch;
-import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.webreport.domain.Lemma;
+import jp.keio.jfn.wat.webreport.domain.LexUnit;
+import jp.keio.jfn.wat.webreport.domain.PartOfSpch;
+import jp.keio.jfn.wat.webreport.repository.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

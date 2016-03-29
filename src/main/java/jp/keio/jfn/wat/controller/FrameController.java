@@ -7,10 +7,13 @@ import java.util.regex.Pattern;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.domain.*;
-import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.webreport.repository.*;
 import jp.keio.jfn.wat.webreport.FrameOutput;
 import jp.keio.jfn.wat.webreport.LightLU;
+import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.webreport.domain.LexUnit;
+import jp.keio.jfn.wat.webreport.repository.*;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

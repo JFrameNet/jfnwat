@@ -3,8 +3,8 @@ package jp.keio.jfn.jfnwat.controller;
 import jp.keio.jfn.wat.JFNWAT;
 
 import jp.keio.jfn.wat.webreport.LayerTriplet;
-import jp.keio.jfn.wat.domain.*;
-import jp.keio.jfn.wat.repository.*;
+import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.webreport.repository.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

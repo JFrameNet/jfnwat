@@ -3,8 +3,8 @@ package jp.keio.jfn.jfnwat.controller;
 import jp.keio.jfn.wat.JFNWAT;
 
 import jp.keio.jfn.wat.controller.FrameIndexController;
-import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.repository.FrameRepository;
+import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.webreport.repository.FrameRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

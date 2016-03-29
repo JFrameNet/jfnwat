@@ -1,10 +1,10 @@
 package jp.keio.jfn.wat.annotation;
 
 import jp.keio.jfn.wat.Utils;
-import jp.keio.jfn.wat.domain.AnnotationSet;
-import jp.keio.jfn.wat.domain.Label;
-import jp.keio.jfn.wat.domain.Layer;
-import jp.keio.jfn.wat.domain.Sentence;
+import jp.keio.jfn.wat.webreport.domain.AnnotationSet;
+import jp.keio.jfn.wat.webreport.domain.Label;
+import jp.keio.jfn.wat.webreport.domain.Layer;
+import jp.keio.jfn.wat.webreport.domain.Sentence;
 
 import java.util.ArrayList;
 import java.util.List;

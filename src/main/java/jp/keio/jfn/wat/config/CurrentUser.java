@@ -1,7 +1,6 @@
 package jp.keio.jfn.wat.config;
 
-import jp.keio.jfn.wat.domain.Principals;
-import org.springframework.context.annotation.Role;
+import jp.keio.jfn.wat.webreport.domain.Principals;
 import org.springframework.security.core.authority.AuthorityUtils;
 
 public class CurrentUser extends org.springframework.security.core.userdetails.User {
