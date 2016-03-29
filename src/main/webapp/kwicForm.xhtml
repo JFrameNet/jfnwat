@@ -1,0 +1,28 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <h:form id="kwicForm" class="concordancer">
+        <p:autoComplete id="searchField" maxResults="5" placeholder="search word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicController.search}"/>
+
+        <div style="display: inline; margin-left: 25px">
+        <p:selectBooleanCheckbox value="#{kwicController.end}" style="display: inline-block; vertical-align: middle"/>
+        <h:outputText value="at end of sentence" style="display: inline-block; vertical-align: middle"/>
+        </div>
+
+        <p:autoComplete id="kwicColocial" maxResults="5" placeholder="colloquial word" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicController.colloquial}"/>
+        <p:commandButton value="Search Kwic!" style="display: block" styleClass="GreenButton" actionListener="#{kwicController.findSentences()}" />
+    </h:form>
+
+<h:outputText id="kwicOutput" value="#{kwicController.sentences}">
+
+</h:outputText>
+
+    <!-- update=":kwicOutput"-->
+
+
+</ui:composition>

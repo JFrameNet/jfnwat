@@ -10,15 +10,15 @@ public class KwicView {
 
     public String getIcon(String type){
         if(type.matches("Core")){
-            return "ui-icon-bullet";
+            return "fa fa-circle";  //"ui-icon-bullet";
         }else if(type.matches("Peripheral")){
-            return "ui-icon-radio-off";
+            return "fa fa-circle-o";//"ui-icon-radio-off";
         }else if(type.matches("Extra-Thematic")){
-            return "ui-icon-arrow-4";
+            return "fa fa-arrows";//"ui-icon-arrow-4";
         }else if(type.matches("Core-Unexpressed")){
-            return "ui-icon-cancel";
+            return "fa fa-adjust";//"ui-icon-cancel";
         }else{
-            return "ui-icon-help";
+            return "fa fa-question";//"ui-icon-help";
         }
     }
 }

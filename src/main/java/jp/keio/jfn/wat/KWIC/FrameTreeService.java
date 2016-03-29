@@ -1,15 +1,12 @@
 package jp.keio.jfn.wat.KWIC;
 
-import javax.faces.bean.ApplicationScoped;
-
-import jp.keio.jfn.wat.domain.*;
+import jp.keio.jfn.wat.webreport.domain.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 
 import java.util.List;
 
-@ApplicationScoped
-public class FrameAssociatesService {
+public class FrameTreeService {
     private Frame mainFrame;
     private TreeNode root;
 
@@ -33,8 +30,8 @@ public class FrameAssociatesService {
         if(!lus.isEmpty()){
             for (LexUnit lu : lus) {
                 TreeNode luTN = new DefaultTreeNode(lu.getName(), root);
-                addLemma(luTN, lu);
-                addSentences(luTN, lu);
+//                addLemma(luTN, lu);
+//                addSentences(luTN, lu);
             }
         }
     }

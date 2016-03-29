@@ -6,46 +6,67 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/WEB-INF/kwicTemplate.xhtml">
 
-    <ui:define name="search">
+    <ui:define name="title navigation">
         <div class="Fleft OvHidden">
-            <h1>KWIC</h1>
+            <h:form>
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="#{text['KwicTabMenuItem']}">
+                        <f:param name="i" value="0" />
+                    </p:menuitem>
+                </p:tabMenu>
+            </h:form>
         </div>
     </ui:define>
 
-    <ui:define name="filter">
-        <h:form>
-            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
-                <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="kwicIndex"/>
-            </p:inputText>
-        </h:form>
+    <ui:define name="topic">
+        #{text['kwicCardTopic']} <br/>
+            <span class="CardSubTopic">
+                <h:outputText value="#{text['kwicCardSubTopic']}" escape="false"/>
+            </span>
     </ui:define>
 
-    <ui:define name="indexList">
-        <div>
-            <p:accordionPanel id="kwicIndex" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
-                              dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-accordion">
-                <p:tab title="#{frame}">
 
+        <ui:define name="filter">
+            <h:form>
+                <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
+                    <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="kwicIndex"/>
+                </p:inputText>
+            </h:form>
+        </ui:define>
 
-                    <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe" styleClass="structural-table compact-table">
-                        <p:column>
-                            <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="fe-btn"/>
-                        </p:column>
-                    </p:dataTable>
-
-
-                    <h:form>
-                        <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
-                                     styleClass="structural-table">
-                             <p:column>
-                                 <h:outputText value="#{elementName}"/>
+        <ui:define name="indexList">
+            <div>
+                <p:accordionPanel id="kwicIndex" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
+                                  dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-accordion">
+                    <p:tab title="#{frame}">
+<!--
+                        <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe" styleClass="structural-table compact-table">
+                            <p:column>
+                                <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="fe-btn"/>
                             </p:column>
-                        </p:treeTable>
-                    </h:form>
-                </p:tab>
-            </p:accordionPanel>
-        </div>
+                        </p:dataTable>
+-->
+
+                        <h:form>
+                            <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
+                                         styleClass="structural-table"  emptyMessage="No Lu's found.">
+                                 <p:column>
+                                     <h:outputText value="#{elementName}"/>
+                                </p:column>
+                            </p:treeTable>
+                        </h:form>
+
+                    </p:tab>
+                </p:accordionPanel>
+            </div>
+        </ui:define>
+
+
+    <ui:define name="indexOutput">
+        <ui:include src="kwicForm.xhtml"/>
     </ui:define>
+
+
 </ui:composition>
 
 <!-- icon="#{frame_element_icons[fe.getType()]}" -->
