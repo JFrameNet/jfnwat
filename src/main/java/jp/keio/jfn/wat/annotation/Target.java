@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.annotation;
 
-import jp.keio.jfn.wat.webreport.domain.AnnotationSet;
+import jp.keio.jfn.wat.domain.AnnotationSet;
 
 /**
  * This class is used to represent annotation, every Tag object is associated with a list of Target objects.

@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EnableJpaRepositories(
         entityManagerFactoryRef = "entityManagerFactory",
-        basePackages = { "jp.keio.jfn.wat.webreport.repository" })
+        basePackages = { "jp.keio.jfn.wat.repository" })
 public class PrimeDataConfig {
     @Primary
     @Bean(name = "dataSource")
@@ -39,7 +39,7 @@ public class PrimeDataConfig {
             @Qualifier("dataSource") DataSource dataSource) {
         return builder
                 .dataSource(dataSource)
-                .packages("jp.keio.jfn.wat.webreport.domain")
+                .packages("jp.keio.jfn.wat.domain")
                 .persistenceUnit("webreport")
                 .build();
     }

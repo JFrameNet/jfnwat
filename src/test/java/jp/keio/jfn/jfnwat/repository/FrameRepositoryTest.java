@@ -1,8 +1,8 @@
 package jp.keio.jfn.jfnwat.repository;
 
 import jp.keio.jfn.wat.JFNWAT;
-import jp.keio.jfn.wat.webreport.domain.Frame;
-import jp.keio.jfn.wat.webreport.repository.FrameRepository;
+import jp.keio.jfn.wat.domain.Frame;
+import jp.keio.jfn.wat.repository.FrameRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

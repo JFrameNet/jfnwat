@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.KWIC;
 
-import jp.keio.jfn.wat.webreport.domain.FrameElement;
+import jp.keio.jfn.wat.domain.FrameElement;
 
 import java.util.Comparator;
 

@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
-import jp.keio.jfn.wat.webreport.domain.Frame;
+import jp.keio.jfn.wat.domain.Frame;
 import org.primefaces.model.TreeNode;
 
 @ViewScoped

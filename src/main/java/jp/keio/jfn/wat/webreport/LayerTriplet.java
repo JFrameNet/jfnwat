@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.webreport.domain.Label;
+import jp.keio.jfn.wat.domain.Label;
 
 /**
  * This class represents the grammatical information associated to a frame element label.

@@ -1,8 +1,8 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.webreport.domain.AnnotationSet;
-import jp.keio.jfn.wat.webreport.domain.FrameElement;
-import jp.keio.jfn.wat.webreport.domain.Label;
+import jp.keio.jfn.wat.domain.AnnotationSet;
+import jp.keio.jfn.wat.domain.FrameElement;
+import jp.keio.jfn.wat.domain.Label;
 
 import java.util.ArrayList;
 import java.util.List;

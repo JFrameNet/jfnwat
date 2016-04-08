@@ -2,7 +2,7 @@ package jp.keio.jfn.wat.webreport;
 
 import jp.keio.jfn.wat.annotation.AnnotatedSentence;
 import jp.keio.jfn.wat.annotation.AnnotationDisplay;
-import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;

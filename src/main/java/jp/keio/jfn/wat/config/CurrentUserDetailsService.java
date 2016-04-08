@@ -1,10 +1,10 @@
 package jp.keio.jfn.wat.config;
 
 
-import jp.keio.jfn.wat.webreport.domain.Principals;
-import jp.keio.jfn.wat.webreport.domain.Roles;
-import jp.keio.jfn.wat.webreport.repository.PrincipalsRepository;
-import jp.keio.jfn.wat.webreport.repository.RolesRepository;
+import jp.keio.jfn.wat.domain.Principals;
+import jp.keio.jfn.wat.domain.Roles;
+import jp.keio.jfn.wat.repository.PrincipalsRepository;
+import jp.keio.jfn.wat.repository.RolesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

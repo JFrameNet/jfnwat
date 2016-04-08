@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.KWIC;
 
-import jp.keio.jfn.wat.webreport.domain.*;
+import jp.keio.jfn.wat.domain.*;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 

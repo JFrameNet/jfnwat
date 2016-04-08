@@ -1,6 +1,6 @@
 package jp.keio.jfn.wat.webreport;
 
-import jp.keio.jfn.wat.webreport.domain.Status;
+import jp.keio.jfn.wat.domain.Status;
 
 import java.util.ArrayList;
 import java.util.List;
