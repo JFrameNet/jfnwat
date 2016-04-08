@@ -101,11 +101,13 @@ public class KwicController implements Serializable {
 
     @Transactional(transactionManager = "kwicTransactionManager")
     public void findSentences() {
-        sentences = null;
         System.out.println("get sentences");
+
+        long startTime = System.currentTimeMillis();
 
         KwicWord word = wordRepository.findByWord(search);
         Set<Kwics> set = word.getKwics();
+        if(set.size() == 0) sentences = "No matching sentences found for "+ search;
 
         if(!colloquial.isEmpty()) {
             KwicWord coWord = wordRepository.findByWord(colloquial);
@@ -118,6 +120,10 @@ public class KwicController implements Serializable {
         }else if(end) {
             set = keepEndOnly(set);
         }
+
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println(elapsedTime);
 
         sentences = "finish this sentence, found: "+ set.size();
         System.out.println(sentences);

@@ -9,4 +9,10 @@ import java.util.List;
  */
 public interface KwicSentenceRepositoryCustom {
     List<KwicSentence> findWithWord(int wordID);
+
+    List<KwicSentence> findEndsWithWord(int wordId);
+
+    List<KwicSentence> findEndsWithWordAndWithWord(int wordID, int wordID2);
+
+    List<KwicSentence> findWithWordAndWord(int wordId, int wordId2);
 }

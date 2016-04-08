@@ -11,7 +11,6 @@ public class FrameTreeService {
     private TreeNode root;
 
     public TreeNode createTree(Frame frame){
-        System.out.println(frame.getName()); //TODO why does it get called so often??
         mainFrame = frame;
         root = new DefaultTreeNode("frame", null);
         // addFEs();

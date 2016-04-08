@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "Kwics")
 public class Kwics implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -22,22 +23,27 @@ public class Kwics implements Serializable {
 
     @ManyToOne
     @JoinColumn(name="word_id")
-    private Kwicword word;
+    private KwicWord word;
 
     @ManyToOne
     @JoinColumn(name="sentence_id")
     private KwicSentence kwicSentence;
 
+
+
+//    @Column(name = "sentence_id", insertable = false, updatable = false)
+//    private int sentenceID;
+
+
     private int place;
 
     @CreatedDate
-    @Column(name="created_at")
+    @Column(name="created_at", insertable = true, updatable = false)
     private Timestamp createdDate;
 
     @LastModifiedDate
-    @Column(name="updated_at")
+    @Column(name="updated_at", insertable = false, updatable = true)
     private Timestamp modifiedDate;
-
 
     protected Kwics() {
     }
@@ -47,13 +53,18 @@ public class Kwics implements Serializable {
 
     public void setId(int id) {this.id = id;}
 
-    public Kwicword getWord() {return this.word;}
+    public KwicWord getWord() {return this.word;}
 
-    public void setWord(Kwicword word) {this.word = word;}
+    public void setWord(KwicWord word) {this.word = word;}
 
     public KwicSentence getKwicSentence() {return this.kwicSentence;}
 
     public void setKwicSentence(KwicSentence kwicSentence) {this.kwicSentence = kwicSentence;}
+
+    public int getSentenceID() {
+  //      return sentenceID;
+        return kwicSentence.getId();
+    }
 
     public int getPlace() {return this.place;}
 

@@ -28,15 +28,15 @@
 
         <ui:define name="filter">
             <h:form>
-                <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicFrameIndexController.filter}">
-                    <p:ajax event="keyup" listener="#{kwicFrameIndexController.orderFrames()}" update="kwicIndex"/>
+                <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicIndexController.filter}">
+                    <p:ajax event="keyup" listener="#{kwicIndexController.orderFrames()}" update="kwicIndex"/>
                 </p:inputText>
             </h:form>
         </ui:define>
 
         <ui:define name="indexList">
             <div>
-                <p:accordionPanel id="kwicIndex" value="#{kwicFrameIndexController.orderedFrames}" var="frame"
+                <p:accordionPanel id="kwicIndex" value="#{kwicIndexController.orderedFrames}" var="frame"
                                   dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-accordion">
                     <p:tab title="#{frame}">
 <!--
@@ -48,8 +48,8 @@
 -->
 
                         <h:form>
-                            <p:treeTable value="#{kwicFrameIndexController.getFrameTree(frame)}" var="elementName"
-                                         styleClass="structural-table"  emptyMessage="No Lu's found.">
+                            <p:treeTable value="#{kwicIndexController.getFrameTree(frame)}" var="elementName"
+                                         styleClass="structural-table" emptyMessage="No Lu's found.">
                                  <p:column>
                                      <h:outputText value="#{elementName}"/>
                                 </p:column>
@@ -63,7 +63,8 @@
 
 
     <ui:define name="indexOutput">
-        <ui:include src="kwicForm.xhtml"/>
+        <ui:include src="/WEB-INF/kwicForm.xhtml"/>
+        <ui:include src="/WEB-INF/kwicSentences.xhtml"/>
     </ui:define>
 
 

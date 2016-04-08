@@ -16,4 +16,11 @@ public interface KwicSentenceRepository extends CrudRepository<KwicSentence, Lon
 
 
     List<KwicSentence> findWithWord(int wordID);
+
+    List<KwicSentence> findEndsWithWord(int wordID);
+
+    List<KwicSentence> findEndsWithWordAndWithWord(int wordID, int wordID2);
+
+    List<KwicSentence> findWithWordAndWord(int wordID, int wordID2);
 }
+

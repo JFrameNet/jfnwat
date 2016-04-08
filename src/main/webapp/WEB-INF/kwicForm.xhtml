@@ -15,14 +15,7 @@
         </div>
 
         <p:autoComplete id="kwicColocial" maxResults="5" placeholder="colloquial word" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicController.colloquial}"/>
-        <p:commandButton value="Search Kwic!" style="display: block" styleClass="GreenButton" actionListener="#{kwicController.findSentences()}" />
+        <p:commandButton value="Search Kwic!" style="display: block" styleClass="GreenButton" actionListener="#{kwicController.findSentences()}" update=":#{p:component('kwicOutput')}" />
     </h:form>
-
-<h:outputText id="kwicOutput" value="#{kwicController.sentences}">
-
-</h:outputText>
-
-    <!-- update=":kwicOutput"-->
-
 
 </ui:composition>

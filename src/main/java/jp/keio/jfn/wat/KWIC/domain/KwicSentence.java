@@ -6,6 +6,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jfn on 3/22/16.
@@ -20,6 +22,7 @@ public class KwicSentence implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name="content")
     private String sentence;
 
     private String fileName;
@@ -36,10 +39,14 @@ public class KwicSentence implements Serializable {
 
     private int sentencePlace;
 
+    @OneToMany(mappedBy = "kwicSentence", cascade = CascadeType.ALL)
+    private Set<Kwics> kwics =  new HashSet<Kwics>();
+
 
     protected KwicSentence(){
     }
 
+    public  int getId(){return id;}
 
     public String getSentence() {return this.sentence;}
 
@@ -64,4 +71,12 @@ public class KwicSentence implements Serializable {
     public int getSentencePlace() {return this.sentencePlace;}
 
     public void setSentencePlace(int sentencePlace) {this.sentencePlace = sentencePlace;}
+
+
+
+    public Set<Kwics> getKwics() {
+        return kwics;
+    }
+
+
 }

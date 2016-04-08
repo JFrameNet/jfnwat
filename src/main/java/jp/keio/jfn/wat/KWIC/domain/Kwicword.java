@@ -6,6 +6,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by jfn on 3/22/16.
@@ -13,7 +15,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Kwicword")
-public class Kwicword implements Serializable {
+public class KwicWord implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -33,8 +35,13 @@ public class Kwicword implements Serializable {
     private Timestamp modifiedDate;
 
 
-    protected Kwicword(){
+    @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
+    private Set<Kwics> kwics =  new HashSet<Kwics>();
+
+
+    protected KwicWord(){
     }
+
 
     public int getId() {return this.id;}
 
@@ -55,5 +62,11 @@ public class Kwicword implements Serializable {
     public Timestamp getModifiedDate() {return this.modifiedDate;}
 
     public void setModifiedDate(Timestamp modifiedDate) {this.modifiedDate = modifiedDate;}
+
+
+
+    public Set<Kwics> getKwics() {
+        return kwics;
+    }
 
 }

@@ -2,7 +2,9 @@ package jp.keio.jfn.wat.KWIC.repository;
 
 import javax.persistence.PersistenceContext;
 import javax.persistence.EntityManager;
-import jp.keio.jfn.wat.KWIC.domain.Kwicword;
+
+import jp.keio.jfn.wat.KWIC.domain.KwicWord;
+
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public class WordRepositoryImpl implements WordRepositoryCustom {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Kwicword> findKwicwordLike(String wordElement) {
+    public List<KwicWord> findKwicwordLike(String wordElement) {
         return this.entityManager.
         createQuery("select w from Kwicword w where w.word like '"+wordElement+"%' ").
         getResultList();
