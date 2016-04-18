@@ -6,7 +6,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -36,7 +38,7 @@ public class KwicWord implements Serializable {
 
 
     @OneToMany(mappedBy = "word", cascade = CascadeType.ALL)
-    private Set<Kwics> kwics =  new HashSet<Kwics>();
+    private List<Kwics> kwics =  new ArrayList<Kwics>();
 
 
     protected KwicWord(){
@@ -65,7 +67,7 @@ public class KwicWord implements Serializable {
 
 
 
-    public Set<Kwics> getKwics() {
+    public List<Kwics> getKwics() {
         return kwics;
     }
 

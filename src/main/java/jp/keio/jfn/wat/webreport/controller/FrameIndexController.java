@@ -33,7 +33,7 @@ public class FrameIndexController implements Serializable {
      * Updates this.orderedFrames with all the frames whose name matches the search string.
      * Sorts the frames by name.
      */
-    public void orderFrames() { //TODO use SQL
+    public void orderFrames() { //TODO replace find all by appropriate jpa
         List <String> sortedNames = new ArrayList<String>();
         for (Frame frame : frameRepository.findAll()) {
             if (Utils.matchSearch(filter, frame.getName())) {

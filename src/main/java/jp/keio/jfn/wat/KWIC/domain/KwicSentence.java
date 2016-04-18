@@ -25,8 +25,10 @@ public class KwicSentence implements Serializable {
     @Column(name="content")
     private String sentence;
 
+    @Column
     private String fileName;
 
+    @Column
     private String corpusName;
 
     @CreatedDate
@@ -37,10 +39,19 @@ public class KwicSentence implements Serializable {
     @Column(name="updated_at")
     private Timestamp modifiedDate;
 
+    @Column
     private int sentencePlace;
 
     @OneToMany(mappedBy = "kwicSentence", cascade = CascadeType.ALL)
     private Set<Kwics> kwics =  new HashSet<Kwics>();
+
+
+    @Transient
+    public String beforeSearch ="";
+    @Transient
+    public String search ="";
+    @Transient
+    public String AfterSearch ="";
 
 
     protected KwicSentence(){
@@ -50,15 +61,9 @@ public class KwicSentence implements Serializable {
 
     public String getSentence() {return this.sentence;}
 
-    public void setSentence(String sentence) {this.sentence = sentence;}
-
-    public String getFileNname() {return this.fileName;}
-
-    public void setFileNname(String fileNname) {this.fileName = fileNname;}
+    public String getFileName() {return this.fileName;}
 
     public String getCorpusName() {return this.corpusName;}
-
-    public void setCorpusName(String corpusName) {this.corpusName = corpusName;}
 
     public Timestamp getCreatedDate() {return this.createdDate;}
 
@@ -70,9 +75,18 @@ public class KwicSentence implements Serializable {
 
     public int getSentencePlace() {return this.sentencePlace;}
 
-    public void setSentencePlace(int sentencePlace) {this.sentencePlace = sentencePlace;}
 
+    public String getBeforeSearch() {
+        return beforeSearch;
+    }
 
+    public String getSearch() {
+        return search;
+    }
+
+    public String getAfterSearch() {
+        return AfterSearch;
+    }
 
     public Set<Kwics> getKwics() {
         return kwics;

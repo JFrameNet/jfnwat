@@ -1,0 +1,35 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+>
+
+    <div class="kwicOutput">
+
+        <p:dataTable id="output" emptyMessage=""
+
+                     var="sentence" value="#{kwicController.view.lazyModel}"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                     paginator="true" rows="50" style="margin-bottom:20px" paginatorAlwaysVisible="false"
+                     currentPageReportTemplate="{startRecord} - {endRecord} out of {totalRecords}"
+                     lazy="true"
+
+        >
+            <p:column style="width: 85px">
+                <h:outputText value="#{sentence.fileName}"></h:outputText>
+            </p:column>
+            <p:column style="width: 42%; text-align: right">
+                <h:outputText value="#{sentence.beforeSearch}"></h:outputText>
+            </p:column>
+            <p:column style="width: auto; text-align: center; font-weight: bold;">
+                <h:outputText value="#{sentence.search}"></h:outputText>
+            </p:column>
+            <p:column style="width: 42%">
+                <h:outputText value="#{sentence.afterSearch}"></h:outputText>
+            </p:column>
+        </p:dataTable>
+    </div>
+
+</ui:composition>

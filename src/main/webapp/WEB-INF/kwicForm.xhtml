@@ -6,16 +6,17 @@
                 xmlns:p="http://primefaces.org/ui"
                 >
 
-    <h:form id="kwicForm" class="concordancer">
-        <p:autoComplete id="searchField" maxResults="5" placeholder="search word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicController.search}"/>
+     <h:form id="kwicForm" class="concordancer">
+            <p:autoComplete id="searchField" maxResults="5" placeholder="search word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.search}"/>
 
-        <div style="display: inline; margin-left: 25px">
-        <p:selectBooleanCheckbox value="#{kwicController.end}" style="display: inline-block; vertical-align: middle"/>
-        <h:outputText value="at end of sentence" style="display: inline-block; vertical-align: middle"/>
-        </div>
+            <div> <!--style="display: inline; margin-left: 25px"-->
+                <h:outputText value="at end of sentence" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+                <p:selectBooleanCheckbox value="#{kwicController.end}" style="display: inline-block; margin: 10px 5px; vertical-align: middle"/>
 
-        <p:autoComplete id="kwicColocial" maxResults="5" placeholder="colloquial word" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="autocomplete-jfn searchBar" onfocus="this.select()" value="#{kwicController.colloquial}"/>
-        <p:commandButton value="Search Kwic!" style="display: block" styleClass="GreenButton" actionListener="#{kwicController.findSentences()}" update=":#{p:component('kwicOutput')}" />
-    </h:form>
+            </div>
+
+            <p:autoComplete id="kwicColocial" maxResults="5" placeholder="colloquial word" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.colloquial}"/>
+            <p:commandButton value="Search Kwic!" styleClass="GreenButton KwicButton" actionListener="#{kwicController.findMatchingSentences()}" update=":#{p:component('output')}" />
+        </h:form>
 
 </ui:composition>

@@ -29,23 +29,32 @@
             </div>
         </div>
         <div class="Container100">
-            <div class="Card NoPadding">
-                <div class="Wid20 Fleft OvHidden BorderRight">
+            <div class="Card NoPadding FlexContainer">
+
+                <div class="Flex15 hei100 OvHidden BorderRight">
+                    <div class="Container100">
+                        <ui:insert name="kwicSearch"/>
+                    </div>
+                </div>
+
+                <div class="Flex70 OvHidden">
+                    <div class="Container100">
+                        <ui:insert name="kwicOutput"/>
+                    </div>
+                </div>
+
+                <div class="Flex15 OvHidden BorderLeft">
                     <div class="Container100">
                         <ui:insert name="filter"/>
                     </div>
-                    <div class="Container100 BorderBottom">
-                        <div class="ContainerIndent">
+                    <div class="Container100 OvXScroll BorderBottom">
+                        <div class="ContainerIndent" style="padding: 10px 5px 10px 0px">
                             <ui:insert name="indexList"/>
                         </div>
                     </div>
                 </div>
-                <div class="Wid70 OvHidden">
-                    <div class="ContainerIndent">
-                        <ui:insert name="indexOutput"/>
-                    </div>
-                </div>
             </div>
+
         </div>
     </ui:define>
 </ui:composition>
