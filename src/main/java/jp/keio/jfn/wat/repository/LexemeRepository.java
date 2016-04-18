@@ -8,4 +8,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface LexemeRepository extends CrudRepository<Lexeme, Long> {
     Lexeme findById(int id);
+    Lexeme findByName(String name);
 }
