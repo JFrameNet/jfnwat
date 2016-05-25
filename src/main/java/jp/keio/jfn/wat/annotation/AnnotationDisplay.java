@@ -20,7 +20,7 @@ public class AnnotationDisplay {
     private List<Label> focus = new ArrayList<Label>();
     private List<Label> allTargets = new ArrayList<Label>();
     private boolean fullText;
-    private boolean displayed;
+//    private boolean displayed;
 
     /**
      * Initialization.
@@ -203,15 +203,13 @@ public class AnnotationDisplay {
                 if (label.getStartChar() == i) {
                     if (i > aux) {
                         for (int x = aux; x < i; x ++) {
-                            Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
-                            if (!tag.isEmpty()) {
-                                tags.add(tag);
-                            }
+                            Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
+                            auxInsertTag(tag, tags);
                         }
                     }
                     Target t = new Target(text.substring(i,label.getEndChar() + 1));
                     confTarget(t,label);
-                    tags.add(new Tag(this,".",t));
+                    tags.add(new Tag(this,"",t));
                     i = label.getEndChar();
                     aux = i + 1;
                 }
@@ -220,13 +218,30 @@ public class AnnotationDisplay {
         }
         if (aux < end) {
             for (int x = aux; x < end; x ++) {
-                Tag tag = new Tag(this,".", new Target(sentence.getText().substring(x, x+1)));
-                if (!tag.isEmpty()) {
-                    tags.add(tag);
-                }
+                Tag tag = new Tag(this,"", new Target(sentence.getText().substring(x, x+1)));
+                auxInsertTag(tag, tags);
             }
         }
         return tags;
+    }
+
+    private void auxInsertTag(Tag tag, List<Tag> tags) {
+        if (!tag.isEmpty()) {
+            boolean in = true;
+            if (tag.getAssociated().size() == 1) {
+                 Target t = tag.getAssociated().get(0);
+                if ((tags.size() > 0) && (t.getText().equals("。"))) {
+                    Tag last = tags.get(tags.size() -1);
+                    if (last.getAssociated().size() == 1) {
+                        last.getAssociated().get(0).setText(last.getAssociated().get(0).getText() +"。" );
+                        in = false;
+                    }
+                }
+            }
+            if (in) {
+                tags.add(tag);
+            }
+        }
     }
 
     /**
@@ -236,11 +251,11 @@ public class AnnotationDisplay {
     private void confTarget(Target t, Label label) {
         t.setValid(true);
         if (!fullText) {
-            t.setBkg("#66BB6A");
+            t.setFocus(true);
         } else {
             for (Label on : this.focus) {
                 if (label.getStartChar() == on.getStartChar() && on.getEndChar() == label.getEndChar()) {
-                    t.setBkg("#66BB6A");
+                    t.setFocus(true);
                 }
             }
         }
@@ -271,11 +286,4 @@ public class AnnotationDisplay {
         return fullText;
     }
 
-    public boolean isDisplayed() {
-        return displayed;
-    }
-
-    public void setDisplayed(boolean displayed) {
-        this.displayed = displayed;
-    }
 }

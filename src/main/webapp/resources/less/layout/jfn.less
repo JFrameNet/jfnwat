@@ -28,6 +28,10 @@ input[type=text]{
 }
 
 /*General */
+
+.ui-tabs .ui-tabs-nav li a{padding-top: 2px !important; padding-bottom: 4px !important;}
+
+.ui-datatable table tbody td {padding: 5px 0px !important;  }
 .ui-datalist-empty-message {font-size: 14px !important;}
 
 .ui-lightbox-content {background-color: #FFFFFF !important;}
@@ -44,9 +48,7 @@ input[type=text]{
 
 .hidden-width-helper{display: none;}
 
-.ui-dialog .ui-dialog-titlebar{padding:0 !important; padding-left: 5px !important; padding-right: 5px !important; background-color: #66bb6a;}
-
-.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon:hover{padding-right: 5px; padding-left: 5px;}
+.ui-datatable-scrollable .ui-datatable-scrollable-footer{display: none;}
 
 .ui-panelgrid{border: none!important;}
 .ui-panelgrid tbody tr td{border: none !important;}
@@ -55,13 +57,24 @@ input[type=text]{
 
 .ui-fieldset{padding-top: 10px!important; padding-right: 0 !important;; padding-left: 0 !important; padding-bottom: 0 !important;}
 
-.dialog-sentences{position: fixed; bottom: 0 !important; left: 0!important; right: 0!important; display: inline-table}
+.dialog-sentences{width:100%;position: fixed; bottom: 0 !important; left: 0!important; right: 0!important; display: inline-table; padding: 0!important;}
+.dialog-sentences .ui-panel-content{padding: 0!important}
+.dialog-sentences .icon-mini{padding: 0}
+
+.dialog-mini{width:280px !important; position: fixed; bottom: 0 !important; left: 0!important; right: 0!important; display: inline-table}
+.dialog-mini .icon-mini{background-position: -16px -128px!important;  padding-top:2px !important; padding-right: 1px!important;}
+
+.my-icon-close{padding-top:3px !important; padding-right: 2px!important;}
+.my-icon {background-image: url("/web-report/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;}
+.my-icon {background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;}
+.clear-btn{color: white !important; background-color:  #66bb6a;padding-right: 14px; padding-left: 4px; font-weight: normal}
+.clear-btn:hover{text-decoration: none;}
 
 /*Tabs*/
 .tab-layout {border: none !important;}
 
 /*Home page*/
-.btn-home{margin: 1px}
+.btn-home{margin: 1px;}
 .btn-search{}
 
 /*Search */
@@ -83,13 +96,15 @@ input[type=text]{
 .annotation {background-color: #F5F5F5 !important;}
 .annotation-table {width: auto; text-align: center; border: none}
 .column-annotation{text-align: center; border: none!important; padding: 0!important; background-color: transparent!important; width: auto}
-.display-sent {background-color: transparent!important;}
+.display-sent {}
 .bottom-panel{position: relative; bottom: 0}
-.remove-link{color: #2b2b2b; font-weight: bold; margin-right: 10px; font-size: large}
+.remove-link:hover .ui-icon-minusthick{background-position: -96px -128px !important;}
 .lex-unit-name {margin-right: 10px; font-size: smaller}
 .word{ white-space: nowrap}
-.lu-el{font-weight: bold;}
-.normal-el{font-weight: normal}
+.target{font-weight: bold;}
+
+.focus{font-weight: bold; border: solid 1px #66BB6A; }
+.lu-focus{border: solid 1px #66BB6A; padding-left: 1px; padding-right: 1px}
 
 /*Document*/
 .paragraph{width: auto!important; text-align: center!important; border: none!important;}
@@ -103,15 +118,16 @@ input[type=text]{
 .list-lu{padding-left: 5px; padding-right: 10px}
 
 /*LexUnit*/
-.filter-btn {border: solid 1px #E0E0E0; color: #546E7A;}
+.filter-btn {border: solid 1px #E0E0E0; color: #546E7A}
 .all-btn{background-color: #FCF2F2}
 .all-btn:hover{background-color: #F5D8C6}
 .core-btn{background-color: #EDF2F5;}
 .core-btn:hover{background-color:#C6E3F5 }
 .non-core-btn{background-color: #EEF5ED;}
 .non-core-btn:hover{background-color:#CBF5C6}
-.main-btn{width: 20%;}
-.element-btn{width: 90%;}
+.main-btn{width: 20%;margin-bottom:4px;}
+.real-btn{margin-left: 2px; }
+.element-btn{width:100%;}
 .element-column{border:none!important; background-color: transparent!important; width: 25%}
 .real-column{border: none!important; background-color: transparent!important;}
 .selected-filter{margin: 2px}
@@ -119,6 +135,9 @@ input[type=text]{
 .valence-pattern-column{background-color: transparent!important; border: none!important;}
 .valence-pattern{border-top: solid 1px #D9E3E8}
 .total-vp-column{text-align: center; border: none!important; background-color: transparent!important; width: 30px}
-.total-vp{color: #546E7A; font-weight: bold;}
+.total-vp{color: #546E7A; font-weight: bold; text-decoration: none!important;}
 .list-fe-vp{text-align: center; background-color: transparent !important; border: none!important; width: 120px; padding: 0}
 .underline-tag{border-bottom: solid 1px !important;}
+.real-button:hover div{background-color: #F5F5F5;}
+.vpstyle{float:left; width: 130px; text-align: center;  padding-top: 5px; padding-bottom: 5px;}
+.vpstyleNumber{float:left; width: 30px; text-align: center;  padding-top: 5px; padding-bottom: 5px;}

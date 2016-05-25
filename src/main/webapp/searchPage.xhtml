@@ -8,6 +8,7 @@
     <f:metadata>
         <f:viewParam name="search" value="#{searchViewController.search}" />
     </f:metadata>
+
     <ui:define name="search">
         <div class="Fleft OvHidden">
             <p:link outcome="index">
@@ -21,6 +22,7 @@
             </h:form>
         </div>
     </ui:define>
+
     <ui:define name="frame">
         <p:dataList value="#{searchViewController.findFrameKeyword()}" var="frame" type="definition" emptyMessage="#{text['emptyMessage']}">
             <h:form>
@@ -57,6 +59,10 @@
             </p:tab>
         </p:accordionPanel>
 
+    </ui:define>
+
+    <ui:define name="dialog">
+        <ui:include src="WEB-INF/dialog.xhtml"/>
     </ui:define>
 
 </ui:composition>
