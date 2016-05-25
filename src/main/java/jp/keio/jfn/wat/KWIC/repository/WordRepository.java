@@ -1,6 +1,8 @@
 package jp.keio.jfn.wat.KWIC.repository;
 
 import jp.keio.jfn.wat.KWIC.domain.KwicWord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

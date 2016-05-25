@@ -1,12 +1,19 @@
 package jp.keio.jfn.wat.KWIC.domain;
 
+import org.hibernate.annotations.IndexColumn;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.JoinColumnsOrFormulas;
+import org.hibernate.annotations.JoinFormula;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,15 +52,6 @@ public class KwicSentence implements Serializable {
     @OneToMany(mappedBy = "kwicSentence", cascade = CascadeType.ALL)
     private Set<Kwics> kwics =  new HashSet<Kwics>();
 
-
-    @Transient
-    public String beforeSearch ="";
-    @Transient
-    public String search ="";
-    @Transient
-    public String AfterSearch ="";
-
-
     protected KwicSentence(){
     }
 
@@ -74,19 +72,6 @@ public class KwicSentence implements Serializable {
     public void setModifiedDate(Timestamp modifiedDate) {this.modifiedDate = modifiedDate;}
 
     public int getSentencePlace() {return this.sentencePlace;}
-
-
-    public String getBeforeSearch() {
-        return beforeSearch;
-    }
-
-    public String getSearch() {
-        return search;
-    }
-
-    public String getAfterSearch() {
-        return AfterSearch;
-    }
 
     public Set<Kwics> getKwics() {
         return kwics;

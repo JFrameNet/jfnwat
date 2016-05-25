@@ -4,6 +4,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.EntityManager;
 
 import jp.keio.jfn.wat.KWIC.domain.KwicWord;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class WordRepositoryImpl implements WordRepositoryCustom {
     @Override
     public List<KwicWord> findKwicwordLike(String wordElement) {
         return this.entityManager.
-        createQuery("select w from Kwicword w where w.word like '"+wordElement+"%' ").
-        getResultList();
+                createQuery("select w from Kwicword w where w.word like '" + wordElement + "%' ").
+                getResultList();
     }
 }

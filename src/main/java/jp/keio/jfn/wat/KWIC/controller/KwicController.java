@@ -2,13 +2,12 @@ package jp.keio.jfn.wat.KWIC.controller;
 
 import javax.faces.bean.ManagedBean;
 
-import jp.keio.jfn.wat.KWIC.NoResultsExeption;
+import jp.keio.jfn.wat.KWIC.*;
+import org.primefaces.model.LazyDataModel;
 import org.springframework.context.annotation.Scope;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
-import jp.keio.jfn.wat.KWIC.KwicDataView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import jp.keio.jfn.wat.domain.LexUnit;
 import jp.keio.jfn.wat.repository.LexUnitRepository;
@@ -22,7 +21,7 @@ import java.util.List;
  */
 
 @ManagedBean
-@RestController
+@Controller
 @Scope("view")
 public class KwicController implements Serializable {
 
@@ -30,11 +29,16 @@ public class KwicController implements Serializable {
     LexUnitRepository lexUnitRepository;
 
     @Autowired
-    KwicDataView kwicDataView;
+    KwicTransactions kwicTransactions;
+
+    private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
+
 
     private String search;
-    private String colloquial;
+    private String collocate;
     private Boolean end;
+    private int preScope;
+    private int postScope;
 
 
     public String toKwic() { return "kwicPage?faces-redirect=true";}
@@ -54,18 +58,20 @@ public class KwicController implements Serializable {
         return results;
     }
 
+
+
     public void setSearch(String search) {
         this.search = search;
     }
 
     public String getSearch() {return search;}
 
-    public void setColloquial(String colloquial) {
-        this.colloquial = colloquial;
+    public void setCollocate(String collocate) {
+        this.collocate = collocate;
     }
 
-    public String getColloquial() {
-        return colloquial;
+    public String getCollocate() {
+        return collocate;
     }
 
     public void setEnd(Boolean end) {
@@ -76,18 +82,40 @@ public class KwicController implements Serializable {
         return end;
     }
 
+    public void setPreScope(int preScope) {
+        this.preScope = preScope;
+    }
 
-    @Transactional(transactionManager = "kwicTransactionManager")
+    public int getPreScope() {
+        return preScope;
+    }
+
+    public void setPostScope(int postScope) {
+        this.postScope = postScope;
+    }
+
+    public int getPostScope() {
+        return postScope;
+    }
+
+
     public void findMatchingSentences() {
         try {
-            kwicDataView.setSearch(search);
-        } catch (NoResultsExeption e){
-            System.out.println("No matching sentences found for " + search);
+            if(search != null){
+                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, end), kwicTransactions);
+            }
+        } catch (NoResultsExeption noResultsExeption) {
+            noResultsExeption.printStackTrace();
         }
     }
 
-    public KwicDataView getView() {
-        return kwicDataView;
+    public LazyDataModel<DTOSentenceDisplay> getLazyData(){
+        if(lazyKwicData == null){
+            findMatchingSentences();
+        }
+        return lazyKwicData;
     }
+
+
 }
 

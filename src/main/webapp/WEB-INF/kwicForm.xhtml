@@ -7,16 +7,21 @@
                 >
 
      <h:form id="kwicForm" class="concordancer">
-            <p:autoComplete id="searchField" maxResults="5" placeholder="search word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.search}"/>
+            <p:autoComplete id="searchField" maxResults="5" placeholder="Key word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.search}"/>
 
             <div> <!--style="display: inline; margin-left: 25px"-->
-                <h:outputText value="at end of sentence" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+                <h:outputText value="Sentence-finally" style="display: inline-block; margin: 10px; vertical-align: middle"/>
                 <p:selectBooleanCheckbox value="#{kwicController.end}" style="display: inline-block; margin: 10px 5px; vertical-align: middle"/>
 
             </div>
 
-            <p:autoComplete id="kwicColocial" maxResults="5" placeholder="colloquial word" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.colloquial}"/>
-            <p:commandButton value="Search Kwic!" styleClass="GreenButton KwicButton" actionListener="#{kwicController.findMatchingSentences()}" update=":#{p:component('output')}" />
+            <p:autoComplete id="kwicCollocate" maxResults="5" placeholder="Collocate" queryDelay="0" completeMethod="#{kwicController.completeText}" styleClass="" onfocus="this.select()" value="#{kwicController.collocate}"/>
+            <h:outputText value="Max # of morphemes from key word" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+            <h:outputText value="Before:" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+            <p:inputText id="kwicCollocatePreScope" style="display: inline-block; width: 52%" onfocus="this.select()" value="#{kwicController.preScope}"/>
+            <h:outputText value="After:" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+            <p:inputText id="kwicCollocatePostScope" style="display: inline-block; margin-left: 10px; width: 52%"  onfocus="this.select()" value="#{kwicController.postScope}"/>
+            <p:commandButton value="Search KWIC!" styleClass="GreenButton KwicButton" actionListener="#{kwicController.findMatchingSentences()}" update=":#{p:component('output')}" />
         </h:form>
 
 </ui:composition>

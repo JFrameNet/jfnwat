@@ -10,24 +10,24 @@
 
         <p:dataTable id="output" emptyMessage=""
 
-                     var="sentence" value="#{kwicController.view.lazyModel}"
+                     var="sentence" value="#{kwicController.lazyData}"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-                     paginator="true" rows="50" style="margin-bottom:20px" paginatorAlwaysVisible="false"
+                     paginator="true" rows="20" style="margin-bottom:20px" paginatorAlwaysVisible="false"
                      currentPageReportTemplate="{startRecord} - {endRecord} out of {totalRecords}"
                      lazy="true"
 
         >
             <p:column style="width: 85px">
-                <h:outputText value="#{sentence.fileName}"></h:outputText>
+                <h:outputText value="#{sentence.file}"></h:outputText>
             </p:column>
             <p:column style="width: 42%; text-align: right">
-                <h:outputText value="#{sentence.beforeSearch}"></h:outputText>
+                <h:outputText value="#{sentence.before}"></h:outputText>
             </p:column>
             <p:column style="width: auto; text-align: center; font-weight: bold;">
-                <h:outputText value="#{sentence.search}"></h:outputText>
+                <h:outputText value="#{sentence.word}"></h:outputText>
             </p:column>
             <p:column style="width: 42%">
-                <h:outputText value="#{sentence.afterSearch}"></h:outputText>
+                <h:outputText value="#{sentence.after}"></h:outputText>
             </p:column>
         </p:dataTable>
     </div>
