@@ -68,7 +68,7 @@ public class DialogManager {
      * This method is called when a user wants to add all of the sentences of a pattern entry to the list of the
      * selected sentences.
      */
-    public void realPatterEntry (LUOutput lu,PatternEntry patternEntry) {
+    public void realPatternEntry(LUOutput lu, PatternEntry patternEntry) {
         for (AnnotationSet annotationSet : patternEntry.getAnnoSet()) {
             enableSentence(lu, annotationSet);
         }
@@ -113,12 +113,13 @@ public class DialogManager {
         this.mini = false;
     }
 
-    public void setSelectedSentences(List<AnnotationDisplay> selectedSentences) {
-        this.selectedSentences = selectedSentences;
+
+    public List<AnnotationDisplay> getSelectedSentences() {
+        return selectedSentences;
     }
 
-    public void toggleMini() {
-        this.mini = !this.mini;
+    public void setSelectedSentences(List<AnnotationDisplay> selectedSentences) {
+        this.selectedSentences = selectedSentences;
     }
 
     public String getBkgColor(AnnotationDisplay line) {
@@ -138,10 +139,9 @@ public class DialogManager {
         }
     }
 
-    public List<AnnotationDisplay> getSelectedSentences() {
-        return selectedSentences;
+    public void toggleMini() {
+        this.mini = !this.mini;
     }
-
     public boolean isMini() {
         return mini;
     }

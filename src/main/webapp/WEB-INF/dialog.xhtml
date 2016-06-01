@@ -8,7 +8,7 @@
               styleClass="#{dialogManager.isMini() ?'dialog-mini':''} dialog-sentences"
               showHeader="#{dialogManager.selectedSentences.size() > 0}">
         <h:outputText value="Annotated Sentences" styleClass="clear-btn" style="float: left; padding-top: 5px" rendered="#{dialogManager.selectedSentences.size() > 0}"/>
-        <div style="background-color: #66BB6A; max-height: 23px">
+        <div id="topBar" style="background-color: #66BB6A; max-height: 23px">
             <ui:fragment rendered="#{dialogManager.selectedSentences.size() > 0}">
                 <p:commandButton id="dwl" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" style="background-color: #66BB6A;width: 20px; height: 20px">
                     <p:fileDownload value="#{dialogManager.downloadSentencesFile()}" />
@@ -20,7 +20,7 @@
             </ui:fragment>
         </div>
         <ui:fragment rendered="#{!dialogManager.mini}">
-            <div style="max-height: 45vh; overflow: auto">
+            <div id="Content" style="max-height: 45vh; overflow: auto">
                 <ui:repeat value="#{dialogManager.getSelectedSentences()}" var="line">
                     <p:fieldset style="background-color: #{dialogManager.getBkgColor(line)}">
                         <ui:repeat value="#{line.elements}" var="tag">

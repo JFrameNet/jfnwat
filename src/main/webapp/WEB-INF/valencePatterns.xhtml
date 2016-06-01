@@ -24,7 +24,7 @@
             <br/><br/>
             <ui:repeat value="#{group.patterns}" var="real">
                 <div class="real-button">
-                    <p:commandLink action="#{dialogManager.realPatterEntry(lu,real)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
+                    <p:commandLink action="#{dialogManager.realPatternEntry(lu,real)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
                         <div class="vpstyleNumber">
                             <h:outputText value="#{real.annoSet.size()}"/>
                         </div>
