@@ -1,10 +1,11 @@
-package jp.keio.jfn.wat.KWIC;
+package jp.keio.jfn.wat.KWIC.viewelements;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
+import jp.keio.jfn.wat.KWIC.FrameTreeService;
 import jp.keio.jfn.wat.domain.Frame;
 import org.primefaces.model.TreeNode;
 

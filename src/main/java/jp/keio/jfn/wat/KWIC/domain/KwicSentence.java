@@ -49,8 +49,8 @@ public class KwicSentence implements Serializable {
     @Column
     private int sentencePlace;
 
-    @OneToMany(mappedBy = "kwicSentence", cascade = CascadeType.ALL)
-    private Set<Kwics> kwics =  new HashSet<Kwics>();
+//    @OneToMany(mappedBy = "kwicSentence", cascade = CascadeType.ALL)
+//    private Set<Kwics> kwics =  new HashSet<Kwics>();
 
     protected KwicSentence(){
     }
@@ -73,9 +73,9 @@ public class KwicSentence implements Serializable {
 
     public int getSentencePlace() {return this.sentencePlace;}
 
-    public Set<Kwics> getKwics() {
-        return kwics;
-    }
+//    public Set<Kwics> getKwics() {
+//        return kwics;
+//    }
 
 
 }

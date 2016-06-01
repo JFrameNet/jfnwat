@@ -11,7 +11,7 @@ import java.util.ListIterator;
  */
 public class DTOSentenceDisplay {
 
-    KwicSentence kwicSentence;
+    private KwicSentence kwicSentence;
     private String before;
     private String beginning;
     private String word;
@@ -52,6 +52,10 @@ public class DTOSentenceDisplay {
 
     public String getFile(){
         return kwicSentence.getFileName();
+    }
+
+    public KwicSentence getKwicSentence() {
+        return kwicSentence;
     }
 
     private void splitInBeginningWordEnd() {

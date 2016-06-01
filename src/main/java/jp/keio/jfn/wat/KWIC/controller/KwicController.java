@@ -3,6 +3,7 @@ package jp.keio.jfn.wat.KWIC.controller;
 import javax.faces.bean.ManagedBean;
 
 import jp.keio.jfn.wat.KWIC.*;
+import jp.keio.jfn.wat.KWIC.viewelements.KwicDataView;
 import org.primefaces.model.LazyDataModel;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -29,16 +30,20 @@ public class KwicController implements Serializable {
     LexUnitRepository lexUnitRepository;
 
     @Autowired
+    KwicDataView dataView;
+
+    @Autowired
     KwicTransactions kwicTransactions;
+
 
     private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
 
 
-    private String search;
+    private String search; // TODO need to remove unwanted spaces and other unwanted input?
     private String collocate;
     private Boolean end;
-    private int preScope;
-    private int postScope;
+    private int preScope = 5;
+    private int postScope = 5;
 
 
     public String toKwic() { return "kwicPage?faces-redirect=true";}
@@ -102,7 +107,7 @@ public class KwicController implements Serializable {
     public void findMatchingSentences() {
         try {
             if(search != null){
-                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, end), kwicTransactions);
+                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, preScope, postScope, end), kwicTransactions);
             }
         } catch (NoResultsExeption noResultsExeption) {
             noResultsExeption.printStackTrace();
@@ -117,5 +122,8 @@ public class KwicController implements Serializable {
     }
 
 
+    public int getWordColumnSize() {
+        return search == null ? 20 : search.length()*20; // TODO longest word form
+    }
 }
 

@@ -6,6 +6,7 @@ import jp.keio.jfn.wat.KWIC.domain.Kwics;
 import jp.keio.jfn.wat.KWIC.repository.KwicSentenceRepository;
 import jp.keio.jfn.wat.KWIC.repository.KwicsRepository;
 import jp.keio.jfn.wat.KWIC.repository.WordRepository;
+import jp.keio.jfn.wat.domain.Lexeme;
 import jp.keio.jfn.wat.domain.WordForm;
 import jp.keio.jfn.wat.repository.LexemeRepository;
 import org.primefaces.model.SortOrder;
@@ -32,99 +33,107 @@ public class KwicTransactions implements Serializable {
     @Autowired
     KwicSentenceRepository kwicSentenceRepository;
 
-    List<String> stringWordForms = new ArrayList<String>();
     List<KwicWord> kwicWordForms = new ArrayList<KwicWord>();
-    List<String> stringColloquialForms = new ArrayList<String>();
-    List<KwicWord> kwicCollocialForms = new ArrayList<KwicWord>();
+    List<KwicWord> kwicCollocateForms = new ArrayList<KwicWord>();
 
     DTOKwicSearch searchIn;
     int totalResults;
+
+    private final int SENTENCE_END_SCOPE = 2;
 
     public KwicTransactions() {
     }
 
     @Transactional(transactionManager = "kwicTransactionManager")
     public void setNewSearch(DTOKwicSearch search) throws NoResultsExeption {
-        clear();
         this.searchIn = search;
-        MakeAllFindableWithSearch();
-        totalResults = kwicsRepository.countByWordIsIn(kwicWordForms);
+        clear();
+        MakeAllFindable();
+        totalResults = kwicsRepository.countByWordIsIn(kwicWordForms); // TODO does not take collocate into account
     }
 
     private void clear() {
-        stringWordForms.clear();
         kwicWordForms.clear();
-        stringColloquialForms.clear();
-        kwicCollocialForms.clear();
+        kwicCollocateForms.clear();
     }
 
-    private void MakeAllFindableWithSearch() throws NoResultsExeption {
-        findForms(searchIn.word, stringWordForms, kwicWordForms);
+    private void MakeAllFindable() throws NoResultsExeption {
+        findAllKwics(searchIn.word, kwicWordForms);
         if (kwicWordForms.isEmpty()) {
             throw new NoResultsExeption();
         }
-        if (! (searchIn.colloquial == null || searchIn.colloquial.equals("") )) {
-            findForms(searchIn.colloquial, stringColloquialForms, kwicCollocialForms);
+        if (! (searchIn.collocate == null || searchIn.collocate.equals("") )) {
+            findAllKwics(searchIn.collocate, kwicCollocateForms);
         }
     }
 
-    private void findForms(String search, List<String> stringForms, List<KwicWord> kwicForms) throws NoResultsExeption {
+    private void findAllKwics(String search, List<KwicWord> kwicForms) throws NoResultsExeption {
         try {
-            List<WordForm> wordForms = lexemeRepository.findByName(search).getWordForms();
+            // in some cases more then one result eg　車　(名詞 and 接尾辞)
+            List<WordForm> wordForms = getWordForms(search);
 
             for (WordForm wordForm : wordForms) {
-                String stringForm = wordForm.getForm();
-                KwicWord kwicForm = wordRepository.findByWord(stringForm);
-                if (kwicForm != null) {
-                    kwicForms.add(kwicForm);
-                    stringForms.add(stringForm);
-                }
+                findKwics(wordForm.getForm(), kwicForms);
             }
+
+            findKwics(search, kwicForms);
         } catch (Exception e){
             e.printStackTrace();
         }
-        try{
-            KwicWord byWord = wordRepository.findByWord(search);
-            kwicForms.add(byWord);
-            stringForms.add(search);
-        } catch (Exception e){
-           e.printStackTrace();
+    }
+
+    private List<WordForm> getWordForms(String search) {
+        List<Lexeme> lexemes = lexemeRepository.findByName(search);
+        List<WordForm> wordForms = new ArrayList<WordForm>();
+        for (Lexeme l : lexemes){
+            wordForms.addAll(l.getWordForms());
         }
+        return wordForms;
+    }
+
+    private void findKwics(String word, List<KwicWord> kwicForms) {
+        List<KwicWord> kwicSearches = wordRepository.findByWord(word);
+        kwicForms.addAll(kwicSearches);
     }
 
 
-
-/*
-    public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
-        KwicSentence kwicSentence = kwicSentenceRepository.findById(Integer.parseInt(rowKey));
-        return sentenceToDisplay(kwicSentence);
-    }
-*/
-
-
+// ********************************************************************************************************************
 
     @Transactional(transactionManager = "kwicTransactionManager")
     public List<DTOSentenceDisplay> getData(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+        Page<Kwics> page;
 
- //   　  if(searchIn.colloquial == null && !searchIn.end){ //TODO
-            Page<Kwics> page = kwicsRepository.findByWordIsIn(kwicWordForms, makePagable(first, pageSize));
- //       }
+ /**/         long startTime = System.currentTimeMillis();
+
+        if(!searchIn.collocate.equals("") && searchIn.end){ //BOTH
+             page = kwicsRepository.findByWordIsIn(kwicWordForms, makePagable(first, pageSize)); // TODO
+        } else if (!searchIn.collocate.equals("") && !searchIn.end) { //COLLOCATE
+            page = kwicsRepository.findByCollocateWithScope(kwicWordForms, kwicCollocateForms, searchIn.collOfsetBefore, searchIn.collOfsetAfter, makePagable(first, pageSize));
+        } else if(searchIn.collocate.equals("") && searchIn.end) { // END
+            KwicWord dot = wordRepository.findByWord("。").get(0);
+            page = kwicsRepository.findBySentenceEnd(kwicWordForms, dot, SENTENCE_END_SCOPE, makePagable(first, pageSize)); //TODO 3 as Parameter
+        } else {
+            page = kwicsRepository.findByWordIsIn(kwicWordForms, makePagable(first, pageSize));
+        }
+/**/        long stopTime = System.currentTimeMillis();
+/**/         long elapsedTime = stopTime - startTime;
+/**/         System.out.println("DB Query took: "+elapsedTime);
 
         totalResults = (int) page.getTotalElements();
         return convertKwicsToDisplay(page, pageSize);
     }
 
     private Pageable makePagable(int first, int size){
-//        int last = Math.min(first+size, getCount());
         int page = first/size;
         return new PageRequest(page, size);
     }
 
+// ********************************************************************************************************************
 
     List<DTOSentenceDisplay> convertKwicsToDisplay(Page<Kwics> kwicData, int pageSize) {
         List<DTOSentenceDisplay> result = new ArrayList<DTOSentenceDisplay>(pageSize);
 
-        long startTime = System.currentTimeMillis();
+/**/         long startTime = System.currentTimeMillis();
 
         for (Kwics kwic : kwicData) {
             KwicSentence kwicSentence = kwic.getKwicSentence();
@@ -132,36 +141,24 @@ public class KwicTransactions implements Serializable {
             result.add(sentenceToDisplay(kwicSentence, splitIndex));
         }
 
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println("Converting to Display took: "+elapsedTime);
+/**/         long stopTime = System.currentTimeMillis();
+/**/         long elapsedTime = stopTime - startTime;
+/**/         System.out.println("Converting to Display took: "+elapsedTime);
 
         return result;
     }
 
     DTOSentenceDisplay sentenceToDisplay(KwicSentence kwicSentence, int splitIndex){
         int currentSentencePlace = kwicSentence.getSentencePlace();
-        String file = kwicSentence.getFileName();
-        ArrayList<String>[] fiveBeforeAndAfter = find5BeforeAndAfter(file, currentSentencePlace);
+        ArrayList<String>[] fiveBeforeAndAfter = find5BeforeAndAfter(kwicSentence, currentSentencePlace);
         DTOSentenceDisplay display = new DTOSentenceDisplay(kwicSentence, splitIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
         return display;
     }
 
-    private ArrayList<String>[] find5BeforeAndAfter(String file, int currentSentencePlace) {
-
-        long startTime = System.currentTimeMillis();
-        List<KwicSentence> BeforeAndAfter5 = kwicSentenceRepository.findByFileNameAndSentencePlaceBetweenOrderBySentencePlace(file, currentSentencePlace-5, currentSentencePlace+5); //TODO takes ~1000millis
-        long stopTime = System.currentTimeMillis();
-        long elapsedTime = stopTime - startTime;
-        System.out.println("Querying the DB took: "+elapsedTime);
-
-//        startTime = System.currentTimeMillis();
-//        List<KwicSentence> test = kwicSentenceRepository.findByFileNameAndSentencePlaceBetween(file, currentSentencePlace-5, currentSentencePlace+5);
-//        stopTime = System.currentTimeMillis();
-//        elapsedTime = stopTime - startTime;
-//        System.out.println("Querying the D　without sort took: "+elapsedTime);
-
-
+    private ArrayList<String>[] find5BeforeAndAfter(KwicSentence kwicSentence, int currentSentencePlace) {
+        String corpus = kwicSentence.getCorpusName();
+        String file = kwicSentence.getFileName();
+        List<KwicSentence> BeforeAndAfter5 = kwicSentenceRepository.findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(corpus, file, currentSentencePlace-5, currentSentencePlace+5); //TODO takes ~1000millis
         return separateBeforeAndAfter(currentSentencePlace, BeforeAndAfter5);
     }
 
@@ -181,6 +178,22 @@ public class KwicTransactions implements Serializable {
         return result;
     }
 
+
+
+    public int getCount() {
+        return totalResults;
+    }
+
+
+/*
+    public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
+        KwicSentence kwicSentence = kwicSentenceRepository.findById(Integer.parseInt(rowKey));
+        return sentenceToDisplay(kwicSentence);
+    }
+*/
+
+/* Old code
+
     List<String> find5Between(String file, int from, int to) {
         List<String> five = new ArrayList<String>(5);
 
@@ -190,9 +203,6 @@ public class KwicTransactions implements Serializable {
         }
         return five;
     }
+*/
 
-
-    public int getCount() {
-        return totalResults;
-    }
 }

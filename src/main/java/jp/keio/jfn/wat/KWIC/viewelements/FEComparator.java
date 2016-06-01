@@ -1,4 +1,4 @@
-package jp.keio.jfn.wat.KWIC;
+package jp.keio.jfn.wat.KWIC.viewelements;
 
 import jp.keio.jfn.wat.domain.FrameElement;
 

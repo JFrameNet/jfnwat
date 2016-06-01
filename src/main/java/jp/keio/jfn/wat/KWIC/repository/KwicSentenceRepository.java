@@ -14,7 +14,7 @@ import java.util.List;
 public interface KwicSentenceRepository extends CrudRepository<KwicSentence, Long> {
     KwicSentence findById(int id);
 
-    List<KwicSentence> findByFileNameAndSentencePlaceBetweenOrderBySentencePlace(String fileName, int place, int place2);
+    List<KwicSentence> findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(String corpusName, String fileName, int place, int place2);
     List<KwicSentence> findByFileNameAndSentencePlaceBetween(String fileName, int place, int place2);
 }
 

@@ -1,8 +1,7 @@
 package jp.keio.jfn.wat.KWIC.controller;
 
-import jp.keio.jfn.wat.KWIC.FEComparator;
-import jp.keio.jfn.wat.KWIC.FrameListView;
-import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.KWIC.viewelements.FEComparator;
+import jp.keio.jfn.wat.KWIC.viewelements.FrameListView;
 import jp.keio.jfn.wat.webreport.controller.FrameIndexController;
 import javax.faces.bean.ManagedBean;
 
@@ -14,8 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.primefaces.model.TreeNode;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 

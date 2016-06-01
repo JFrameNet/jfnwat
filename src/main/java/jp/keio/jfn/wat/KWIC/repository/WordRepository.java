@@ -14,7 +14,8 @@ import java.util.List;
 @Repository
 public interface WordRepository extends CrudRepository<KwicWord, Long>, WordRepositoryCustom {
     KwicWord findById(int id);
-    KwicWord findByWord(String word);
+
+   List<KwicWord> findByWord(String word);
 
     List<KwicWord> findKwicwordLike(String wordElement);
 }

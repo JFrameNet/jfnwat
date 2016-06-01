@@ -6,12 +6,16 @@ package jp.keio.jfn.wat.KWIC;
 public class DTOKwicSearch {
 
     String word;
-    String colloquial;
+    String collocate;
+    int collOfsetBefore;
+    int collOfsetAfter;
     boolean end;
 
-    public DTOKwicSearch(String word, String colloquial, boolean end){
+    public DTOKwicSearch(String word, String collocate, int before, int after, boolean end){
         this.word = word;
-        this.colloquial = colloquial;
+        this.collocate = collocate;
         this.end = end;
+        this.collOfsetBefore = before;
+        this.collOfsetAfter = after;
     }
 }
