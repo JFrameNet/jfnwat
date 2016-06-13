@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/docIndex.xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core">
+                template="../WEB-INF/docIndex.xhtml" xmlns:c="http://java.sun.com/jsp/jstl/core">
     <ui:define name="docOutput">
         <p:tabView id="doc-tabs" activeIndex="#{tabController.index}" dynamic="false" cache="true" styleClass="tab-layout">
             <p:ajax event="tabClose" listener="#{tabController.onTabDocClose}" oncomplete="heightDocList()"/>
@@ -49,7 +49,7 @@
                                         </p:panelGrid>
                                     </ui:repeat>
                                     <ui:fragment rendered="#{!(sent.currentAnnoSet.annotationSet eq null)}">
-                                        <ui:include src="WEB-INF/frameTag.xhtml" >
+                                        <ui:include src="../WEB-INF/frameTag.xhtml" >
                                             <ui:param name="line" value="#{sent.currentAnnoSet}"/>
                                             <ui:param name="sent" value="#{sent}"/>
                                         </ui:include>
@@ -61,6 +61,6 @@
                 </p:tab>
             </c:forEach>
         </p:tabView>
-        <ui:include src="WEB-INF/dialog.xhtml"/>
+        <ui:include src="../WEB-INF/dialog.xhtml"/>
     </ui:define>
 </ui:composition>

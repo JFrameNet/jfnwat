@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 
             http.authorizeRequests()
-                    .antMatchers("/**").permitAll()  // "/resources/**", "/testAll*"
+                    .antMatchers("/resources/**").permitAll()  // "/resources/**", "/testAll*"
                     .antMatchers("/testAdmin*").hasRole("ADMIN")
                     .antMatchers("/testAnnotate*").access("hasRole('ADMIN') or hasRole('ANNOTATE')")
                     .anyRequest().authenticated()
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .loginPage("/login.xhtml")
                     .permitAll()
                     .loginProcessingUrl("/login")
-                    .defaultSuccessUrl("/index.jsf");
+                    .defaultSuccessUrl("/moduleIndex.jsf");
 
     }
 }

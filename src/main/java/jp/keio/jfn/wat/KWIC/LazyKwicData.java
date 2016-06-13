@@ -1,9 +1,7 @@
 package jp.keio.jfn.wat.KWIC;
 
-import jp.keio.jfn.wat.KWIC.domain.Kwics;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -27,7 +25,7 @@ public class LazyKwicData extends LazyDataModel<DTOSentenceDisplay>{
 
     private LazyKwicData() {}
 
-    public LazyKwicData(DTOKwicSearch dtoKwicSearch, KwicTransactions kwicTransactions) throws NoResultsExeption {
+    public LazyKwicData(DTOKwicSearch dtoKwicSearch, KwicTransactions kwicTransactions) throws UnknownWordExeption {
         this.kwicTransactions = kwicTransactions;
         kwicTransactions.setNewSearch(dtoKwicSearch);
         setRowCount(kwicTransactions.getCount());

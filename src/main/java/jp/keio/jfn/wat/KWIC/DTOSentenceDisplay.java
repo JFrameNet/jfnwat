@@ -14,16 +14,16 @@ public class DTOSentenceDisplay {
     private KwicSentence kwicSentence;
     private String before;
     private String beginning;
-    private String word;
+    private String keyWord;
     private int splitIndex;
     private String end;
     private String after;
-    private int charNum = 20;
+    private int CONTEXT_SCOPE = 20;
     private List<String> before5;
     private List<String> after5;
 
-    public DTOSentenceDisplay(int charNum, KwicSentence kwicSentence,int splitIndex, List<String> before5, List<String> after5) {
-        this.charNum = charNum;
+    public DTOSentenceDisplay(int contextScope, KwicSentence kwicSentence,int splitIndex, List<String> before5, List<String> after5) {
+        this.CONTEXT_SCOPE = contextScope;
         this.kwicSentence = kwicSentence;
         this.splitIndex = splitIndex;
         this.before5 = before5;
@@ -42,8 +42,8 @@ public class DTOSentenceDisplay {
         return before;
     }
 
-    public String getWord() {
-        return word;
+    public String getKeyWord() {
+        return keyWord;
     }
 
     public String getAfter() {
@@ -54,15 +54,18 @@ public class DTOSentenceDisplay {
         return kwicSentence.getFileName();
     }
 
+    public String getCorpus() {return kwicSentence.getCorpusName();}
+
     public KwicSentence getKwicSentence() {
         return kwicSentence;
     }
+
 
     private void splitInBeginningWordEnd() {
         String sentence = kwicSentence.getSentence();
         String[] split = sentence.split(" ");
         beginning = join(split, 0, splitIndex);
-        word = split[splitIndex];
+        keyWord = split[splitIndex];
         end  = join(split, splitIndex+1, split.length);
     }
 
@@ -77,12 +80,12 @@ public class DTOSentenceDisplay {
 
     private void extendBefore(){
         StringBuilder builder = new StringBuilder();
-        builder.append(lastPartToAddFrom(charNum, beginning));
+        builder.append(lastPartToAddFrom(CONTEXT_SCOPE, beginning));
         ListIterator<String> iterator = before5.listIterator(before5.size());
 
-        while (builder.length() < charNum &&  iterator.hasPrevious()){
+        while (builder.length() < CONTEXT_SCOPE &&  iterator.hasPrevious()){
             String[] split = iterator.previous().split(" ");
-            String subSentence = lastPartToAddFrom(charNum - builder.length(), join(split, 0, split.length));
+            String subSentence = lastPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
             builder.insert(0, subSentence);
         }
         before = builder.toString();
@@ -96,11 +99,11 @@ public class DTOSentenceDisplay {
 
     private void extendAfter(){
         StringBuilder builder = new StringBuilder();
-        builder.append(firstPartToAddFrom(charNum, end));
+        builder.append(firstPartToAddFrom(CONTEXT_SCOPE, end));
         Iterator<String> iterator = after5.iterator();
-        while (builder.length() < charNum && iterator.hasNext() ){
+        while (builder.length() < CONTEXT_SCOPE && iterator.hasNext() ){
             String[] split = iterator.next().split(" ");
-            String subSentence = firstPartToAddFrom(charNum - builder.length(), join(split, 0, split.length));
+            String subSentence = firstPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
             builder.append(subSentence);
         }
         after = builder.toString();
@@ -111,8 +114,16 @@ public class DTOSentenceDisplay {
         return sentence.substring(0, tillIndex);
     }
 
-    public void setCharNum(int charNum){
-        this.charNum = charNum;
+    public String getNonKwicDisplay(){
+        StringBuilder builder = new StringBuilder();
+        builder.append(beginning).append(keyWord).append(end);
+        String string = builder.toString();
+        string = string.replaceAll(keyWord, "<b>" + keyWord + "</b>");
+        return string;
+    }
+
+    public void setCONTEXT_SCOPE(int charNum){
+        this.CONTEXT_SCOPE = charNum;
         extendBefore();
         extendAfter();
     }

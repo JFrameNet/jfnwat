@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                template="/WEB-INF/frameIndex.xhtml">
+                template="../WEB-INF/frameIndex.xhtml">
     <ui:define name="frameOutput">
         <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" styleClass="tab-layout">
             <p:ajax event="tabClose" listener="#{tabController.onTabClose}" oncomplete="heightFrameList()"/>
@@ -74,6 +74,6 @@
                 </p:accordionPanel>
             </p:tab>
         </p:tabView>
-        <ui:include src="WEB-INF/dialog.xhtml"/>
+        <ui:include src="../WEB-INF/dialog.xhtml"/>
     </ui:define>
 </ui:composition>

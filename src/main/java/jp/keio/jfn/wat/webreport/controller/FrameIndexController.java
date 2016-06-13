@@ -21,11 +21,11 @@ import java.util.List;
 @Scope("view")
 public class FrameIndexController implements Serializable {
     @Autowired
-    protected FrameRepository frameRepository;
+    private FrameRepository frameRepository;
 
-    protected String filter = "";
+    private String filter = "";
 
-    protected List<String> orderedFrames = new ArrayList<String>();
+    private List<String> orderedFrames = new ArrayList<String>();
 
 
     /**

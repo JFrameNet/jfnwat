@@ -10,7 +10,7 @@
         <div class="Container100">
             <div class="ContainerIndent">
                 <div class="Fleft OvHidden">
-                    <p:link outcome="index">
+                    <p:link href="../web-report/index.jsf">
                         <h:graphicImage name="logo/jfn_logo_only.jpg" width="60" styleClass="toolbar-jfn"/>
                     </p:link>
                 </div>
@@ -28,16 +28,15 @@
                 </div>
             </div>
         </div>
+        <div class="Container100 BorderTop BorderBottom">
+            <div class="ContainerIndent">
+                <ui:insert name="kwicHorizontalSearch"/>
+            </div>
+        </div>
         <div class="Container100">
             <div class="Card NoPadding FlexContainer">
 
-                <div class="Flex15 hei100 OvHidden BorderRight">
-                    <div class="Container100">
-                        <ui:insert name="kwicSearch"/>
-                    </div>
-                </div>
-
-                <div class="Flex70 OvHidden">
+                <div class="Flex85 OvHidden">
                     <div class="Container100">
                         <ui:insert name="kwicOutput"/>
                     </div>
@@ -45,16 +44,18 @@
 
                 <div class="Flex15 OvHidden BorderLeft">
                     <div class="Container100">
+                        <ui:insert name="correspondingFrames"/>
+                    </div>
+                    <div class="Container100">
                         <ui:insert name="filter"/>
                     </div>
                     <div class="Container100 OvXScroll BorderBottom">
-                        <div class="ContainerIndent" style="padding: 10px 5px 10px 0px">
+                        <div class="ContainerIndent" style="padding-left: 5px; padding-right: 0px">
                             <ui:insert name="indexList"/>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </ui:define>
 </ui:composition>

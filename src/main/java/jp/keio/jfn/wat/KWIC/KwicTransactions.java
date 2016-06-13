@@ -6,9 +6,15 @@ import jp.keio.jfn.wat.KWIC.domain.Kwics;
 import jp.keio.jfn.wat.KWIC.repository.KwicSentenceRepository;
 import jp.keio.jfn.wat.KWIC.repository.KwicsRepository;
 import jp.keio.jfn.wat.KWIC.repository.WordRepository;
+import jp.keio.jfn.wat.Utils;
+import jp.keio.jfn.wat.domain.Frame;
+import jp.keio.jfn.wat.domain.LexUnit;
 import jp.keio.jfn.wat.domain.Lexeme;
 import jp.keio.jfn.wat.domain.WordForm;
+import jp.keio.jfn.wat.repository.FrameRepository;
+import jp.keio.jfn.wat.repository.LexUnitRepository;
 import jp.keio.jfn.wat.repository.LexemeRepository;
+import org.hibernate.Hibernate;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +34,10 @@ public class KwicTransactions implements Serializable {
     @Autowired
     LexemeRepository lexemeRepository;
     @Autowired
+    LexUnitRepository lexUnitRepository;
+    @Autowired
+    FrameRepository frameRepository;
+    @Autowired
     WordRepository wordRepository;
     @Autowired
     KwicsRepository kwicsRepository;
@@ -36,16 +47,24 @@ public class KwicTransactions implements Serializable {
     List<KwicWord> kwicWordForms = new ArrayList<KwicWord>();
     List<KwicWord> kwicCollocateForms = new ArrayList<KwicWord>();
 
-    DTOKwicSearch searchIn;
-    int totalResults;
+    private KwicWord dot;
 
-    private final int SENTENCE_END_SCOPE = 2;
+    private DTOKwicSearch searchIn;
+    private int totalResults;
+    public List<DTOSentenceDisplay> curentPageList;
+
+    private int CONTEXT_SCOPE = 20;
 
     public KwicTransactions() {
     }
 
+    @PostConstruct
+    public void intit(){
+        dot = wordRepository.findByWord("。").get(0);
+    }
+
     @Transactional(transactionManager = "kwicTransactionManager")
-    public void setNewSearch(DTOKwicSearch search) throws NoResultsExeption {
+    public void setNewSearch(DTOKwicSearch search) throws UnknownWordExeption {
         this.searchIn = search;
         clear();
         MakeAllFindable();
@@ -57,25 +76,23 @@ public class KwicTransactions implements Serializable {
         kwicCollocateForms.clear();
     }
 
-    private void MakeAllFindable() throws NoResultsExeption {
+    private void MakeAllFindable() throws UnknownWordExeption {
         findAllKwics(searchIn.word, kwicWordForms);
-        if (kwicWordForms.isEmpty()) {
-            throw new NoResultsExeption();
-        }
-        if (! (searchIn.collocate == null || searchIn.collocate.equals("") )) {
+        if (kwicWordForms.isEmpty()){throw new UnknownWordExeption(UnknownWordExeption.Cause.KEYWORD);}
+
+        if (!searchIn.collocate.equals("")) {
             findAllKwics(searchIn.collocate, kwicCollocateForms);
+            if(kwicCollocateForms.isEmpty()){ throw new UnknownWordExeption(UnknownWordExeption.Cause.COLLOCATE);}
         }
     }
 
-    private void findAllKwics(String search, List<KwicWord> kwicForms) throws NoResultsExeption {
+    private void findAllKwics(String search, List<KwicWord> kwicForms){
         try {
-            // in some cases more then one result eg　車　(名詞 and 接尾辞)
+            // in some cases more then one result eg　車　(名詞 and 接尾辞 part of speach)
             List<WordForm> wordForms = getWordForms(search);
-
             for (WordForm wordForm : wordForms) {
                 findKwics(wordForm.getForm(), kwicForms);
             }
-
             findKwics(search, kwicForms);
         } catch (Exception e){
             e.printStackTrace();
@@ -102,25 +119,66 @@ public class KwicTransactions implements Serializable {
     @Transactional(transactionManager = "kwicTransactionManager")
     public List<DTOSentenceDisplay> getData(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Page<Kwics> page;
+        List<Kwics> pageList;
+        boolean doRandomSearch = searchIn.random;
+
+        /**/ int sortbefore = -5;
 
  /**/         long startTime = System.currentTimeMillis();
 
+        //TODO REFACTOR THIS BEAST
         if(!searchIn.collocate.equals("") && searchIn.end){ //BOTH
-             page = kwicsRepository.findByWordIsIn(kwicWordForms, makePagable(first, pageSize)); // TODO
+            if(doRandomSearch){
+                pageList = kwicsRepository.selectRandomWithScopedCollocateAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, pageSize);
+            } else {
+                page = kwicsRepository.findByCollocateWithScopeAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
+                pageList = pageToList(page);
+            }
         } else if (!searchIn.collocate.equals("") && !searchIn.end) { //COLLOCATE
-            page = kwicsRepository.findByCollocateWithScope(kwicWordForms, kwicCollocateForms, searchIn.collOfsetBefore, searchIn.collOfsetAfter, makePagable(first, pageSize));
+            if(doRandomSearch){
+                pageList = kwicsRepository.selectRandomWithScopedCollocate(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, pageSize);
+            } else {
+                page = kwicsRepository.findByCollocateWithScope(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, makePagable(first, pageSize));
+                pageList = pageToList(page);
+            }
         } else if(searchIn.collocate.equals("") && searchIn.end) { // END
-            KwicWord dot = wordRepository.findByWord("。").get(0);
-            page = kwicsRepository.findBySentenceEnd(kwicWordForms, dot, SENTENCE_END_SCOPE, makePagable(first, pageSize)); //TODO 3 as Parameter
+            if(doRandomSearch){
+                pageList = kwicsRepository.selectRandomWithEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, pageSize);
+            } else {
+                page = kwicsRepository.findBySentenceEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
+                pageList = pageToList(page);
+            }
         } else {
-            page = kwicsRepository.findByWordIsIn(kwicWordForms, makePagable(first, pageSize));
+            if(doRandomSearch){
+                pageList = kwicsRepository.selectRandomByWord(searchIn.corpora, kwicWordForms, pageSize);
+            }
+//            else if (sortField.equals("before")) {
+ //               kwicsRepository.simpleSorted(searchIn.corpora, kwicWordForms, sortbefore, makePagable(first, pageSize));
+//            }
+            else {
+                page = kwicsRepository.findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms, makePagable(first, pageSize));
+                pageList = pageToList(page);
+//                KwicWord word = kwicWordForms.get(1);
+//                pageList = kwicsRepository.sorttest(word);
+            }
         }
 /**/        long stopTime = System.currentTimeMillis();
-/**/         long elapsedTime = stopTime - startTime;
-/**/         System.out.println("DB Query took: "+elapsedTime);
+/**/        long elapsedTime = stopTime - startTime;
+/**/        System.out.println("DB Query took: "+elapsedTime);
 
+
+        totalResults = doRandomSearch ? pageSize : totalResults;
+        try {
+            curentPageList =  convertKwicsToDisplay(pageList, pageSize);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return curentPageList;
+    }
+
+    private List<Kwics> pageToList(Page<Kwics> page) {
         totalResults = (int) page.getTotalElements();
-        return convertKwicsToDisplay(page, pageSize);
+        return page.getContent();
     }
 
     private Pageable makePagable(int first, int size){
@@ -128,9 +186,18 @@ public class KwicTransactions implements Serializable {
         return new PageRequest(page, size);
     }
 
+    public int getCount() {
+        return totalResults;
+    }
+
 // ********************************************************************************************************************
 
-    List<DTOSentenceDisplay> convertKwicsToDisplay(Page<Kwics> kwicData, int pageSize) {
+    public void setCONTEXT_SCOPE(int CONTEXT_SCOPE) {
+        this.CONTEXT_SCOPE = CONTEXT_SCOPE;
+    }
+
+
+    List<DTOSentenceDisplay> convertKwicsToDisplay(List<Kwics> kwicData, int pageSize) {
         List<DTOSentenceDisplay> result = new ArrayList<DTOSentenceDisplay>(pageSize);
 
 /**/         long startTime = System.currentTimeMillis();
@@ -151,7 +218,7 @@ public class KwicTransactions implements Serializable {
     DTOSentenceDisplay sentenceToDisplay(KwicSentence kwicSentence, int splitIndex){
         int currentSentencePlace = kwicSentence.getSentencePlace();
         ArrayList<String>[] fiveBeforeAndAfter = find5BeforeAndAfter(kwicSentence, currentSentencePlace);
-        DTOSentenceDisplay display = new DTOSentenceDisplay(kwicSentence, splitIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
+        DTOSentenceDisplay display = new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, splitIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
         return display;
     }
 
@@ -178,12 +245,29 @@ public class KwicTransactions implements Serializable {
         return result;
     }
 
+// ********************************************************************************************************************
 
-
-    public int getCount() {
-        return totalResults;
+    @Transactional
+    public List<Frame> findRelevantFrames(){
+        List<Frame> relevantFrames = new ArrayList<Frame>();
+        try {
+                for (LexUnit lu : lexUnitRepository.findAll()) {
+                    if (Utils.matchSearch(searchIn.word, lu.getName())) {
+                        Frame frame = lu.getFrame();
+                        if (!frame.getName().isEmpty()) {
+                            relevantFrames.add(frame);
+                            Hibernate.initialize(frame.getFrameElements());
+                            Hibernate.initialize(frame.getFrameRelations1());
+                            Hibernate.initialize(frame.getFrameRelations2());
+                        }
+                    }
+                }
+            // Collections.sort(relevantFrames);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return relevantFrames;
     }
-
 
 /*
     public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
