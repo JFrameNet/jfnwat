@@ -22,9 +22,9 @@
         </h:form>
     </ui:define>
     <ui:define name="indexes">
-        <p:commandButton value="#{text['moduleReport']}" action="web-report/index?faces-redirect=true" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
         <p:commandButton value="#{text['moduleKwic']}" action="#{kwicController.toKwic}" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
         <p:commandButton value="#{text['moduleAnnotation']}" styleClass="GreenButton FloatNoneOnMobile btn-home" disabled="true"/>
+        <p:commandButton value="#{text['moduleReport']}" action="web-report/index?faces-redirect=true" styleClass="GreenButton FloatNoneOnMobile btn-home"/>
     </ui:define>
 
 </ui:composition>
