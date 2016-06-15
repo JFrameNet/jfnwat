@@ -16,7 +16,7 @@ import java.util.Set;
  */
 
 @Entity
-@Table(name = "Kwicword")
+@Table(name = "KwicWord")
 public class KwicWord implements Serializable {
     private static final long serialVersionUID = 1L;
 
