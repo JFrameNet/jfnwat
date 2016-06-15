@@ -2,6 +2,9 @@ package jp.keio.jfn.wat.KWIC;
 
 import jp.keio.jfn.wat.KWIC.domain.KwicSentence;
 
+import java.io.IOException;
+import java.io.Serializable;
+import java.io.UncheckedIOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -9,7 +12,7 @@ import java.util.ListIterator;
 /**
  * Created by jfn on 4/26/16.
  */
-public class DTOSentenceDisplay {
+public class DTOSentenceDisplay implements Serializable{
 
     private KwicSentence kwicSentence;
     private String before;
@@ -127,6 +130,26 @@ public class DTOSentenceDisplay {
         extendBefore();
         extendAfter();
     }
+
+    public void write(java.io.BufferedOutputStream out){
+        try {
+            out.write("[".getBytes());
+            out.write(getFile().getBytes());
+            out.write(", ".getBytes());
+            out.write(getCorpus().getBytes());
+            out.write("] ".getBytes());
+            out.write(before.getBytes());
+            out.write("<target>".getBytes());
+            out.write(keyWord.getBytes());
+            out.write("</target>".getBytes());
+            out.write(after.getBytes());
+            out.write("\n".getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new UncheckedIOException(e);
+        }
+    }
+
 }
 
 

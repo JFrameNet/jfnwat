@@ -14,7 +14,7 @@ import java.util.*;
  *   because @transactional gave the following problem when used in this class:
  *   - ?
  *
- *   Also the class wit the database connection needs to be autowired to autowire the repositories.
+ *   Also the class with the database connection needs to be autowired to autowire the repositories.
  */
 @Component
 public class LazyKwicData extends LazyDataModel<DTOSentenceDisplay>{

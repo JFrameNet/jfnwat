@@ -24,10 +24,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 @Component
 public class KwicTransactions implements Serializable {
@@ -169,7 +170,7 @@ public class KwicTransactions implements Serializable {
 
         totalResults = doRandomSearch ? pageSize : totalResults;
         try {
-            curentPageList =  convertKwicsToDisplay(pageList, pageSize);
+            curentPageList =  convertAllKwicsToDisplay(pageList, pageSize);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,15 +198,14 @@ public class KwicTransactions implements Serializable {
     }
 
 
-    List<DTOSentenceDisplay> convertKwicsToDisplay(List<Kwics> kwicData, int pageSize) {
+    List<DTOSentenceDisplay> convertAllKwicsToDisplay(List<Kwics> kwicData, int pageSize) {
         List<DTOSentenceDisplay> result = new ArrayList<DTOSentenceDisplay>(pageSize);
 
 /**/         long startTime = System.currentTimeMillis();
 
         for (Kwics kwic : kwicData) {
-            KwicSentence kwicSentence = kwic.getKwicSentence();
-            int splitIndex = kwic.getPlace();
-            result.add(sentenceToDisplay(kwicSentence, splitIndex));
+            DTOSentenceDisplay display = aKwicToDisplay(kwic);
+            result.add(display);
         }
 
 /**/         long stopTime = System.currentTimeMillis();
@@ -215,18 +215,19 @@ public class KwicTransactions implements Serializable {
         return result;
     }
 
-    DTOSentenceDisplay sentenceToDisplay(KwicSentence kwicSentence, int splitIndex){
-        int currentSentencePlace = kwicSentence.getSentencePlace();
-        ArrayList<String>[] fiveBeforeAndAfter = find5BeforeAndAfter(kwicSentence, currentSentencePlace);
-        DTOSentenceDisplay display = new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, splitIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
-        return display;
+    private DTOSentenceDisplay aKwicToDisplay(Kwics kwic) {
+        KwicSentence kwicSentence = kwic.getKwicSentence();
+        int keyWordIndex = kwic.getPlace();
+        List<KwicSentence> BeforeAndAfter5 =find5BeforeAndAfter(kwicSentence);
+        ArrayList<String>[] fiveBeforeAndAfter = separateBeforeAndAfter(kwicSentence.getSentencePlace(), BeforeAndAfter5);
+        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, keyWordIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
     }
 
-    private ArrayList<String>[] find5BeforeAndAfter(KwicSentence kwicSentence, int currentSentencePlace) {
+    private List<KwicSentence> find5BeforeAndAfter(KwicSentence kwicSentence) {
+        int currentSentencePlace = kwicSentence.getSentencePlace();
         String corpus = kwicSentence.getCorpusName();
         String file = kwicSentence.getFileName();
-        List<KwicSentence> BeforeAndAfter5 = kwicSentenceRepository.findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(corpus, file, currentSentencePlace-5, currentSentencePlace+5); //TODO takes ~1000millis
-        return separateBeforeAndAfter(currentSentencePlace, BeforeAndAfter5);
+        return kwicSentenceRepository.findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(corpus, file, currentSentencePlace-5, currentSentencePlace+5); //TODO takes ~1000millis
     }
 
     private ArrayList<String>[] separateBeforeAndAfter(int currentSentencePlace, List<KwicSentence> beforeAndAfter5) {
@@ -269,6 +270,26 @@ public class KwicTransactions implements Serializable {
         return relevantFrames;
     }
 
+    static BufferedOutputStream bos;
+
+    @Transactional
+    public InputStream stream() throws IOException {
+
+            Stream<Kwics> kwicsStream = kwicsRepository.readAllByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bos = new BufferedOutputStream(baos);
+
+            kwicsStream.map(k -> aKwicToDisplay(k)).forEach(d -> d.write(bos));
+
+            bos.flush();
+            bos.close();
+
+            ByteArrayInputStream is = new ByteArrayInputStream(baos.toByteArray());
+            return is;
+    }
+}
+
 /*
     public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
         KwicSentence kwicSentence = kwicSentenceRepository.findById(Integer.parseInt(rowKey));
@@ -288,5 +309,3 @@ public class KwicTransactions implements Serializable {
         return five;
     }
 */
-
-}

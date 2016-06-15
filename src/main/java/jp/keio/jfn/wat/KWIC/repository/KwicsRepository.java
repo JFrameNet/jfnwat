@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by jfn on 3/28/16.
@@ -70,7 +71,16 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
                                                @Param("endScope") int scope,
                                          Pageable pageable);
 
+    Stream<Kwics> readAllByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(List<String> corpora, List<KwicWord> words);
+            /*
+            @Query("select u from User u")
+            Stream<User> findAllByCustomQueryAndStream();
 
+            Stream<User> readAllByFirstnameNotNull();
+
+            @Query("select u from User u")
+            Stream<User> streamAllPaged(Pageable pageable);
+         */
 
     List<Kwics> selectRandomByWord(List<String> corpora, List<KwicWord> words, int number);
     List<Kwics> selectRandomWithCollocate(List<String> corpora,List<KwicWord> words,List<KwicWord> collocates, int number);

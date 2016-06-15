@@ -12,14 +12,14 @@
 
                      var="sentence" value="#{kwicController.lazyData}"
                      paginator="true" rows="#{kwicController.pageSize}" paginatorAlwaysVisible="true"
-                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      currentPageReportTemplate="{startRecord} - {endRecord} out of {totalRecords}"
                      lazy="true"
                      selection="#{kwicDataView.selectedSentences}" rowKey="#{sentence.kwicSentence.id}"
                      style="margin-bottom:20px"
         >
             <f:facet name="{Exporters}">
-                <h:form>
+                <h:form style="display: inline-block;margin-left: 20px;">
                     <h:commandLink action="#{kwicController.download}">
                         <i class="fa fa-file-text-o"/>
                     </h:commandLink>

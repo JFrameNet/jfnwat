@@ -234,48 +234,45 @@ public class KwicController implements Serializable {
 
     /*adjusted from http://stackoverflow.com/questions/2914025/ */
     public void download() throws IOException {
-        String fileName = "jfnkwic_"+search+".txt";
         FacesContext fc = FacesContext.getCurrentInstance();
-        ExternalContext ec = fc.getExternalContext();
 
-        ec.responseReset(); // Some JSF component library or some Filter might have set some headers in the buffer beforehand. We want to get rid of them, else it may collide.
-        ec.setResponseContentType("text/plain"); // Check http://www.iana.org/assignments/media-types for all types. Use if necessary ExternalContext#getMimeType() for auto-detection based on filename.
+        if(search != null) {
+            String fileName = "jfnkwic_" + search + ".doc";
+            ExternalContext ec = fc.getExternalContext();
+
+            ec.responseReset(); // Some JSF component library or some Filter might have set some headers in the buffer beforehand. We want to get rid of them, else it may collide.
+            ec.setResponseContentType("application/msword"); // text/plain Check http://www.iana.org/assignments/media-types for all types. Use if necessary ExternalContext#getMimeType() for auto-detection based on filename.
 //        ec.setResponseContentLength(contentLength); // Set it with the file size. This header is optional. It will work if it's omitted, but the download progress will be unknown.
-        ec.setResponseHeader("Content-disposition", "attachment; filename=\"" + fileName + "\""); // The Save As popup magic is done here. You can give it any filename you want, this only won't work in MSIE, it will use current request URL as filename instead.
+            ec.setResponseHeader("Content-disposition", "attachment; filename=\"" + fileName + "\""); // The Save As popup magic is done here. You can give it any filename you want, this only won't work in MSIE, it will use current request URL as filename instead.
 
-        BufferedInputStream input = null;
-        BufferedOutputStream output = null;
+            BufferedInputStream input = null;
+            BufferedOutputStream output = null;
 
-        try {
-            input = new BufferedInputStream(getDatAsInputStream());
-            output = new BufferedOutputStream(ec.getResponseOutputStream());
+            try {
+                input = new BufferedInputStream(getDatAsInputStream());
+                output = new BufferedOutputStream(ec.getResponseOutputStream());
 
-            byte[] buffer = new byte[10240];
-            for (int length; (length = input.read(buffer)) > 0; ) {
-                output.write(buffer, 0, length);
+                byte[] buffer = new byte[10240];
+                for (int length; (length = input.read(buffer)) > 0; ) {
+                    output.write(buffer, 0, length);
+                }
+            } finally {
+                output.close();
+                input.close();
             }
-        } finally {
-            output.close();
-            input.close();
         }
-
-
             fc.responseComplete(); // Important! Else JSF will attempt to render the response which obviously will fail since it's already written with a file and closed.
+            //TODO empty download results in blank screen
     }
 
-    private InputStream getDatAsInputStream() {
-        matchLazyDataWithSearch();
-        List<DTOSentenceDisplay> curentPageList = kwicTransactions.curentPageList;
-        return (InputStream) curentPageList.stream(); //TODO curentPageList = NULL
-        /*
-            @Query("select u from User u")
-            Stream<User> findAllByCustomQueryAndStream();
-
-            Stream<User> readAllByFirstnameNotNull();
-
-            @Query("select u from User u")
-            Stream<User> streamAllPaged(Pageable pageable);
-         */
+    private InputStream getDatAsInputStream() throws IOException{
+        KwicDataStreamer kwicDataStreamer = null;
+        try {
+            kwicDataStreamer = new KwicDataStreamer(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random), kwicTransactions);
+        } catch (UnknownWordExeption unknownWordExeption) {
+            unknownWordExeption.printStackTrace();
+        }
+        return kwicDataStreamer.getStream();
     }
 
     /*
