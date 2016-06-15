@@ -3,14 +3,10 @@ package jp.keio.jfn.wat.KWIC.controller;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 
 import jp.keio.jfn.wat.KWIC.*;
 import jp.keio.jfn.wat.KWIC.viewelements.KwicDataView;
-import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.Frame;
-import jp.keio.jfn.wat.repository.FrameRepository;
-import jp.keio.jfn.wat.webreport.FrameOutput;
 import jp.keio.jfn.wat.webreport.controller.FrameController;
 import org.primefaces.model.LazyDataModel;
 import org.springframework.context.annotation.Scope;
@@ -35,6 +31,11 @@ import java.util.List;
 @Scope("view")
 public class KwicController implements Serializable {
 
+    private final int DEFAULT_PRE_SCOPE = 5;
+    private final int DEFAULT_POST_SCOPE = 5;
+    private final int DEFAULT_END_SCOPE = 5;
+    private final int DEFAULT_N_RANDOM = 100;
+
     @Autowired
     LexUnitRepository lexUnitRepository;
 
@@ -47,28 +48,26 @@ public class KwicController implements Serializable {
     @Autowired
     FrameController frameController;
 
-    private final int DEFAULT_PAGESIZE = 100;
 
     // Form variables used in kwicSearch.xhtml
     private String search; // TODO need to remove unwanted spaces and other unwanted input?
     private String collocate;
+    private int preScope = DEFAULT_PRE_SCOPE;
+    private int postScope = DEFAULT_POST_SCOPE;
     private Boolean end;
-    private int preScope = 5;
-    private int postScope = 5;
-    private int endScope = 5;
+    private int endScope = DEFAULT_END_SCOPE;
     private List<String> corpora = Arrays.asList("BK", "OW", "OM", "OC");
 
     private boolean random;
-    private int randomNumber = 100;
+    private int randomNumber = DEFAULT_N_RANDOM;
     private String regex;
 
     // Output variables
     private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
     private List<Frame> relevantFrames = new ArrayList<Frame>();
-    private int pageSize = DEFAULT_PAGESIZE;
-    private boolean kwicView = true;
     private Object sort = "keyWord";
     private int charNum = 20;
+
 
     // Navigation to the kwic page
     public String toKwic() { return "concordancer/kwic?faces-redirect=true";}
@@ -141,7 +140,7 @@ public class KwicController implements Serializable {
 
     public void setRandom(boolean random) {
         this.random = random;
-        pageSize = (random)?  randomNumber : DEFAULT_PAGESIZE;
+
     }
     public boolean getRandom() {
         return random;
@@ -149,8 +148,13 @@ public class KwicController implements Serializable {
 
     public void setRandomNumber(int randomNumber) {
         this.randomNumber = randomNumber;
-        pageSize = (random)?  randomNumber : DEFAULT_PAGESIZE;
+        if (random){
+            dataView.setPageSize(randomNumber);
+        } else {
+            dataView.resetPageSize();
+        }
     }
+
     public int getRandomNumber() {
         return randomNumber;
     }
@@ -178,7 +182,7 @@ public class KwicController implements Serializable {
     public void matchLazyDataWithSearch() {
         try {
             if(search != null){
-                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random), kwicTransactions);
+                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random, randomNumber), kwicTransactions);
                 relevantFrames = kwicTransactions.findRelevantFrames();
             }
         } catch (Exception e) {
@@ -208,18 +212,13 @@ public class KwicController implements Serializable {
         return search == null ? 20 : search.length()*20; // TODO longest word form
     }
 
-    public int getPageSize() {
-        return this.pageSize;
-    }
 
     public void setKwicView(boolean kwicView) {
-        this.kwicView = kwicView;
+        dataView.setKwicView(kwicView);
     }
-    public boolean getKwicView() {
-        return kwicView;
-    }
-    public boolean getNonKwicView() {
-        return !kwicView;
+
+    public boolean getKwicView(){
+        return dataView.isKwicView();
     }
 
     public void setSort(Object sort) {
@@ -237,7 +236,7 @@ public class KwicController implements Serializable {
         FacesContext fc = FacesContext.getCurrentInstance();
 
         if(search != null) {
-            String fileName = "jfnkwic_" + search + ".doc";
+            String fileName = "jfnwat_kwic.doc";
             ExternalContext ec = fc.getExternalContext();
 
             ec.responseReset(); // Some JSF component library or some Filter might have set some headers in the buffer beforehand. We want to get rid of them, else it may collide.
@@ -268,7 +267,7 @@ public class KwicController implements Serializable {
     private InputStream getDatAsInputStream() throws IOException{
         KwicDataStreamer kwicDataStreamer = null;
         try {
-            kwicDataStreamer = new KwicDataStreamer(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random), kwicTransactions);
+            kwicDataStreamer = new KwicDataStreamer(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random, randomNumber), kwicTransactions);
         } catch (UnknownWordExeption unknownWordExeption) {
             unknownWordExeption.printStackTrace();
         }

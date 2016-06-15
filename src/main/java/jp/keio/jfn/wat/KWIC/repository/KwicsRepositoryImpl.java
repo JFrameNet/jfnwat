@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.KWIC.repository;
 
+import jp.keio.jfn.wat.KWIC.DTOKwicSearch;
 import jp.keio.jfn.wat.KWIC.domain.KwicWord;
 import jp.keio.jfn.wat.KWIC.domain.Kwics;
 
@@ -16,107 +17,83 @@ public class KwicsRepositoryImpl implements KwicsRepositoryCustom{
     @PersistenceContext(unitName = "kwic")
     private EntityManager entityManager;
 
+    String sqSelectID = " select k.id from Kwics k ";
+    String sqKeyWord = " k.word in :wordList ";
+    String sqCorpus = " k.kwicSentence.corpusName in :corpusList ";
+    String sqScopedCollocate = " exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :pre) and (k.place + :post ) ) ";
+    String sqEndOfSentence = " exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) ) ";
+
 
     @Override
-    public List<Kwics> selectRandomByWord(List<String> corpora, List<KwicWord> words, int number) {
-
-        List<Integer> ids = null;
-        try {
-            ids = findAllIDByWord(corpora, words);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List<Integer> random = getXRandomFromList(ids, number);
+    public List<Kwics> selectRandomByWord(DTOKwicSearch param, List<KwicWord> words) {
+        List<Integer> ids = findAllIdWithWord(param, words);
+        List<Integer> random = getXRandomFromList(ids, param.randomNumber);
         return getKwicsByRandomIDs(random);
     }
 
     @Override
-    public List<Kwics> selectRandomWithCollocate(List<String> corpora, List<KwicWord> words, List<KwicWord> collocates, int number) {
-        List<Integer> ids = findAllIDByCollocate(corpora, words, collocates);
-        List<Integer> random = getXRandomFromList(ids, number);
-        return getKwicsByRandomIDs(random);
-    }
-
-
-    @Override
-    public List<Kwics> selectRandomWithScopedCollocate(List<String> corpora, List<KwicWord> words, List<KwicWord> collocates, int before, int after, int number) {
-        List<Integer> ids = findAllIDByCollocateWithScope(corpora, words, collocates, before, after);
-        List<Integer> random = getXRandomFromList(ids, number);
+    public List<Kwics> selectRandomWithScopedCollocate(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates) {
+        List<Integer> ids = findAllIdWithScopedCollocate(param, words, collocates);
+        List<Integer> random = getXRandomFromList(ids, param.randomNumber);
         return getKwicsByRandomIDs(random);
     }
 
     @Override
-    public List<Kwics> selectRandomWithEnd(List<String> corpora, List<KwicWord> words, KwicWord dot, int scope, int number) {
-        List<Integer> ids = findAllIDBySentenceEnd(corpora, words, dot, scope);
-        List<Integer> random = getXRandomFromList(ids, number);
+    public List<Kwics> selectRandomWithEnd(DTOKwicSearch param, List<KwicWord> words) {
+        List<Integer> ids = findAllIdWithEnd(param, words);
+        List<Integer> random = getXRandomFromList(ids, param.randomNumber);
         return getKwicsByRandomIDs(random);
     }
 
     @Override
-    public List<Kwics> selectRandomWithScopedCollocateAndEnd(List<String> corpora, List<KwicWord> words, List<KwicWord> collocates, int before, int after, KwicWord dot, int scope, int number) {
-        List<Integer> ids = findAllIDByCollocateWithScopeAndEnd(corpora, words, collocates, before, after, dot, scope);
-        List<Integer> random = getXRandomFromList(ids, number);
+    public List<Kwics> selectRandomWithScopedCollocateAndEnd(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates) {
+        List<Integer> ids = findAllIdWithScopedCollocateAndEnd(param, words, collocates);
+        List<Integer> random = getXRandomFromList(ids, param.randomNumber);
         return getKwicsByRandomIDs(random);
     }
 
 
-    private List<Integer> findAllIDByWord(List<String> corpora,List<KwicWord> words) {
+    private List<Integer> findAllIdWithWord(DTOKwicSearch param, List<KwicWord> words) {
         return this.entityManager.
-                createQuery("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList").
-                setParameter("corpusList", corpora).
+                createQuery(sqSelectID +" where "+ sqCorpus +" and "+ sqKeyWord).
+                setParameter("corpusList", param.corpora).
                 setParameter("wordList", words).
                 getResultList();
     }
 
-
-    private List<Integer> findAllIDByCollocate(List<String> corpora, List<KwicWord> words,List<KwicWord> collocates) {
+    private List<Integer> findAllIdWithScopedCollocate(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates) {
         return this.entityManager.
-                createQuery("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList" +
-                        " and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList)").
-                setParameter("corpusList", corpora).
+                createQuery(sqSelectID +" where "+ sqCorpus +" and "+ sqKeyWord + " and "+ sqScopedCollocate ).
+                setParameter("corpusList", param.corpora).
                 setParameter("wordList", words).
                 setParameter("collocateList", collocates).
+                setParameter("pre", param.PRE_COLLOCATE).
+                setParameter("post", param.POST_COLLOCATE).
                 getResultList();
     }
 
 
-    private List<Integer> findAllIDByCollocateWithScope(List<String> corpora,List<KwicWord> words,List<KwicWord> collocates,int before,int after) {
+    private List<Integer> findAllIdWithEnd(DTOKwicSearch param, List<KwicWord> words) {
         return this.entityManager.
-                createQuery("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-                        "and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :b) and (k.place + :a) )").
-                setParameter("corpusList", corpora).
+                createQuery(sqSelectID +" where "+ sqCorpus +" and "+ sqKeyWord + " and "+ sqEndOfSentence).
+                setParameter("corpusList", param.corpora).
+                setParameter("wordList", words).
+                setParameter("dot",  param.dot).
+                setParameter("endScope", param.END_SCOPE).
+                getResultList();
+    }
+
+
+    private List<Integer> findAllIdWithScopedCollocateAndEnd(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates) {
+        return this.entityManager.
+                createQuery(sqSelectID +" where "+ sqCorpus +" and "+ sqKeyWord + " and "+ sqEndOfSentence + " and "+ sqScopedCollocate).
+                setParameter("corpusList", param.corpora).
                 setParameter("wordList", words).
                 setParameter("collocateList", collocates).
-                setParameter("b", before).
-                setParameter("a", after).
-                getResultList();
-    }
-
-
-    private List<Integer> findAllIDBySentenceEnd(List<String> corpora,List<KwicWord> words,KwicWord dot,int scope) {
-        return this.entityManager.
-                createQuery("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-                        "and exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) )").
-                setParameter("corpusList", corpora).
-                setParameter("wordList", words).
-                setParameter("dot", dot).
-                setParameter("endScope", scope).
-                getResultList();
-    }
-
-
-    private List<Integer> findAllIDByCollocateWithScopeAndEnd(List<String> corpora,List<KwicWord> words,List<KwicWord> collocates,int before,int after,KwicWord dot,int scope) {
-        return this.entityManager.
-                createQuery("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-                        "and exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) )"+
-                        "and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :b) and (k.place + :a) )").
-                setParameter("corpusList", corpora).
-                setParameter("wordList", words).
-                setParameter("collocateList", collocates).
-                setParameter("b", before).
-                setParameter("a", after).
-                setParameter("dot", dot).
-                setParameter("endScope", scope).
+                setParameter("pre", param.PRE_COLLOCATE).
+                setParameter("post", param.POST_COLLOCATE).
+                setParameter("dot",  param.dot).
+                setParameter("endScope", param.END_SCOPE).
                 getResultList();
     }
 
@@ -137,6 +114,7 @@ public class KwicsRepositoryImpl implements KwicsRepositoryCustom{
                 setParameter("ids", ids).
                 getResultList();
     }
+
 
     public List<Kwics> sorttest(KwicWord word){
         return this.entityManager.createNativeQuery("SELECT k.* FROM Kwics k " +

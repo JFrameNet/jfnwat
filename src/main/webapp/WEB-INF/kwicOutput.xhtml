@@ -11,7 +11,7 @@
         <p:dataTable id="output" emptyMessage="No results to Display"
 
                      var="sentence" value="#{kwicController.lazyData}"
-                     paginator="true" rows="#{kwicController.pageSize}" paginatorAlwaysVisible="true"
+                     paginator="true" rows="#{kwicDataView.pageSize}" paginatorAlwaysVisible="true"
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      currentPageReportTemplate="{startRecord} - {endRecord} out of {totalRecords}"
                      lazy="true"
@@ -30,17 +30,17 @@
                 <h:outputText value="#{sentence.file}, #{sentence.corpus}"/>
             </p:column>
 
-                <p:column rendered="#{kwicController.kwicView}"  sortBy="#{sentence.before}" sortable="false" style="width: auto; text-align: right">
+                <p:column rendered="#{kwicDataView.kwicView}"  sortBy="#{sentence.before}" sortable="false" style="width: auto; text-align: right">
                     <h:outputText value="#{sentence.before}"/>
                 </p:column>
-                <p:column rendered="#{kwicController.kwicView}" sortBy="#{sentence.keyWord}" sortable="false" style="width: #{kwicController.wordColumnSize}px; text-align: center; font-weight: bold;">
+                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.keyWord}" sortable="false" style="width: #{kwicController.wordColumnSize}px; text-align: center; font-weight: bold;">
                     <h:outputText value="#{sentence.keyWord}"/>
                 </p:column>
-                <p:column rendered="#{kwicController.kwicView}" sortBy="#{sentence.after}" sortable="false" style="width: auto; text-align: left">
+                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.after}" sortable="false" style="width: auto; text-align: left">
                     <h:outputText value="#{sentence.after}"/>
                 </p:column>
 
-                <p:column  rendered="#{kwicController.nonKwicView}">
+                <p:column  rendered="#{kwicDataView.nonKwicView}">
                     <h:outputText value="#{sentence.nonKwicDisplay}" escape="false"/>
                 </p:column>
 

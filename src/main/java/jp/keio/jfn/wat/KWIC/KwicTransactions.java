@@ -121,6 +121,7 @@ public class KwicTransactions implements Serializable {
     public List<DTOSentenceDisplay> getData(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Page<Kwics> page;
         List<Kwics> pageList;
+        searchIn.dot = this.dot;
         boolean doRandomSearch = searchIn.random;
 
         /**/ int sortbefore = -5;
@@ -130,28 +131,28 @@ public class KwicTransactions implements Serializable {
         //TODO REFACTOR THIS BEAST
         if(!searchIn.collocate.equals("") && searchIn.end){ //BOTH
             if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithScopedCollocateAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, pageSize);
+                pageList = kwicsRepository.selectRandomWithScopedCollocateAndEnd(searchIn, kwicWordForms, kwicCollocateForms);
             } else {
                 page = kwicsRepository.findByCollocateWithScopeAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
                 pageList = pageToList(page);
             }
         } else if (!searchIn.collocate.equals("") && !searchIn.end) { //COLLOCATE
             if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithScopedCollocate(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, pageSize);
+                pageList = kwicsRepository.selectRandomWithScopedCollocate(searchIn, kwicWordForms, kwicCollocateForms);
             } else {
                 page = kwicsRepository.findByCollocateWithScope(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, makePagable(first, pageSize));
                 pageList = pageToList(page);
             }
         } else if(searchIn.collocate.equals("") && searchIn.end) { // END
             if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, pageSize);
+                pageList = kwicsRepository.selectRandomWithEnd(searchIn, kwicWordForms);
             } else {
                 page = kwicsRepository.findBySentenceEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
                 pageList = pageToList(page);
             }
         } else {
             if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomByWord(searchIn.corpora, kwicWordForms, pageSize);
+                pageList = kwicsRepository.selectRandomByWord(searchIn, kwicWordForms);
             }
 //            else if (sortField.equals("before")) {
  //               kwicsRepository.simpleSorted(searchIn.corpora, kwicWordForms, sortbefore, makePagable(first, pageSize));

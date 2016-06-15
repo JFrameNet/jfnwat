@@ -1,5 +1,6 @@
 package jp.keio.jfn.wat.KWIC.repository;
 
+import jp.keio.jfn.wat.KWIC.DTOKwicSearch;
 import jp.keio.jfn.wat.KWIC.domain.KwicWord;
 import jp.keio.jfn.wat.KWIC.domain.Kwics;
 import org.springframework.data.domain.Page;
@@ -82,11 +83,11 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
             Stream<User> streamAllPaged(Pageable pageable);
          */
 
-    List<Kwics> selectRandomByWord(List<String> corpora, List<KwicWord> words, int number);
-    List<Kwics> selectRandomWithCollocate(List<String> corpora,List<KwicWord> words,List<KwicWord> collocates, int number);
-    List<Kwics> selectRandomWithScopedCollocate(List<String> corpora, List<KwicWord> words, List<KwicWord> collocates, int before, int after, int number);
-    List<Kwics> selectRandomWithEnd(List<String> corpora, List<KwicWord> words, KwicWord dot, int scope, int number);
-    List<Kwics> selectRandomWithScopedCollocateAndEnd(List<String> corpora, List<KwicWord> words, List<KwicWord> collocates, int before, int after, KwicWord dot, int scope, int number);
+    List<Kwics> selectRandomByWord(DTOKwicSearch param, List<KwicWord> words);
+    List<Kwics> selectRandomWithScopedCollocate(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates);
+    List<Kwics> selectRandomWithEnd(DTOKwicSearch param, List<KwicWord> words);
+    List<Kwics> selectRandomWithScopedCollocateAndEnd(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates);
+
     List<Kwics> sorttest(KwicWord word);
 }
 

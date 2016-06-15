@@ -20,6 +20,10 @@ import java.util.List;
 @Component
 @ManagedBean
 public class KwicDataView implements Serializable {
+    private final int DEFAULT_PAGESIZE = 100;
+    private int pageSize = DEFAULT_PAGESIZE;
+
+    private boolean kwicView = true;
 
     private List<DTOSentenceDisplay> selectedSentences;
 
@@ -33,4 +37,32 @@ public class KwicDataView implements Serializable {
     public void setSelectedSentences(List<DTOSentenceDisplay> selectedSentences) {
         this.selectedSentences = selectedSentences;
     }
+
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void resetPageSize(){
+        this.pageSize = DEFAULT_PAGESIZE;
+    }
+
+    public boolean isKwicView() {
+        return kwicView;
+    }
+
+    public boolean isNonKwicView() {
+        return !kwicView;
+    }
+
+    public void setKwicView(boolean kwicView) {
+        this.kwicView = kwicView;
+    }
+
+
+
 }
