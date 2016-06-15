@@ -1,5 +1,34 @@
 /*Style sheet for the JFN WebReport */
+p {
+  font-family: 'latoregular', sans-serif;
+  color: #455a64;
+}
+input[type=submit] {
+  font-family: 'latoregular', sans-serif;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+input[type=reset] {
+  font-family: 'latoregular', sans-serif;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+input[type=text] {
+  font-family: 'latoregular', sans-serif !important;
+}
+#error-msg {
+  font-family: 'latoregular', sans-serif;
+  color: red;
+  font-size: small;
+}
 /*General */
+.ui-tabs .ui-tabs-nav li a {
+  padding-top: 2px !important;
+  padding-bottom: 4px !important;
+}
+.ui-datatable table tbody td {
+  padding: 5px 0px !important;
+}
 .ui-datalist-empty-message {
   font-size: 14px !important;
 }
@@ -27,11 +56,72 @@
 .hidden-width-helper {
   display: none;
 }
-.ui-dialog .ui-dialog-titlebar {
+.ui-datatable-scrollable .ui-datatable-scrollable-footer {
+  display: none;
+}
+.ui-panelgrid {
+  border: none!important;
+}
+.ui-panelgrid tbody tr td {
+  border: none !important;
+}
+.ui-panelgrid .ui-panelgrid-cell {
+  padding: 0!important;
+  text-align: center;
+}
+.ui-fieldset {
+  padding-top: 10px!important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+}
+.dialog-sentences {
+  width: 100%;
+  position: fixed;
+  bottom: 0 !important;
+  left: 0!important;
+  right: 0!important;
+  display: inline-table;
+  padding: 0!important;
+}
+.dialog-sentences .ui-panel-content {
   padding: 0 !important;
-  padding-left: 5px !important;
-  padding-right: 5px !important;
+}
+.dialog-sentences .icon-mini {
+  padding: 0;
+}
+.dialog-mini {
+  width: 280px !important;
+  position: fixed;
+  bottom: 0 !important;
+  left: 0!important;
+  right: 0!important;
+  display: inline-table;
+}
+.dialog-mini .icon-mini {
+  background-position: -16px -128px !important;
+  padding-top: 2px !important;
+  padding-right: 1px!important;
+}
+.my-icon-close {
+  padding-top: 3px !important;
+  padding-right: 2px!important;
+}
+.my-icon {
+  background-image: url("/web-report/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
+}
+.my-icon {
+  background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
+}
+.clear-btn {
+  color: white !important;
   background-color: #66bb6a;
+  padding-right: 14px;
+  padding-left: 4px;
+  font-weight: normal;
+}
+.clear-btn:hover {
+  text-decoration: none;
 }
 /*Tabs*/
 .tab-layout {
@@ -72,6 +162,12 @@
 .element-index {
   line-height: 20px;
   padding-left: 5px ;
+  text-decoration: none !important;
+}
+.element-index:hover {
+  line-height: 20px;
+  padding-left: 5px ;
+  text-decoration: underline !important;
 }
 .sub-element-index {
   margin-left: 10px;
@@ -93,18 +189,12 @@
   background-color: transparent!important;
   width: auto;
 }
-.display-sent {
-  background-color: transparent!important;
-}
 .bottom-panel {
   position: relative;
   bottom: 0;
 }
-.remove-link {
-  color: #2b2b2b;
-  font-weight: bold;
-  margin-right: 10px;
-  font-size: large;
+.remove-link:hover .ui-icon-minusthick {
+  background-position: -96px -128px !important;
 }
 .lex-unit-name {
   margin-right: 10px;
@@ -113,11 +203,17 @@
 .word {
   white-space: nowrap;
 }
-.lu-el {
+.target {
   font-weight: bold;
 }
-.normal-el {
-  font-weight: normal;
+.focus {
+  font-weight: bold;
+  border: solid 1px #66BB6A;
+}
+.lu-focus {
+  border: solid 1px #66BB6A;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 /*Document*/
 .paragraph {
@@ -129,6 +225,9 @@
   text-decoration: underline;
   font-weight: normal;
   white-space: nowrap;
+}
+.doc {
+  width: 100%;
 }
 /*Frame*/
 .frame-element {
@@ -152,7 +251,7 @@
 /*LexUnit*/
 .filter-btn {
   border: solid 1px #E0E0E0;
-  color: #546E7A;
+  color: #546e7a;
 }
 .all-btn {
   background-color: #fcf2f2;
@@ -174,9 +273,13 @@
 }
 .main-btn {
   width: 20%;
+  margin-bottom: 4px;
+}
+.real-btn {
+  margin-left: 2px;
 }
 .element-btn {
-  width: 90%;
+  width: 100%;
 }
 .element-column {
   border: none!important;
@@ -209,6 +312,7 @@
 .total-vp {
   color: #546E7A;
   font-weight: bold;
+  text-decoration: none!important;
 }
 .list-fe-vp {
   text-align: center;
@@ -216,5 +320,25 @@
   border: none!important;
   width: 120px;
   padding: 0;
+}
+.underline-tag {
+  border-bottom: solid 1px !important;
+}
+.real-button:hover div {
+  background-color: #F5F5F5;
+}
+.vpstyle {
+  float: left;
+  width: 130px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.vpstyleNumber {
+  float: left;
+  width: 30px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 

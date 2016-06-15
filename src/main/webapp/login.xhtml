@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://java.sun.com/jsf/html">
+<script type="text/javascript">
+    function isError(){
+        if (document.URL.indexOf("error") > -1) {
+            document.getElementById("error-msg").style.display = "block";
+        }
+    }
+</script>
+<h:head>
+    <title>Login Form</title>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/jfn.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/kwic.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/core-layout.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/adamantium-font.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/adamantium-layout.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/font-awesome.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/adamantium-layout/css/animate.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/primefaces-adamantium/theme.css"/>
+</h:head>
+<h:body>
+    <div style="text-align: center; border: solid 1px #455a64">
+        <img src="resources/logo/JFN_color/JFN_color_S.jpg" alt="logo" style="width: 200px; padding-top: 10px"/>
+        <div id="error-msg" style="display: none; padding-top: 10px">
+            The user name or password is incorrect
+        </div>
+        <form name="loginForm" method="post" action="/login" onsubmit=" return validate()">
+            <p><strong class="ui-corner-all">User name: </strong>
+                <input  style="width: 150px" class="ui-autocomplete-input ui-inputfield ui-widget ui-state-default ui-corner-all" type="text" name="username"/></p>
+            <p><strong>Password: </strong>
+                <input  style="width: 150px" class="ui-autocomplete-input ui-inputfield ui-widget ui-state-default ui-corner-all" type="password" name="password"/></p>
+            <p>
+                <input type="submit" value="Submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only GreenButton FloatNoneOnMobile btn-home"/>
+                <input type="reset" value="Reset" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only GreenButton FloatNoneOnMobile btn-home"/>
+            </p>
+        </form>
+    </div>
+    <script type="text/javascript">
+        window.onload=isError ;
+    function validate() {
+            if (document.loginForm.username.value == "") {
+                alert("Username is required");
+                document.loginForm.username.focus();
+                return false;
+            }else if (document.loginForm.password.value == "") {
+                alert("Password is required");
+                document.loginForm.password.focus();
+                return false;
+            }
+        }
+    </script>
+</h:body>
+</html>
+

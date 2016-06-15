@@ -3,13 +3,17 @@ package jp.keio.jfn.wat;
 import java.util.HashMap;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.context.ServletContextAware;
 import org.springframework.beans.factory.config.CustomScopeConfigurer;
 
-import jp.keio.jfn.wat.ViewScope;
+import jp.keio.jfn.wat.scopes.ViewScope;
 
 import javax.faces.webapp.FacesServlet;
 import javax.servlet.ServletContext;
@@ -20,10 +24,17 @@ import com.sun.faces.config.ConfigureListener;
  * This is the main class for the JFNWAT application.
  */
 @SpringBootApplication
+@Configuration
+@ComponentScan
+@Import(SecurityConfig.class)
 public class JFNWAT implements ServletContextAware {
 
 	public static void main(String[] args) throws Exception {
-		SpringApplication.run(JFNWAT.class, args);
+        SpringApplication springApplication =
+                new SpringApplication(JFNWAT.class);
+        springApplication.addListeners(
+                new ApplicationPidFileWriter("./bin/jfnwat.pid"));
+        springApplication.run(args);
 	}
 
 	@Override

@@ -1,0 +1,40 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/indexTemplate.xhtml">
+    <ui:define name="topic">
+            #{text['frameIndexCardTopic']} <br/>
+            <span class="CardSubTopic">
+                <h:outputText value="#{text['frameIndexCardSubTopic']}" escape="false"/>
+            </span>
+    </ui:define>
+
+    <ui:define name="filter">
+        <h:form>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{frameIndexController.filter}">
+                <p:ajax event="keyup" listener="#{frameIndexController.orderFrames()}" update="frameList" oncomplete="heightFrameList()"/>
+            </p:inputText>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="indexList">
+        <div>
+            <p:dataTable id="frameList" value="#{frameIndexController.orderedFrames}" var="frame" scrollable="true" scrollRows="60" scrollHeight="1500" emptyMessage="#{text['emptyMessage']}" liveScroll="true">
+                <p:column>
+                    <h:form>
+                        <p:commandLink action="#{tabController.addFrame(frame)}" value="#{frame}" styleClass="element-index" update="form2" oncomplete="heightFrameList()"/>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+        </div>
+    </ui:define>
+    <ui:define name="indexOutput">
+            <h:form id="form2">
+                <ui:insert id="output-index" name="frameOutput"/>
+            </h:form>
+    </ui:define>
+
+</ui:composition>

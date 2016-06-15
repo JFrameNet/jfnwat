@@ -1,0 +1,79 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../WEB-INF/frameIndex.xhtml">
+    <ui:define name="frameOutput">
+        <p:tabView value="#{tabController.loadedFrames}" activeIndex="#{tabController.index}" var="frame" dynamic="false" cache="true" styleClass="tab-layout">
+            <p:ajax event="tabClose" listener="#{tabController.onTabClose}" oncomplete="heightFrameList()"/>
+            <p:ajax event="tabChange" listener="#{tabController.onTabChange}" oncomplete="heightFrameList()"/>
+            <p:tab title="#{frame.name}" closable="true" titleStyle="font-weight: bold">
+                <p:accordionPanel multiple="true" activeIndex="0,1,2,3" id="output">
+                    <p:tab title="#{text['definition']}" >
+                        <h:outputText value="#{frameController.processDef(frame, frame.definition)}" escape="false" />
+                    </p:tab>
+                    <p:tab title="#{text['frameElements']}">
+                        <p:dataTable var="fe" value="#{frame.coreFrameEl}" emptyMessage="">
+                            <p:column styleClass="frame-element" headerText="#{text['core']}">
+                                <div class="ContainerIndent">
+                                    <h:outputText value="#{fe.name}" styleClass="marright10"/>
+                                    <h:outputText value=" [#{fe.abbrev}]" styleClass="general-tooltip"/>
+                                </div>
+                            </p:column >
+                            <p:column styleClass="frame-element-def">
+                                <div class="ContainerIndent">
+                                    <h:outputText value="#{frameController.processDef(frame, fe.definition)}" escape="false" />
+                                </div>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dataTable var="fe" value="#{frame.nonCoreFrameEl}" emptyMessage="">
+                            <p:column styleClass="frame-element" headerText="#{text['non-core']}">
+                                <div class="ContainerIndent">
+                                    <h:outputText value="#{fe.name}" styleClass="marright10"/>
+                                    <h:outputText value=" [#{fe.abbrev}]" styleClass="general-tooltip"/>
+                                </div>
+                            </p:column >
+                            <p:column styleClass="frame-element-def">
+                                <h:outputText value="#{frameController.processDef(frame, fe.definition)}" escape="false" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:tab>
+                    <p:tab title="#{text['frameRelations']}">
+                        <div>
+                            <p:dataList var="coreSets" value="#{frame.coreSets}" emptyMessage="" type="definition">
+                                <h:outputText value="#{coreSets}" styleClass="horizontal core-set"/>
+                            </p:dataList>
+                            <br/>
+                        </div>
+                        <div >
+                            <p:dataList var="rel" type="definition" value="#{frame.relations}" emptyMessage="">
+                                <div>
+                                    <div class="Wid20 Fleft OvHidden">
+                                        <h:outputText value="#{rel.key} :"/>
+                                    </div>
+                                    <div class="Wid70 OvHidden">
+                                        <p:dataList var="related" value="#{rel.value}" type="definition">
+                                            <p:commandLink styleClass="horizontal core-set" action="#{tabController.addFrame(related.name)}" value="#{related.name}" update="@(.tab-layout)"/>
+                                        </p:dataList>
+                                    </div>
+                                </div>
+                            </p:dataList>
+                        </div>
+                    </p:tab>
+                    <p:tab title="#{text['lexUnits']}">
+                        <p:dataList var="lexUnit" type="definition" value="#{frameController.lexUnitsByFrame(frame)}" emptyMessage="#{text['emptyMessage']}">
+                            <p:commandLink styleClass="list-lu horizontal" action="#{tabController.addLURedirect(lexUnit.id)}" value="#{lexUnit.name}" style="font-size: larger"/>
+                            <p:dataList value="#{lexUnit.statuses}" var="status" type="definition" styleClass="horizontal">
+                                <h:outputText styleClass="horizontal general-tooltip" value="#{status.statusType.name}" />
+                            </p:dataList>
+                            <br/><br/>
+                        </p:dataList>
+                    </p:tab>
+                </p:accordionPanel>
+            </p:tab>
+        </p:tabView>
+        <ui:include src="../WEB-INF/dialog.xhtml"/>
+    </ui:define>
+</ui:composition>

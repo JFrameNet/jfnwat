@@ -2,7 +2,7 @@ package jp.keio.jfn.jfnwat.controller;
 
 import jp.keio.jfn.wat.JFNWAT;
 
-import jp.keio.jfn.wat.controller.Utils;
+import jp.keio.jfn.wat.Utils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;

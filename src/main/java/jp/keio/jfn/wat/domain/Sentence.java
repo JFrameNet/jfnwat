@@ -7,7 +7,7 @@ import java.util.List;
 
 
 /**
- * The persistent class for the Sentence database table.
+ * The persistent class for the Kwicsentence database table.
  *
  */
 @Entity

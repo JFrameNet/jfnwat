@@ -1,0 +1,61 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/layout.xhtml">
+
+    <ui:define name="content">
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Fleft OvHidden">
+                    <p:link href="../web-report/index.jsf">
+                        <h:graphicImage name="logo/jfn_logo_only.jpg" width="60" styleClass="toolbar-jfn"/>
+                    </p:link>
+                </div>
+                <div class="Fleft OvHidden">
+                    <ui:insert name="title navigation">Title navigation</ui:insert>
+                </div>
+            </div>
+        </div>
+        <div class="Container100 BorderTop BorderBottom">
+            <div class="ContainerIndent">
+                <div class="Card">
+                    <div class="CardTopic">
+                        <ui:insert name="topic"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="Container100 BorderTop BorderBottom">
+            <div class="ContainerIndent">
+                <ui:insert name="kwicHorizontalSearch"/>
+            </div>
+        </div>
+        <div class="Container100">
+            <div class="Card NoPadding FlexContainer">
+
+                <div class="Flex85 OvHidden">
+                    <div class="Container100">
+                        <ui:insert name="kwicOutput"/>
+                    </div>
+                </div>
+
+                <div class="Flex15 OvHidden BorderLeft">
+                    <div class="Container100">
+                        <ui:insert name="correspondingFrames"/>
+                    </div>
+                    <div class="Container100">
+                        <ui:insert name="filter"/>
+                    </div>
+                    <div class="Container100 OvXScroll BorderBottom">
+                        <div class="ContainerIndent" style="padding-left: 5px; padding-right: 0px">
+                            <ui:insert name="indexList"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>

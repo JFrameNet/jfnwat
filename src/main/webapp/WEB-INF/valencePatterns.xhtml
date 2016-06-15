@@ -1,0 +1,42 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui" >
+    <p:dataTable id="patterns" styleClass="allReal" var="group" value="#{lexUnitController.getValencePatterns(lu)}" emptyMessage=""> 
+        <p:column styleClass="valence-pattern-column"> 
+            <f:facet name="header">
+                <h:outputText id="title" value="Sentences per Valence Patterns" style="float: left;" rendered="#{lu.valencePatterns.size() > 0}"/>
+            </f:facet>
+            <p:commandLink action="#{dialogManager.totalGroup(lu,group)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
+                <div class="real-button" style="border-top: solid 1px #e0e0e0">
+                    <div class="vpstyleNumber">
+                        <h:outputText value="#{group.totalOccurences}" style="font-weight: bold"/>
+                    </div>
+                    <ui:repeat value="#{group.frameElements}" var="fe">
+                        <div class="vpstyle">
+                            <h:outputText value="#{fe.name}" style="font-weight: bold"/>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </p:commandLink>
+            <br/><br/>
+            <ui:repeat value="#{group.patterns}" var="real">
+                <div class="real-button">
+                    <p:commandLink action="#{dialogManager.realPatternEntry(lu,real)}" oncomplete="heightLUList()" update="@(.dialog-sentences)">
+                        <div class="vpstyleNumber">
+                            <h:outputText value="#{real.annoSet.size()}"/>
+                        </div>
+                        <ui:repeat value="#{group.frameElements}" var="var">
+                            <div class="vpstyle">
+                                #{real.outputFE(var)}
+                            </div>
+                        </ui:repeat>
+                        <br/><br/>
+                    </p:commandLink>
+                </div>
+            </ui:repeat>
+        </p:column> 
+    </p:dataTable>
+</ui:composition>

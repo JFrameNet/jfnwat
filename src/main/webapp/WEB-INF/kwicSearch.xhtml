@@ -1,0 +1,70 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+    <div class="KWIC kwicSearch" style="display: none">
+
+     <h:form id="kwicSearch">
+            <p:autoComplete id="searchField" maxResults="5" placeholder="Key word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" style="width: 100%" onfocus="this.select()" value="#{kwicController.search}"/>
+
+            <div> <!--style="display: inline; margin-left: 25px"-->
+                <h:outputText value="Sentence-finally" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+                <p:selectBooleanCheckbox value="#{kwicController.end}" style="display: inline-block; margin: 10px 5px; vertical-align: middle"/>
+            </div>
+
+            <p:autoComplete id="kwicCollocate" maxResults="5" placeholder="Collocate" queryDelay="0" completeMethod="#{kwicController.completeText}" style="width: 100%" onfocus="this.select()" value="#{kwicController.collocate}"/>
+            <h:outputText value="Max # of morphemes from key word" style="display: block; margin: 10px; vertical-align: middle"/>
+
+
+             <div style="display: flex">
+                <h:outputText value="Before:" style="width: 50px; margin: 10px; vertical-align: middle"/>
+                <p:inputText id="kwicCollocatePreScope" style="display: inline-block; width: 100%;" onfocus="this.select()" value="#{kwicController.preScope}"/>
+             </div>
+            <div style="display: flex">
+                <h:outputText value="After:" style="width: 50px; padding-right: 9px; margin: 10px; vertical-align: middle"/>
+                <p:inputText id="kwicCollocatePostScope" style="display: inline-block; width: 100%;" onfocus="this.select()" value="#{kwicController.postScope}"/>
+            </div>
+
+         <p:commandButton value="Search KWIC!" styleClass="GreenButton KwicButton"
+                          actionListener="#{kwicController.matchLazyDataWithSearch()}"
+                          update="#{p:component('relevantFrames')} #{p:component('output')}" />
+
+
+         <h:outputText value="Settings" style="display: block; width: 100%; text-align: center; vertical-align: middle; margin: 25px 0px 10px "/>
+
+            <h:outputText value="Corpora:" style="display: block; margin: 10px; vertical-align: middle"/>
+
+             <p:selectManyCheckbox id="corpora" value="#{kwicController.corpora}" layout="grid" columns="1" style="margin-left: 20px">
+                 <f:selectItem itemLabel="書籍" itemValue="BK" />
+                 <f:selectItem itemLabel="白書" itemValue="OW" />
+                 <f:selectItem itemLabel="国会議事録" itemValue="OM" />
+                 <f:selectItem itemLabel="Yahoo!知恵袋" itemValue="OC" />
+             </p:selectManyCheckbox>
+
+            <h:outputText value="get # random results" style="display: inline-block; margin-left: 10px; vertical-align: middle"/>
+            <p:selectBooleanCheckbox value="#{kwicController.random}" style="display: inline-block; margin: 10px 5px; vertical-align: middle"/>
+            <p:inputText id="randomNumber" style="display: inline-block" onfocus="this.select()" value="#{kwicController.randomNumber}"/>
+
+             <h:outputText value="# of final morphemes before 。:" style="display: block; margin: 10px; vertical-align: middle"/>
+             <p:inputText id="endScope" style="display: inline-block" onfocus="this.select()" value="#{kwicController.endScope}"/>
+        </h:form>
+
+        <h:form>
+            <h:outputText value="# of context characters around keyword:" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+            <p:inputText id="charNum" style="display: inline-block" onfocus="this.select()" value="#{kwicController.charNum}"/>
+        </h:form>
+
+        <h:form>
+            <h:outputText value="KWIC view" style="display: inline-block; margin: 10px; vertical-align: middle"/>
+            <p:inputSwitch value="#{kwicController.kwicView}" style="display: inline-block; margin: 10px 5px; vertical-align: middle; ">
+                <p:ajax update="#{p:component('output')}" />
+            </p:inputSwitch>
+        </h:form>
+
+    </div>
+
+</ui:composition>

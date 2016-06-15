@@ -1,0 +1,97 @@
+<ui:composition lang="#{localeBean.language}"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="../WEB-INF/kwicTemplate.xhtml">
+
+    <ui:define name="title navigation">
+        <div class="Fleft OvHidden">
+            <h:form>
+                <p:tabMenu activeIndex="#{param.i}">
+                    <p:menuitem value="#{text['KwicTabMenuItem']}">
+                        <f:param name="i" value="0" />
+                    </p:menuitem>
+                </p:tabMenu>
+            </h:form>
+        </div>
+    </ui:define>
+
+    <ui:define name="topic">
+        #{text['kwicCardTopic']} <br/>
+            <span class="CardSubTopic">
+                <h:outputText value="#{text['kwicCardSubTopic']}" escape="false"/>
+            </span>
+    </ui:define>
+
+
+    <ui:define name="filter">
+        <h:form>
+            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicIndexController.filter}" style="margin-top: 1px; padding-top: 10px !important;">
+                <p:ajax event="keyup" listener="#{kwicIndexController.orderFrames()}" update="kwicIndex"/>
+            </p:inputText>
+        </h:form>
+    </ui:define>
+
+    <ui:define name="indexList">
+        <div>
+            <p:accordionPanel id="kwicIndex" value="#{kwicIndexController.orderedFrames}" var="frame"
+                              dynamic="true" cache="true" multiple="true" activeIndex="-1" styleClass="frame-accordion">
+                <p:tab title="#{frame.name}">
+                    <h:outputText value="#{kwicIndexController.getFrameDef(frame.id)}" escape="false"/>
+                    <!--
+                                            <p:dataTable value="#{kwicFrameIndexController.getFrameElements(frame)}" var="fe" styleClass="structural-table compact-table">
+                                                <p:column>
+                                                    <p:commandButton value="#{fe.getName()}" icon="#{kwicView.getIcon(fe.getType())}" styleClass="fe-btn"/>
+                                                </p:column>
+                                            </p:dataTable>
+                    -->
+
+                    <h:form>
+                        <p:treeTable value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
+                                     styleClass="structural-table" emptyMessage="No Lu's found.">
+                            <p:column>
+                                <h:outputText value="#{elementName}"/>
+                            </p:column>
+                        </p:treeTable>
+                    </h:form>
+
+                </p:tab>
+            </p:accordionPanel>
+        </div>
+    </ui:define>
+
+    <ui:define name="kwicHorizontalSearch">
+        <ui:include src="../WEB-INF/kwicHorizontalSearch.xhtml"/>
+    </ui:define>
+
+    <ui:define name="kwicOutput">
+        <ui:include src="../WEB-INF/kwicOutput.xhtml"/>
+    </ui:define>
+
+    <ui:define name="correspondingFrames">
+        <div id="framesHeader">
+            <h:outputText value="(Relevant) Frames"/>
+        </div>
+        <p:accordionPanel id="relevantFrames" styleClass="relevant-frames" value="#{kwicController.relevantFrames}" var="frame" activeIndex="0" multiple="true">
+            <p:tab title="#{frame.name}">
+                <h:outputText value="#{kwicIndexController.getFrameDef(frame.id)}" escape="false"/>
+                <h:form>
+                    <p:treeTable value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
+                                 styleClass="structural-table" emptyMessage="No Lu's found.">
+                        <p:column>
+                            <h:outputText value="#{elementName}"/>
+                        </p:column>
+                    </p:treeTable>
+                </h:form>
+
+            </p:tab>
+        </p:accordionPanel>
+    </ui:define>
+
+    <script>
+        var follow=document.getElementById('output_paginator_top').clientHeight;
+        document.getElementById('framesHeader').style.lineHeight=follow;
+    </script>
+</ui:composition>
