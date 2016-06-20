@@ -11,6 +11,6 @@ public class UnknownWordExeption extends Exception {
     }
 
     public enum Cause{
-        KEYWORD, COLLOCATE, END
+        KEYWORD, COLLOCATE
     }
 }
