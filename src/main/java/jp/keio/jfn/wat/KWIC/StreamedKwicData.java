@@ -6,16 +6,16 @@ import java.util.stream.Stream;
 /**
  * Created by jfn on 6/14/16.
  */
-public class KwicDataStreamer {
+public class StreamedKwicData {
     static ObjectOutputStream oos;
 
     private KwicTransactions kwicTransactions;
 
-    private KwicDataStreamer(){
+    private StreamedKwicData(){
 
     }
 
-    public KwicDataStreamer(DTOKwicSearch dtoKwicSearch, KwicTransactions kwicTransactions) throws UnknownWordExeption{
+    public StreamedKwicData(DTOKwicSearch dtoKwicSearch, KwicTransactions kwicTransactions) throws UnknownWordExeption{
         this.kwicTransactions = kwicTransactions;
         kwicTransactions.setNewSearch(dtoKwicSearch);
     }

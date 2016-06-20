@@ -78,23 +78,25 @@ public class KwicTransactions implements Serializable {
     }
 
     private void MakeAllFindable() throws UnknownWordExeption {
-        findAllKwics(searchIn.word, kwicWordForms);
+        findAllKwicWords(searchIn.word, kwicWordForms);
         if (kwicWordForms.isEmpty()){throw new UnknownWordExeption(UnknownWordExeption.Cause.KEYWORD);}
+        searchIn.words = kwicWordForms;
 
-        if (!searchIn.collocate.equals("")) {
-            findAllKwics(searchIn.collocate, kwicCollocateForms);
+        if (searchIn.hasCollocate) {
+            findAllKwicWords(searchIn.collocate, kwicCollocateForms);
             if(kwicCollocateForms.isEmpty()){ throw new UnknownWordExeption(UnknownWordExeption.Cause.COLLOCATE);}
+            searchIn.collocates = kwicCollocateForms;
         }
     }
 
-    private void findAllKwics(String search, List<KwicWord> kwicForms){
+    private void findAllKwicWords(String search, List<KwicWord> kwicForms){
         try {
             // in some cases more then one result eg　車　(名詞 and 接尾辞 part of speach)
-            List<WordForm> wordForms = getWordForms(search);
-            for (WordForm wordForm : wordForms) {
-                findKwics(wordForm.getForm(), kwicForms);
-            }
-            findKwics(search, kwicForms);
+//            List<WordForm> wordForms = getWordForms(search);
+//            for (WordForm wordForm : wordForms) {
+//                findKwicWords(wordForm.getForm(), kwicForms);
+//            }
+            findKwicWords(search, kwicForms);
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -109,9 +111,9 @@ public class KwicTransactions implements Serializable {
         return wordForms;
     }
 
-    private void findKwics(String word, List<KwicWord> kwicForms) {
-        List<KwicWord> kwicSearches = wordRepository.findByWord(word);
-        kwicForms.addAll(kwicSearches);
+    private void findKwicWords(String word, List<KwicWord> kwicForms) {
+        List<KwicWord> kwicWords = wordRepository.findByWord(word);
+        kwicForms.addAll(kwicWords);
     }
 
 
@@ -124,45 +126,23 @@ public class KwicTransactions implements Serializable {
         searchIn.dot = this.dot;
         boolean doRandomSearch = searchIn.random;
 
-        /**/ int sortbefore = -5;
-
  /**/         long startTime = System.currentTimeMillis();
 
         //TODO REFACTOR THIS BEAST
-        if(!searchIn.collocate.equals("") && searchIn.end){ //BOTH
-            if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithScopedCollocateAndEnd(searchIn, kwicWordForms, kwicCollocateForms);
-            } else {
-                page = kwicsRepository.findByCollocateWithScopeAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
-                pageList = pageToList(page);
-            }
-        } else if (!searchIn.collocate.equals("") && !searchIn.end) { //COLLOCATE
-            if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithScopedCollocate(searchIn, kwicWordForms, kwicCollocateForms);
-            } else {
-                page = kwicsRepository.findByCollocateWithScope(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, makePagable(first, pageSize));
-                pageList = pageToList(page);
-            }
-        } else if(searchIn.collocate.equals("") && searchIn.end) { // END
-            if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomWithEnd(searchIn, kwicWordForms);
-            } else {
-                page = kwicsRepository.findBySentenceEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
-                pageList = pageToList(page);
-            }
+        if(doRandomSearch){
+            pageList = kwicsRepository.findNRandom(searchIn);
+        } else if(searchIn.hasCollocate && searchIn.end){ //BOTH
+            page = kwicsRepository.findByCollocateWithScopeAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
+            pageList = pageToList(page);
+        } else if (searchIn.hasCollocate && !searchIn.end) { //COLLOCATE
+            page = kwicsRepository.findByCollocateWithScope(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, makePagable(first, pageSize));
+            pageList = pageToList(page);
+        } else if(searchIn.end && !searchIn.hasCollocate) { // END
+            page = kwicsRepository.findBySentenceEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
+            pageList = pageToList(page);
         } else {
-            if(doRandomSearch){
-                pageList = kwicsRepository.selectRandomByWord(searchIn, kwicWordForms);
-            }
-//            else if (sortField.equals("before")) {
- //               kwicsRepository.simpleSorted(searchIn.corpora, kwicWordForms, sortbefore, makePagable(first, pageSize));
-//            }
-            else {
-                page = kwicsRepository.findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms, makePagable(first, pageSize));
-                pageList = pageToList(page);
-//                KwicWord word = kwicWordForms.get(1);
-//                pageList = kwicsRepository.sorttest(word);
-            }
+            page = kwicsRepository.findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms, makePagable(first, pageSize));
+            pageList = pageToList(page);
         }
 /**/        long stopTime = System.currentTimeMillis();
 /**/        long elapsedTime = stopTime - startTime;
@@ -171,7 +151,7 @@ public class KwicTransactions implements Serializable {
 
         totalResults = doRandomSearch ? pageSize : totalResults;
         try {
-            curentPageList =  convertAllKwicsToDisplay(pageList, pageSize);
+            curentPageList =  convertAllKwicsToDisplay(pageList);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -199,8 +179,8 @@ public class KwicTransactions implements Serializable {
     }
 
 
-    List<DTOSentenceDisplay> convertAllKwicsToDisplay(List<Kwics> kwicData, int pageSize) {
-        List<DTOSentenceDisplay> result = new ArrayList<DTOSentenceDisplay>(pageSize);
+    List<DTOSentenceDisplay> convertAllKwicsToDisplay(List<Kwics> kwicData) {
+        List<DTOSentenceDisplay> result = new ArrayList<DTOSentenceDisplay>(kwicData.size());
 
 /**/         long startTime = System.currentTimeMillis();
 
@@ -275,13 +255,12 @@ public class KwicTransactions implements Serializable {
 
     @Transactional
     public InputStream stream() throws IOException {
-
-            Stream<Kwics> kwicsStream = kwicsRepository.readAllByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms);
+            Stream<Kwics> kwicsStream = kwicsRepository.readAllAndStream(searchIn);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bos = new BufferedOutputStream(baos);
 
-            kwicsStream.map(k -> aKwicToDisplay(k)).forEach(d -> d.write(bos));
+            kwicsStream.map(this::aKwicToDisplay).forEach(d -> d.write(bos));
 
             bos.flush();
             bos.close();

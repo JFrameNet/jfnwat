@@ -22,19 +22,15 @@ public class DTOKwicSearch {
 
     public int randomNumber;
 
-    boolean end;
-    boolean random;
+    public boolean hasCollocate;
+    public boolean end;
+    public boolean random;
+
+    public List<KwicWord> words;
+    public List<KwicWord> collocates;
 
 
-    public DTOKwicSearch(String word, String collocate, int before, int after, boolean end, int endScope, List<String> corpora, boolean random, int randomNumber){
-        this.word = word;
-        this.collocate = collocate;
-        this.end = end;
-        this.PRE_COLLOCATE = before;
-        this.POST_COLLOCATE = after;
-        this.END_SCOPE = endScope;
-        this.corpora = corpora;
-        this.random  = random;
-        this.randomNumber = randomNumber;
+    public DTOKwicSearch(String keyWord){
+        this.word = keyWord;
     }
 }
