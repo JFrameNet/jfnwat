@@ -50,7 +50,7 @@ public class KwicController implements Serializable {
 
 
     // Form variables used in kwicSearch.xhtml
-    private String search; // TODO need to remove unwanted spaces and other unwanted input?
+    private String keyWord; // TODO need to remove unwanted spaces and other unwanted input?
     private String collocate;
     private int preScope = DEFAULT_PRE_SCOPE;
     private int postScope = DEFAULT_POST_SCOPE;
@@ -63,6 +63,7 @@ public class KwicController implements Serializable {
     private String regex;
 
     // Output variables
+    private DTOKwicSearch search;
     private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
     private List<Frame> relevantFrames = new ArrayList<Frame>();
     private Object sort = "keyWord";
@@ -87,28 +88,41 @@ public class KwicController implements Serializable {
         return results;
     }
 
-
     // Form getters and setters for kwicSearch.xhtml
-    public void setSearch(String search) {
-        this.search = search;
+    public void setKeyWord(String keyWord) {
+        search = new DTOKwicSearch(keyWord);
+        this.keyWord = keyWord;
     }
-    public String getSearch() {return search;}
-
-    public void setCollocate(String collocate) {
-        this.collocate = collocate;
-    }
-    public String getCollocate() {
-        return collocate;
-    }
+    public String getKeyWord() {return keyWord;}
 
     public void setEnd(Boolean end) {
+        search.end = end;
         this.end = end;
     }
     public Boolean getEnd() {
         return end;
     }
 
+    public void setEndScope(int endScope) {
+        search.END_SCOPE = endScope;
+        this.endScope = endScope;
+    }
+    public int getEndScope() {
+        return endScope;
+    }
+
+    public void setCollocate(String collocate) {
+        search.hasCollocate = !collocate.isEmpty();
+        search.collocate = collocate;
+        this.collocate = collocate;
+    }
+    public String getCollocate() {
+        return collocate;
+    }
+
+
     public void setPreScope(int preScope) {
+        search.PRE_COLLOCATE = preScope;
         this.preScope = preScope;
     }
     public int getPreScope() {
@@ -116,10 +130,19 @@ public class KwicController implements Serializable {
     }
 
     public void setPostScope(int postScope) {
+        search.POST_COLLOCATE = postScope;
         this.postScope = postScope;
     }
     public int getPostScope() {
         return postScope;
+    }
+
+    public void setCorpora(List<String> corpora) {
+        search.corpora = corpora;
+        this.corpora = corpora;
+    }
+    public List<String> getCorpora() {
+        return corpora;
     }
 
     public void setRegex(String regex) {
@@ -130,23 +153,16 @@ public class KwicController implements Serializable {
         return regex;
     }
 
-    // Settings defined in kwicSearch.xhtml
-    public void setCorpora(List<String> corpora) {
-        this.corpora = corpora;
-    }
-    public List<String> getCorpora() {
-        return corpora;
-    }
-
     public void setRandom(boolean random) {
+        search.random = random;
         this.random = random;
-
     }
     public boolean getRandom() {
         return random;
     }
 
     public void setRandomNumber(int randomNumber) {
+        search.randomNumber = randomNumber;
         this.randomNumber = randomNumber;
         if (random){
             dataView.setPageSize(randomNumber);
@@ -159,11 +175,14 @@ public class KwicController implements Serializable {
         return randomNumber;
     }
 
-    public void setEndScope(int endScope) {
-        this.endScope = endScope;
+
+    // Display Settings getters and setters
+    public void setKwicView(boolean kwicView) {
+        dataView.setKwicView(kwicView);
     }
-    public int getEndScope() {
-        return endScope;
+
+    public boolean getKwicView(){
+        return dataView.isKwicView();
     }
 
     public void setCharNum(int charNum) {
@@ -174,15 +193,19 @@ public class KwicController implements Serializable {
         return this.charNum;
     }
 
+    public void setSort(Object sort) {
+        this.sort = sort;
+    }
 
-
-
+    public Object getSort() {
+        return sort;
+    }
 
 
     public void matchLazyDataWithSearch() {
         try {
-            if(search != null){
-                lazyKwicData = new LazyKwicData(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random, randomNumber), kwicTransactions);
+            if(keyWord != null){
+                lazyKwicData = new LazyKwicData(search, kwicTransactions);
                 relevantFrames = kwicTransactions.findRelevantFrames();
             }
         } catch (Exception e) {
@@ -209,24 +232,7 @@ public class KwicController implements Serializable {
 
     // Determines the with of the Key Word column in the view according to the length of the key word that was searched
     public int getWordColumnSize() {
-        return search == null ? 20 : search.length()*20; // TODO longest word form
-    }
-
-
-    public void setKwicView(boolean kwicView) {
-        dataView.setKwicView(kwicView);
-    }
-
-    public boolean getKwicView(){
-        return dataView.isKwicView();
-    }
-
-    public void setSort(Object sort) {
-        this.sort = sort;
-    }
-
-    public Object getSort() {
-        return sort;
+        return keyWord == null ? 20 : keyWord.length()*20; // TODO longest word form
     }
 
 
@@ -235,7 +241,7 @@ public class KwicController implements Serializable {
     public void download() throws IOException {
         FacesContext fc = FacesContext.getCurrentInstance();
 
-        if(search != null) {
+        if(keyWord != null) {
             String fileName = "jfnwat_kwic.doc";
             ExternalContext ec = fc.getExternalContext();
 
@@ -265,14 +271,15 @@ public class KwicController implements Serializable {
     }
 
     private InputStream getDatAsInputStream() throws IOException{
-        KwicDataStreamer kwicDataStreamer = null;
+        StreamedKwicData streamedKwicData = null;
         try {
-            kwicDataStreamer = new KwicDataStreamer(new DTOKwicSearch(search, collocate, preScope, postScope, end, endScope, corpora, random, randomNumber), kwicTransactions);
+            streamedKwicData = new StreamedKwicData(search, kwicTransactions);
         } catch (UnknownWordExeption unknownWordExeption) {
             unknownWordExeption.printStackTrace();
         }
-        return kwicDataStreamer.getStream();
+        return streamedKwicData.getStream();
     }
+
 
     /*
     public void documentLink(String fileName){

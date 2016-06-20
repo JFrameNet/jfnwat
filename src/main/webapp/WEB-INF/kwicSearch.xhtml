@@ -9,7 +9,7 @@
     <div class="KWIC kwicSearch" style="display: none">
 
      <h:form id="kwicSearch">
-            <p:autoComplete id="searchField" maxResults="5" placeholder="Key word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" style="width: 100%" onfocus="this.select()" value="#{kwicController.search}"/>
+            <p:autoComplete id="searchField" maxResults="5" placeholder="Key word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" style="width: 100%" onfocus="this.select()" value="#{kwicController.keyWord}"/>
 
             <div> <!--style="display: inline; margin-left: 25px"-->
                 <h:outputText value="Sentence-finally" style="display: inline-block; margin: 10px; vertical-align: middle"/>

@@ -18,7 +18,11 @@ import java.util.stream.Stream;
  */
 @Repository
 public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepositoryCustom {
-    String test = "test";
+    String sqSelect = " select k from Kwics k ";
+    String sqKeyWord = " k.word in :wordList ";
+    String sqCorpus = " k.kwicSentence.corpusName in :corpusList ";
+    String sqScopedCollocate = " exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :pre) and (k.place + :post ) ) ";
+    String sqEndOfSentence = " exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) ) ";
 
     Kwics findById(int id);
 
@@ -30,28 +34,15 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
     Page<Kwics> findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(List<String> corpora, List<KwicWord> words, Pageable pageable);
 
 
-    @Query("select k.id from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-            "and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList)" +
-            "order by k.word")
-    Page<Kwics> findByCollocate(
-                                        @Param("corpusList") List<String> corpora,
-                                        @Param("wordList") List<KwicWord> words,
-                                        @Param("collocateList") List<KwicWord> collocates,
-                                        Pageable pageable);
-
-    @Query("select k from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-            "and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :b) and (k.place + :a) )" +
-            "order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqScopedCollocate + "order by k.word")
     Page<Kwics> findByCollocateWithScope(@Param("corpusList") List<String> corpora,
                                          @Param("wordList") List<KwicWord> words,
                                          @Param("collocateList") List<KwicWord> collocates,
-                                         @Param("b") int before,
-                                         @Param("a") int after,
+                                         @Param("pre") int before,
+                                         @Param("post") int after,
                                          Pageable pageable);
 
-    @Query("select k from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-            "and exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) )" +
-            "order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence + " order by k.word")
     Page<Kwics> findBySentenceEnd(@Param("corpusList") List<String> corpora,
                                     @Param("wordList") List<KwicWord> words,
                                     @Param("dot") KwicWord dot,
@@ -59,34 +50,19 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
                                     Pageable pageable);
 
 
-    @Query("select k from Kwics k where k.kwicSentence.corpusName in :corpusList and k.word in :wordList " +
-            "and exists (select d from Kwics d where d.kwicSentence = k.kwicSentence and d.word = :dot and d.place between (k.place) and (k.place + :endScope) )"+
-            "and exists (select c from Kwics c where c.kwicSentence = k.kwicSentence and c.word in :collocateList and c.place between (k.place - :b) and (k.place + :a) )" +
-            "order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence + " and " + sqScopedCollocate + " order by k.word")
     Page<Kwics> findByCollocateWithScopeAndEnd(@Param("corpusList") List<String> corpora,
-                                         @Param("wordList") List<KwicWord> words,
-                                         @Param("collocateList") List<KwicWord> collocates,
-                                         @Param("b") int before,
-                                         @Param("a") int after,
+                                               @Param("wordList") List<KwicWord> words,
+                                               @Param("collocateList") List<KwicWord> collocates,
+                                               @Param("pre") int before,
+                                               @Param("post") int after,
                                                @Param("dot") KwicWord dot,
                                                @Param("endScope") int scope,
-                                         Pageable pageable);
+                                               Pageable pageable);
 
-    Stream<Kwics> readAllByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(List<String> corpora, List<KwicWord> words);
-            /*
-            @Query("select u from User u")
-            Stream<User> findAllByCustomQueryAndStream();
+    Stream<Kwics> readAllAndStream(DTOKwicSearch param);
 
-            Stream<User> readAllByFirstnameNotNull();
-
-            @Query("select u from User u")
-            Stream<User> streamAllPaged(Pageable pageable);
-         */
-
-    List<Kwics> selectRandomByWord(DTOKwicSearch param, List<KwicWord> words);
-    List<Kwics> selectRandomWithScopedCollocate(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates);
-    List<Kwics> selectRandomWithEnd(DTOKwicSearch param, List<KwicWord> words);
-    List<Kwics> selectRandomWithScopedCollocateAndEnd(DTOKwicSearch param, List<KwicWord> words, List<KwicWord> collocates);
+    List<Kwics> findNRandom(DTOKwicSearch param);
 
     List<Kwics> sorttest(KwicWord word);
 }
