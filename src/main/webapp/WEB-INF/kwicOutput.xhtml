@@ -8,7 +8,7 @@
 
     <div class="KWIC kwicOutput">
 
-        <p:dataTable id="output" emptyMessage="No results to display"
+        <p:dataTable id="output" emptyMessage="#{text['noKwics']}"
 
                      var="sentence" value="#{kwicController.lazyData}"
                      paginator="true" rows="#{kwicDataView.pageSize}" paginatorAlwaysVisible="true"
@@ -30,14 +30,14 @@
                 <h:outputText value="#{sentence.file}, #{sentence.corpus}"/>
             </p:column>
 
-                <p:column rendered="#{kwicDataView.kwicView}"  sortBy="#{sentence.before}" sortable="false" style="width: auto; text-align: right">
-                    <h:outputText value="#{sentence.before}"/>
+                <p:column rendered="#{kwicDataView.kwicView}"  sortBy="#{sentence.preContext}" sortable="false" style="width: auto; text-align: right">
+                    <h:outputText value="#{sentence.preContext}"/>
                 </p:column>
                 <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.keyWord}" sortable="false" style="width: #{kwicController.wordColumnSize}px; text-align: center; font-weight: bold;">
                     <h:outputText value="#{sentence.keyWord}"/>
                 </p:column>
-                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.after}" sortable="false" style="width: auto; text-align: left">
-                    <h:outputText value="#{sentence.after}"/>
+                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.postContext}" sortable="false" style="width: auto; text-align: left">
+                    <h:outputText value="#{sentence.postContext}"/>
                 </p:column>
 
                 <p:column  rendered="#{kwicDataView.nonKwicView}">

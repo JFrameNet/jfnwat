@@ -28,7 +28,7 @@
 
     <ui:define name="filter">
         <h:form>
-            <p:inputText placeholder="#{text['frameFilter']}" value="#{kwicIndexController.filter}" style="margin-top: 1px; padding-top: 10px !important;">
+            <p:inputText placeholder="#{text['kwicFrameFilter']}" value="#{kwicIndexController.filter}" style="margin-top: 1px; padding-top: 10px !important;">
                 <p:ajax event="keyup" listener="#{kwicIndexController.orderFrames()}" update="kwicIndex"/>
             </p:inputText>
         </h:form>
@@ -50,7 +50,7 @@
 
                     <h:form>
                         <p:treeTable value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
-                                     styleClass="structural-table" emptyMessage="No Lu's found.">
+                                     styleClass="structural-table" emptyMessage="#{text['noLU']}">
                             <p:column>
                                 <h:outputText value="#{elementName}"/>
                             </p:column>
@@ -72,14 +72,14 @@
 
     <ui:define name="correspondingFrames">
         <div id="framesHeader">
-            <h:outputText value="(Relevant) Frames"/>
+            <h:outputText value="#{text['frameHeader']}"/>
         </div>
         <p:accordionPanel id="relevantFrames" styleClass="relevant-frames" value="#{kwicController.relevantFrames}" var="frame" activeIndex="0" multiple="true">
             <p:tab title="#{frame.name}">
                 <h:outputText value="#{kwicIndexController.getFrameDef(frame.id)}" escape="false"/>
                 <h:form>
                     <p:treeTable value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
-                                 styleClass="structural-table" emptyMessage="No Lu's found.">
+                                 styleClass="structural-table" emptyMessage="#{text['noLU']}">
                         <p:column>
                             <h:outputText value="#{elementName}"/>
                         </p:column>

@@ -15,12 +15,12 @@ import java.util.ListIterator;
 public class DTOSentenceDisplay implements Serializable{
 
     private KwicSentence kwicSentence;
-    private String before;
+    private String preContext;
     private String beginning;
     private String keyWord;
     private int splitIndex;
     private String end;
-    private String after;
+    private String postContext;
     private int CONTEXT_SCOPE = 20;
     private List<String> before5;
     private List<String> after5;
@@ -32,8 +32,6 @@ public class DTOSentenceDisplay implements Serializable{
         this.before5 = before5;
         this.after5 = after5;
         splitInBeginningWordEnd();
-        extendBefore();
-        extendAfter();
     }
 
     public DTOSentenceDisplay(KwicSentence kwicSentence, int splitIndex,  List<String> befor5, List<String> after5){
@@ -41,16 +39,18 @@ public class DTOSentenceDisplay implements Serializable{
         }
 
 
-    public String getBefore() {
-        return before;
+    public String getPreContext() {
+        if (preContext == null){extendBefore();}
+        return preContext;
     }
 
     public String getKeyWord() {
         return keyWord;
     }
 
-    public String getAfter() {
-        return after;
+    public String getPostContext() {
+        if (postContext == null){extendAfter();}
+        return postContext;
     }
 
     public String getFile(){
@@ -91,7 +91,7 @@ public class DTOSentenceDisplay implements Serializable{
             String subSentence = lastPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
             builder.insert(0, subSentence);
         }
-        before = builder.toString();
+        preContext = builder.toString();
     }
 
     private String lastPartToAddFrom(int charsNeeded, String string) {
@@ -109,7 +109,7 @@ public class DTOSentenceDisplay implements Serializable{
             String subSentence = firstPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
             builder.append(subSentence);
         }
-        after = builder.toString();
+        postContext = builder.toString();
     }
 
     private String firstPartToAddFrom(int charsNeeded, String sentence) {
@@ -138,11 +138,11 @@ public class DTOSentenceDisplay implements Serializable{
             out.write(", ".getBytes());
             out.write(getCorpus().getBytes());
             out.write("] ".getBytes());
-            out.write(before.getBytes());
+            out.write(preContext.getBytes());
             out.write("<target>".getBytes());
             out.write(keyWord.getBytes());
             out.write("</target>".getBytes());
-            out.write(after.getBytes());
+            out.write(postContext.getBytes());
             out.write("\n".getBytes());
         } catch (IOException e) {
             e.printStackTrace();

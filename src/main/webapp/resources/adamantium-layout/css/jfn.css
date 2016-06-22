@@ -108,7 +108,7 @@ input[type=text] {
   padding-right: 2px!important;
 }
 .my-icon {
-  background-image: url("/web-report/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
+  background-image: url("/jfnwat/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;
 }
 .my-icon {
   background-image: url("/javax.faces.resource/images/ui-icons_4eb305_256x240.png.jsf?ln=primefaces-adamantium") !important;

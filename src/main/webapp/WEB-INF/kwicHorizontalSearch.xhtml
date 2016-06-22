@@ -12,56 +12,61 @@
             <div class="ui-grid">
 
                 <div class="ui-grid-col-3">
-                    <p:autoComplete class="text-field" id="searchField"  maxResults="5" placeholder="Key word" required="true" queryDelay="100" completeMethod="#{kwicController.completeText}" onfocus="this.select()" value="#{kwicController.keyWord}"/>
+                    <p:autoComplete id="keyField" placeholder="#{text['keyField']}" required="true" queryDelay="0" completeMethod="#{kwicController.completeText}"  maxResults="5" onfocus="this.select()" value="#{kwicController.keyWord}" class="text-field">
+                        <p:ajax event="query" global="false"/>
+                    </p:autoComplete>
                     <div style="display: block; margin: 7px 10px 10px 10px">
-                        <h:outputText value="Sentence-finally" style="margin-right: 10px; vertical-align: middle"/>
+                        <h:outputText value="#{text['endExpl']}" style="margin-right: 10px; vertical-align: middle"/>
                         <p:selectBooleanCheckbox value="#{kwicController.end}"/>
                     </div>
-                    <h:outputText value="# of final morphemes before 。:" style="display: block; margin: 15px 10px"/>
+                    <h:outputText value="#{text['endScopeExpl']}" style="display: block; margin: 15px 10px"/>
                 <span class="text-field" style="margin-top: 5px">
                     <p:inputText id="endScope" onfocus="this.select()" value="#{kwicController.endScope}"/>
                 </span>
                 </div>
 
                 <div class="ui-grid-col-3">
-                    <p:autoComplete class="text-field" id="kwicCollocate" maxResults="5" placeholder="Collocate" queryDelay="0" completeMethod="#{kwicController.completeText}" onfocus="this.select()" value="#{kwicController.collocate}"/>
-                    <h:outputText value="Max # of morphemes from key word" style="display: block; margin: 10px; vertical-align: middle"/>
+                    <p:autoComplete id="collocate" placeholder="#{text['coField']}" queryDelay="0" completeMethod="#{kwicController.completeText}" maxResults="5"  onfocus="this.select()" value="#{kwicController.collocate}" class="text-field">
+                        <p:ajax event="query" global="false"/>
+                    </p:autoComplete>
+                    <h:outputText value="#{text['coScopeExpl']}" style="display: block; margin: 10px; vertical-align: middle"/>
 
                     <div style="display: flex">
-                        <h:outputText value="Before:" style="width: 50px; margin: 10px; vertical-align: middle"/>
-                        <p:inputText id="kwicCollocatePreScope" style="height: 16px;" onfocus="this.select()" value="#{kwicController.preScope}"/>
+                        <h:outputText value="#{text['before']}" style="width: 50px; margin: 10px; vertical-align: middle"/>
+                        <p:inputText id="collocatePreScope" style="height: 16px;" onfocus="this.select()" value="#{kwicController.preScope}"/>
                     </div>
                     <div style="display: flex; margin-top: 5px">
-                        <h:outputText value="After:" style="width: 50px; padding-right: 9px; margin: 10px; vertical-align: middle"/>
-                        <p:inputText id="kwicCollocatePostScope" style="height: 16px" onfocus="this.select()" value="#{kwicController.postScope}"/>
+                        <h:outputText value="#{text['after']}" style="width: 50px; padding-right: 9px; margin: 10px; vertical-align: middle"/>
+                        <p:inputText id="collocatePostScope" style="height: 16px" onfocus="this.select()" value="#{kwicController.postScope}"/>
                     </div>
                 </div>
 
-                <div class="ui-grid-col-3">
-                    <h:outputText value="Corpora:" style="display: block; margin: 10px 0px"/>
+                <div class="ui-grid-col-3 ui-md-2">
+                    <h:outputText value="#{text['corporaExpl']}" style="display: block; margin: 10px 0px"/>
 
                     <p:selectManyCheckbox id="corpora" value="#{kwicController.corpora}" layout="grid" columns="1" style="margin-left: 20px">
-                        <f:selectItem itemLabel="書籍" itemValue="BK" />
-                        <f:selectItem itemLabel="白書" itemValue="OW" />
-                        <f:selectItem itemLabel="国会議事録" itemValue="OM" />
-                        <f:selectItem itemLabel="Yahoo!知恵袋" itemValue="OC" />
+                        <f:selectItem itemLabel="#{text['bk']}" itemValue="BK" />
+                        <f:selectItem itemLabel="#{text['ow']}" itemValue="OW" />
+                        <f:selectItem itemLabel="#{text['om']}" itemValue="OM" />
+                        <f:selectItem itemLabel="#{text['oc']}" itemValue="OC" />
                     </p:selectManyCheckbox>
                 </div>
 
                 <div class="ui-grid-col-3">
                    <span class="text-field" >
-                       <p:inputText id="regex" onfocus="this.select()" value="#{kwicController.regex}" placeholder="Search by regular expression" disabled="true" />
+                       <p:inputText id="regex" onfocus="this.select()" value="#{kwicController.regex}" placeholder="#{text['regExpField']}" disabled="true" />
                     </span>
                     <div style="margin: 7px 10px">
-                        <h:outputText value="Get # random results" style="margin-right: 10px"/>
+                        <h:outputText value="#{text['randNumExpl']}" style="margin-right: 10px"/>
                         <p:selectBooleanCheckbox value="#{kwicController.random}"/>
                     </div>
                     <span class="text-field" >
                         <p:inputText id="randomNumber" onfocus="this.select()" value="#{kwicController.randomNumber}"/>
                     </span>
-                    <p:commandButton value="Search KWIC!" styleClass="GreenButton KwicButton"
+                    <p:commandButton value="#{text['kwicSearchButton']}" styleClass="GreenButton KwicButton"
                                      action="#{kwicController.matchLazyDataWithSearch()}"
-                                     update="#{p:component('relevantFrames')} #{p:component('output')}" />
+                                     update="#{p:component('relevantFrames')} #{p:component('output')}"
+                                     id="searchTrigger"/>
                 </div>
 
             </div>
@@ -73,46 +78,69 @@
 
 
 
+            <div class="ui-grid-col-9">
             <div class="ui-grid-row" style="margin: 5px 0px">
-                <div class="ui-grid-col-3">
-                    <h:outputText value="Display:" class="ui-grid-col-8"/>
-                    <h:outputText value="KWIC view" class="ui-grid-col-4"/>
+                <div class="ui-grid-col-4" style="padding: 0px 10px;">
+                    <h:outputText value="#{text['displaySettingsExpl']}" class="ui-grid-col-8"/>
+                    <h:outputText value="#{text['kwicViewExpl']}" class="ui-grid-col-4"/>
                 </div>
-                <div class="ui-grid-col-3">
-                    <h:outputText value="# of context characters around key word:"/>
+                <div class="ui-grid-col-4" style="padding: 0px 10px;">
+                    <h:outputText value="#{text['contextExpl']}"/>
                 </div>
-                <div class="ui-grid-col-3">
-                    <h:outputText value="Sort by:" />
+                <div class="ui-grid-col-4">
+                    <h:outputText value="#{text['sortExpl']}" />
                 </div>
             </div>
 
             <div class="ui-grid-row" style="margin: 5px 0px">
-                <div class="ui-grid-col-3">
-                    <div class="ui-grid-col-8" style="display: block; color: #ffffff">.</div>
+                <div class="ui-grid-col-4" style="padding: 0px 10px;">
+                    <div class="ui-grid-col-8" style="visibility:hidden; display: block; color: #ffffff">.</div>
                     <div class="ui-grid-col-4">
                         <h:form >
                             <p:inputSwitch value="#{kwicController.kwicView}" style="margin-left: 10px; margin-top: 5px;">
-                                <p:ajax update="#{p:component('output')}"/>
+                                <p:ajax update="#{p:component('output')}" global="true"/>
                             </p:inputSwitch>
                         </h:form>
                     </div>
                 </div>
-                <div class="ui-grid-col-3">
-                    <h:form>
+                <div class="ui-grid-col-4" style="padding: 0px 10px;">
+                    <h:form id="contextForm">
                     <span class="text-field">
-                        <p:inputText id="context" onfocus="this.select()" value="#{kwicController.charNum}"/>
+                        <p:inputText id="context" onfocus="this.select()" value="#{kwicController.charNum}"
+                                     onkeypress="if(event.keyCode == 13) {document.getElementById('contextForm:triggerContext').click(); return false; }"  >
+                        </p:inputText>
+                        <p:commandButton value="" id="triggerContext" inputtype="submit" update="#{p:component('output')}" global="true" styleClass="zeroSize"/>
                     </span>
                     </h:form>
                 </div>
-                <div class="ui-grid-col-3">
+                <div class="ui-grid-col-4" style="padding: 0px 10px;">
                     <h:form>
                         <p:selectOneMenu value="#{kwicController.sort}" style="vertical-align: middle" disabled="true">
-                            <f:selectItem itemLabel="Key word and left" itemValue="before" />
-                            <f:selectItem itemLabel="Key word " itemValue="keyWord" />
-                            <f:selectItem itemLabel="Key word and right" itemValue="after" />
+                            <f:selectItem itemLabel="#{text['leftSort']}" itemValue="before" />
+                            <f:selectItem itemLabel="#{text['keySort']}" itemValue="keyWord" />
+                            <f:selectItem itemLabel="#{text['rightSort']}" itemValue="after" />
                         </p:selectOneMenu>
                     </h:form>
                 </div>
+
+            </div>
+
+            </div>
+            <div class="ui-grid-col-3">
+                <p:blockUI block="#{p:component('searchTrigger')}" trigger="#{p:component('searchTrigger')}"/>
+                <p:ajaxStatus id="status" widgetVar="status" style="line-height: 65px">
+                    <f:facet name="default">
+                        <h:outputText value="#{text['statusStart']}" />
+                    </f:facet>
+
+                    <f:facet name="start">
+                        <p:graphicImage name="loading.gif" style="height:45px; vertical-align: middle"/> <!--adamantium-layout/images/preloader.gif-->
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value="#{text['statusComplete']}" />
+                    </f:facet>
+                </p:ajaxStatus>
             </div>
         </div>
     </div>

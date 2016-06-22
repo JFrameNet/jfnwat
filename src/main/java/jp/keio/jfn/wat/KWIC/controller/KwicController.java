@@ -186,11 +186,10 @@ public class KwicController implements Serializable {
     }
 
     public void setCharNum(int charNum) {
-        this.charNum = charNum;
         kwicTransactions.setCONTEXT_SCOPE(charNum);
     }
     public int getCharNum() {
-        return this.charNum;
+        return kwicTransactions.getCONTEXT_SCOPE();
     }
 
     public void setSort(Object sort) {
@@ -279,6 +278,7 @@ public class KwicController implements Serializable {
         }
         return streamedKwicData.getStream();
     }
+
 
 
     /*

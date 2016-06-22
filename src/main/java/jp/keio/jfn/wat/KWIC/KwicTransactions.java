@@ -67,6 +67,7 @@ public class KwicTransactions implements Serializable {
     @Transactional(transactionManager = "kwicTransactionManager")
     public void setNewSearch(DTOKwicSearch search) throws UnknownWordExeption {
         this.searchIn = search;
+        searchIn.dot = this.dot;
         clear();
         MakeAllFindable();
         totalResults = kwicsRepository.countByWordIsIn(kwicWordForms); // TODO does not take collocate into account
@@ -123,7 +124,6 @@ public class KwicTransactions implements Serializable {
     public List<DTOSentenceDisplay> getData(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
         Page<Kwics> page;
         List<Kwics> pageList;
-        searchIn.dot = this.dot;
         boolean doRandomSearch = searchIn.random;
 
  /**/         long startTime = System.currentTimeMillis();
@@ -177,6 +177,7 @@ public class KwicTransactions implements Serializable {
     public void setCONTEXT_SCOPE(int CONTEXT_SCOPE) {
         this.CONTEXT_SCOPE = CONTEXT_SCOPE;
     }
+    public int getCONTEXT_SCOPE() {return this.CONTEXT_SCOPE; }
 
 
     List<DTOSentenceDisplay> convertAllKwicsToDisplay(List<Kwics> kwicData) {
@@ -208,7 +209,7 @@ public class KwicTransactions implements Serializable {
         int currentSentencePlace = kwicSentence.getSentencePlace();
         String corpus = kwicSentence.getCorpusName();
         String file = kwicSentence.getFileName();
-        return kwicSentenceRepository.findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(corpus, file, currentSentencePlace-5, currentSentencePlace+5); //TODO takes ~1000millis
+        return kwicSentenceRepository.findByCorpusNameAndFileNameAndSentencePlaceBetweenOrderBySentencePlace(corpus, file, currentSentencePlace-5, currentSentencePlace+5);
     }
 
     private ArrayList<String>[] separateBeforeAndAfter(int currentSentencePlace, List<KwicSentence> beforeAndAfter5) {
@@ -251,6 +252,7 @@ public class KwicTransactions implements Serializable {
         return relevantFrames;
     }
 
+// ********************************************************************************************************************
     static BufferedOutputStream bos;
 
     @Transactional
@@ -274,18 +276,5 @@ public class KwicTransactions implements Serializable {
     public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
         KwicSentence kwicSentence = kwicSentenceRepository.findById(Integer.parseInt(rowKey));
         return sentenceToDisplay(kwicSentence);
-    }
-*/
-
-/* Old code
-
-    List<String> find5Between(String file, int from, int to) {
-        List<String> five = new ArrayList<String>(5);
-
-        List<KwicSentence> sentencesFB = kwicSentenceRepository.findByFileNameAndSentencePlaceBetweenOrderBySentencePlace(file, from, to);
-        for (KwicSentence ks : sentencesFB) {
-            five.add(ks.getSentence());
-        }
-        return five;
     }
 */
