@@ -5,9 +5,7 @@ import jp.keio.jfn.wat.KWIC.domain.KwicSentence;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UncheckedIOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 /**
  * Created by jfn on 4/26/16.
@@ -24,6 +22,7 @@ public class DTOSentenceDisplay implements Serializable{
     private int CONTEXT_SCOPE = 20;
     private List<String> before5;
     private List<String> after5;
+    private String reverseBeginning;
 
     public DTOSentenceDisplay(int contextScope, KwicSentence kwicSentence,int splitIndex, List<String> before5, List<String> after5) {
         this.CONTEXT_SCOPE = contextScope;
@@ -32,11 +31,16 @@ public class DTOSentenceDisplay implements Serializable{
         this.before5 = before5;
         this.after5 = after5;
         splitInBeginningWordEnd();
+        reverseBeginningToSort();
     }
 
     public DTOSentenceDisplay(KwicSentence kwicSentence, int splitIndex,  List<String> befor5, List<String> after5){
         this(20, kwicSentence, splitIndex, befor5, after5);
         }
+
+    public DTOSentenceDisplay(int contextScope, KwicSentence kwicSentence, int splitIndex) {
+        this(contextScope, kwicSentence, splitIndex, new ArrayList<>(), new ArrayList<>());
+    }
 
 
     public String getPreContext() {
@@ -84,12 +88,13 @@ public class DTOSentenceDisplay implements Serializable{
     private void extendBefore(){
         StringBuilder builder = new StringBuilder();
         builder.append(lastPartToAddFrom(CONTEXT_SCOPE, beginning));
-        ListIterator<String> iterator = before5.listIterator(before5.size());
-
-        while (builder.length() < CONTEXT_SCOPE &&  iterator.hasPrevious()){
-            String[] split = iterator.previous().split(" ");
-            String subSentence = lastPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
-            builder.insert(0, subSentence);
+        if(before5 != null) {
+            ListIterator<String> iterator = before5.listIterator(before5.size());
+            while (builder.length() < CONTEXT_SCOPE && iterator.hasPrevious()) {
+                String[] split = iterator.previous().split(" ");
+                String subSentence = lastPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
+                builder.insert(0, subSentence);
+            }
         }
         preContext = builder.toString();
     }
@@ -103,11 +108,13 @@ public class DTOSentenceDisplay implements Serializable{
     private void extendAfter(){
         StringBuilder builder = new StringBuilder();
         builder.append(firstPartToAddFrom(CONTEXT_SCOPE, end));
-        Iterator<String> iterator = after5.iterator();
-        while (builder.length() < CONTEXT_SCOPE && iterator.hasNext() ){
-            String[] split = iterator.next().split(" ");
-            String subSentence = firstPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
-            builder.append(subSentence);
+        if(after5 != null) {
+            Iterator<String> iterator = after5.iterator();
+            while (builder.length() < CONTEXT_SCOPE && iterator.hasNext()) {
+                String[] split = iterator.next().split(" ");
+                String subSentence = firstPartToAddFrom(CONTEXT_SCOPE - builder.length(), join(split, 0, split.length));
+                builder.append(subSentence);
+            }
         }
         postContext = builder.toString();
     }
@@ -125,11 +132,37 @@ public class DTOSentenceDisplay implements Serializable{
         return string;
     }
 
+    public void setBefore5(List<String> before5) {
+        this.before5 = before5;
+        if (preContext == null){extendBefore();}
+    }
+
+    public void setAfter5(List<String> after5) {
+        this.after5 = after5;
+        if (postContext == null){extendAfter();}
+
+    }
+
     public void setCONTEXT_SCOPE(int charNum){
         this.CONTEXT_SCOPE = charNum;
         extendBefore();
         extendAfter();
     }
+
+    private void reverseBeginningToSort() {
+        StringBuilder builder = new StringBuilder();
+        reverseBeginning = builder.append(lastPartToAddFrom(CONTEXT_SCOPE, beginning)).reverse().toString();
+    }
+
+    public String getReverseBeginning() {
+        return reverseBeginning;
+    }
+
+    public String getEnd() {
+        return end;
+    }
+
+
 
     public void write(java.io.BufferedOutputStream out){
         try {
@@ -151,6 +184,8 @@ public class DTOSentenceDisplay implements Serializable{
     }
 
 }
+
+
 
 
 /*

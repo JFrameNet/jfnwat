@@ -1,6 +1,7 @@
 package jp.keio.jfn.wat.KWIC;
 
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import org.springframework.stereotype.Component;
 
@@ -26,23 +27,31 @@ public class LazyKwicData extends LazyDataModel<DTOSentenceDisplay>{
     private LazyKwicData() {}
 
     public LazyKwicData(DTOKwicSearch dtoKwicSearch, KwicTransactions kwicTransactions) throws UnknownWordExeption {
+        System.out.println("Start");
+/**/         long startTime = System.currentTimeMillis();
+
         this.kwicTransactions = kwicTransactions;
         kwicTransactions.setNewSearch(dtoKwicSearch);
-        setRowCount(kwicTransactions.getCount());
+        setRowCount((int) kwicTransactions.getCount());
+/**/        long stopTime = System.currentTimeMillis();
+
+/**/         long elapsedTime = stopTime - startTime;
+/**/         System.out.println("preparing and counting data took: "+elapsedTime);
     }
-
+    
     @Override
-    public List<DTOSentenceDisplay> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+    public List<DTOSentenceDisplay> load(int first, int pageSize,
+                                         List<SortMeta> multiSortMeta, Map<String, Object> filters){
 /**/         long startTime = System.currentTimeMillis();
-/**/         System.out.println("Start");
+/**/
 
-        List<DTOSentenceDisplay> currentPage = kwicTransactions.getData(first, pageSize, sortField, sortOrder, filters);
+        List<DTOSentenceDisplay> currentPage = kwicTransactions.getData(first, pageSize, multiSortMeta, filters);
 
 /**/        long stopTime = System.currentTimeMillis();
 /**/         long elapsedTime = stopTime - startTime;
 /**/         System.out.println("load data took: "+elapsedTime);
 
-        setRowCount(kwicTransactions.getCount());
+        setRowCount((int) kwicTransactions.getCount());
         return currentPage;
     }
 

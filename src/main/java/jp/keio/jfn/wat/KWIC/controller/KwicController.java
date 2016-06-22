@@ -1,6 +1,8 @@
 package jp.keio.jfn.wat.KWIC.controller;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
@@ -8,7 +10,10 @@ import jp.keio.jfn.wat.KWIC.*;
 import jp.keio.jfn.wat.KWIC.viewelements.KwicDataView;
 import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.webreport.controller.FrameController;
+import org.primefaces.component.api.UIColumn;
 import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
@@ -57,7 +62,6 @@ public class KwicController implements Serializable {
     private Boolean end;
     private int endScope = DEFAULT_END_SCOPE;
     private List<String> corpora = Arrays.asList("BK", "OW", "OM", "OC");
-
     private boolean random;
     private int randomNumber = DEFAULT_N_RANDOM;
     private String regex;
@@ -66,8 +70,8 @@ public class KwicController implements Serializable {
     private DTOKwicSearch search;
     private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
     private List<Frame> relevantFrames = new ArrayList<Frame>();
-    private Object sort = "keyWord";
-    private int charNum = 20;
+    private String sort = "keyWord";
+    private List<SortMeta> defaultSort;
 
 
     // Navigation to the kwic page
@@ -192,14 +196,13 @@ public class KwicController implements Serializable {
         return kwicTransactions.getCONTEXT_SCOPE();
     }
 
-    public void setSort(Object sort) {
-        this.sort = sort;
-    }
-
-    public Object getSort() {
+    public String getSort() {
         return sort;
     }
 
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
     public void matchLazyDataWithSearch() {
         try {
@@ -278,6 +281,25 @@ public class KwicController implements Serializable {
         }
         return streamedKwicData.getStream();
     }
+
+    public List<SortMeta> getDefaultSort() {
+        if(defaultSort == null ){buildDefaultSort();}
+        return defaultSort;
+    }
+
+    private void buildDefaultSort() {
+        defaultSort = new ArrayList<>();
+        UIViewRoot viewRoot = FacesContext.getCurrentInstance().getViewRoot();
+        UIComponent column = viewRoot.findComponent("output:keyWord");
+
+        SortMeta sm1 = new SortMeta();
+        sm1.setSortBy((UIColumn)column);
+        sm1.setSortField("keyWord");
+        sm1.setSortOrder(SortOrder.ASCENDING);
+        defaultSort.add(sm1);
+    }
+
+
 
 
 

@@ -88,7 +88,7 @@
                     <h:outputText value="#{text['contextExpl']}"/>
                 </div>
                 <div class="ui-grid-col-4">
-                    <h:outputText value="#{text['sortExpl']}" />
+                    <h:outputText value="#{text['sortExpl']}" style="display: none" />
                 </div>
             </div>
 
@@ -114,7 +114,7 @@
                     </h:form>
                 </div>
                 <div class="ui-grid-col-4" style="padding: 0px 10px;">
-                    <h:form>
+                    <h:form style="display: none">
                         <p:selectOneMenu value="#{kwicController.sort}" style="vertical-align: middle" disabled="true">
                             <f:selectItem itemLabel="#{text['leftSort']}" itemValue="before" />
                             <f:selectItem itemLabel="#{text['keySort']}" itemValue="keyWord" />

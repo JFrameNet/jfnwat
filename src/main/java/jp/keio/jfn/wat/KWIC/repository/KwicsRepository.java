@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Created by jfn on 3/28/16.
@@ -31,10 +30,10 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
     int countByWordIsIn(List<KwicWord> words);
 
     Page<Kwics> findByWordIsIn(List<KwicWord> words, Pageable pageable);
-    Page<Kwics> findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(List<String> corpora, List<KwicWord> words, Pageable pageable);
+    Page<Kwics> findByKwicSentenceCorpusNameIsInAndWordIsIn(List<String> corpora, List<KwicWord> words, Pageable pageable);
 
 
-    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqScopedCollocate + "order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqScopedCollocate)
     Page<Kwics> findByCollocateWithScope(@Param("corpusList") List<String> corpora,
                                          @Param("wordList") List<KwicWord> words,
                                          @Param("collocateList") List<KwicWord> collocates,
@@ -42,7 +41,7 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
                                          @Param("post") int after,
                                          Pageable pageable);
 
-    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence + " order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence)
     Page<Kwics> findBySentenceEnd(@Param("corpusList") List<String> corpora,
                                     @Param("wordList") List<KwicWord> words,
                                     @Param("dot") KwicWord dot,
@@ -50,7 +49,7 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
                                     Pageable pageable);
 
 
-    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence + " and " + sqScopedCollocate + " order by k.word")
+    @Query(sqSelect+" where "+ sqCorpus +" and " + sqKeyWord  + " and " + sqEndOfSentence + " and " + sqScopedCollocate)
     Page<Kwics> findByCollocateWithScopeAndEnd(@Param("corpusList") List<String> corpora,
                                                @Param("wordList") List<KwicWord> words,
                                                @Param("collocateList") List<KwicWord> collocates,
@@ -60,11 +59,11 @@ public interface KwicsRepository extends CrudRepository<Kwics, Long>, KwicsRepos
                                                @Param("endScope") int scope,
                                                Pageable pageable);
 
-    Stream<Kwics> readAllAndStream(DTOKwicSearch param);
+    List<Kwics>  readAll(DTOKwicSearch param);
 
     List<Kwics> findNRandom(DTOKwicSearch param);
 
-    List<Kwics> sorttest(KwicWord word);
+    long countSearchResults(DTOKwicSearch param);
 }
 
 // k.kwicSentence.corpusName in :corpusList and

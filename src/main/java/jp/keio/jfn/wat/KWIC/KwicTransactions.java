@@ -15,6 +15,7 @@ import jp.keio.jfn.wat.repository.FrameRepository;
 import jp.keio.jfn.wat.repository.LexUnitRepository;
 import jp.keio.jfn.wat.repository.LexemeRepository;
 import org.hibernate.Hibernate;
+import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,9 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
@@ -45,14 +45,18 @@ public class KwicTransactions implements Serializable {
     @Autowired
     KwicSentenceRepository kwicSentenceRepository;
 
-    List<KwicWord> kwicWordForms = new ArrayList<KwicWord>();
-    List<KwicWord> kwicCollocateForms = new ArrayList<KwicWord>();
 
     private KwicWord dot;
 
     private DTOKwicSearch searchIn;
-    private int totalResults;
-    public List<DTOSentenceDisplay> curentPageList;
+    private List<KwicWord> kwicWordForms = new ArrayList<KwicWord>();
+    private List<KwicWord> kwicCollocateForms = new ArrayList<KwicWord>();
+    private long totalResults;
+    private List<Kwics> currentSearchData;
+    private List<Kwics> currentRandomData;
+    private Comparator<DTOSentenceDisplay> currentSorter;
+    private DTOKwicSearch currentDataSearch;
+    private DTOKwicSearch currentRandomSearch;
 
     private int CONTEXT_SCOPE = 20;
 
@@ -70,7 +74,8 @@ public class KwicTransactions implements Serializable {
         searchIn.dot = this.dot;
         clear();
         MakeAllFindable();
-        totalResults = kwicsRepository.countByWordIsIn(kwicWordForms); // TODO does not take collocate into account
+        totalResults = kwicsRepository.countSearchResults(searchIn);
+         //TODO is done 2x, inefficient
     }
 
     private void clear() {
@@ -119,43 +124,67 @@ public class KwicTransactions implements Serializable {
 
 
 // ********************************************************************************************************************
-
-    @Transactional(transactionManager = "kwicTransactionManager")
-    public List<DTOSentenceDisplay> getData(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
-        Page<Kwics> page;
-        List<Kwics> pageList;
-        boolean doRandomSearch = searchIn.random;
-
- /**/         long startTime = System.currentTimeMillis();
-
-        //TODO REFACTOR THIS BEAST
-        if(doRandomSearch){
-            pageList = kwicsRepository.findNRandom(searchIn);
-        } else if(searchIn.hasCollocate && searchIn.end){ //BOTH
-            page = kwicsRepository.findByCollocateWithScopeAndEnd(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
-            pageList = pageToList(page);
-        } else if (searchIn.hasCollocate && !searchIn.end) { //COLLOCATE
-            page = kwicsRepository.findByCollocateWithScope(searchIn.corpora, kwicWordForms, kwicCollocateForms, searchIn.PRE_COLLOCATE, searchIn.POST_COLLOCATE, makePagable(first, pageSize));
-            pageList = pageToList(page);
-        } else if(searchIn.end && !searchIn.hasCollocate) { // END
-            page = kwicsRepository.findBySentenceEnd(searchIn.corpora, kwicWordForms, dot, searchIn.END_SCOPE, makePagable(first, pageSize));
-            pageList = pageToList(page);
+    public List<DTOSentenceDisplay> getData(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+        boolean isRandomSearch = searchIn.random;
+        if(isRandomSearch){
+            totalResults = pageSize;
+            if(searchIn != currentRandomSearch){
+                currentRandomData = kwicsRepository.findNRandom(searchIn);
+                currentRandomSearch = searchIn;
+            }
+            return sortPaginateTransform(currentRandomData, first, pageSize, multiSortMeta);
         } else {
-            page = kwicsRepository.findByKwicSentenceCorpusNameIsInAndWordIsInOrderByWord(searchIn.corpora, kwicWordForms, makePagable(first, pageSize));
-            pageList = pageToList(page);
+/**/long startTime = System.currentTimeMillis();
+            if(searchIn != currentDataSearch){
+                currentSearchData = kwicsRepository.readAll(searchIn);
+                currentDataSearch = searchIn;
+            }
+/**/long stopTime = System.currentTimeMillis();
+/**/long elapsedTime = stopTime - startTime;
+/**/System.out.println("DB query took: " + elapsedTime);
+            return sortPaginateTransform(currentSearchData, first, pageSize, multiSortMeta);//TODO prevent resort for view change
         }
-/**/        long stopTime = System.currentTimeMillis();
-/**/        long elapsedTime = stopTime - startTime;
-/**/        System.out.println("DB Query took: "+elapsedTime);
+    }
 
+    private List<DTOSentenceDisplay> sortPaginateTransform(List<Kwics> list, int first, int pageSize, List<SortMeta> multiSortMeta) {
+/**/long startTime = System.currentTimeMillis();
 
-        totalResults = doRandomSearch ? pageSize : totalResults;
-        try {
-            curentPageList =  convertAllKwicsToDisplay(pageList);
-        } catch (Exception e) {
-            e.printStackTrace();
+        currentSorter = getSorters(multiSortMeta);
+        Stream<Kwics> stream = list.stream();
+        List<DTOSentenceDisplay> streamedPage;
+        streamedPage = stream.
+                map(this::kwicsToSort).
+                sorted(currentSorter).
+                skip(first).limit(pageSize).
+                map(this::set5).
+                collect(Collectors.toCollection(ArrayList::new));
+
+/**/long stopTime = System.currentTimeMillis();
+/**/long elapsedTime = stopTime - startTime;
+/**/System.out.println("sort and transform took: " + elapsedTime);
+
+        return streamedPage;
+    }
+
+    private Comparator<DTOSentenceDisplay> getSorters(List<SortMeta> multiSortMeta) {
+        List<Comparator<DTOSentenceDisplay>> comperators = new ArrayList<>();
+        multiSortMeta.sort(DisplaySorter.SORT_PRESEDENSE);
+        for (SortMeta sortMeta : multiSortMeta) {
+            comperators.add(getSorter(sortMeta.getSortField(), sortMeta.getSortOrder()));
         }
-        return curentPageList;
+        return new DisplaySorter(comperators);
+    }
+
+    private Comparator<DTOSentenceDisplay> getSorter(String sortField, SortOrder sortOrder) {
+        Comparator<DTOSentenceDisplay> sorter;
+        if(sortField == null ){return  DisplaySorter.UN_SORTED;}
+
+        switch (sortField){
+            case "preContext": sorter =  DisplaySorter.BY_PRE_CONTEXT; break;
+            case "postContext": sorter =  DisplaySorter.BY_POST_CONTEXT; break;
+            default: sorter = DisplaySorter.BY_KEY_WORD;
+        }
+        return (sortOrder == SortOrder.DESCENDING)? Collections.reverseOrder(sorter) : sorter;
     }
 
     private List<Kwics> pageToList(Page<Kwics> page) {
@@ -168,7 +197,7 @@ public class KwicTransactions implements Serializable {
         return new PageRequest(page, size);
     }
 
-    public int getCount() {
+    public long getCount() {
         return totalResults;
     }
 
@@ -228,6 +257,21 @@ public class KwicTransactions implements Serializable {
         return result;
     }
 
+    private DTOSentenceDisplay kwicsToSort(Kwics kwic){
+        KwicSentence kwicSentence = kwic.getKwicSentence();
+        int keyWordIndex = kwic.getPlace();
+        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, keyWordIndex);
+    }
+
+    private DTOSentenceDisplay set5(DTOSentenceDisplay display){
+        KwicSentence kwicSentence = display.getKwicSentence();
+        List<KwicSentence> BeforeAndAfter5 = find5BeforeAndAfter(kwicSentence);
+        ArrayList<String>[] fiveBeforeAndAfter = separateBeforeAndAfter(kwicSentence.getSentencePlace(), BeforeAndAfter5);
+        display.setBefore5(fiveBeforeAndAfter[0]);
+        display.setAfter5(fiveBeforeAndAfter[1]);
+        return display;
+    }
+
 // ********************************************************************************************************************
 
     @Transactional
@@ -257,14 +301,23 @@ public class KwicTransactions implements Serializable {
 
     @Transactional
     public InputStream stream() throws IOException {
-            Stream<Kwics> kwicsStream = kwicsRepository.readAllAndStream(searchIn);
+            List<Kwics> kwicsData = kwicsRepository.readAll(searchIn);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bos = new BufferedOutputStream(baos);
 
-            kwicsStream.map(this::aKwicToDisplay).forEach(d -> d.write(bos));
 
-            bos.flush();
+        try {
+            currentSearchData.stream().
+                map(this::kwicsToSort).
+                sorted(currentSorter).
+                map(this::set5).
+                forEach(d -> d.write(bos));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        bos.flush();
             bos.close();
 
             ByteArrayInputStream is = new ByteArrayInputStream(baos.toByteArray());

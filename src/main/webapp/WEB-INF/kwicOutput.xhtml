@@ -15,6 +15,7 @@
                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
                      currentPageReportTemplate="{startRecord} - {endRecord} out of {totalRecords}"
                      lazy="true"
+                     sortMode="multiple" sortBy="#{kwicController.defaultSort}"
                      selection="#{kwicDataView.selectedSentences}" rowKey="#{sentence.kwicSentence.id}"
                      style="margin-bottom:20px"
         >
@@ -30,13 +31,13 @@
                 <h:outputText value="#{sentence.file}, #{sentence.corpus}"/>
             </p:column>
 
-                <p:column rendered="#{kwicDataView.kwicView}"  sortBy="#{sentence.preContext}" sortable="false" style="width: auto; text-align: right">
+                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.preContext}" style="width: auto; text-align: right">
                     <h:outputText value="#{sentence.preContext}"/>
                 </p:column>
-                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.keyWord}" sortable="false" style="width: #{kwicController.wordColumnSize}px; text-align: center; font-weight: bold;">
+                <p:column id="keyWord" rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.keyWord}"  style="width: #{kwicController.wordColumnSize}px; text-align: center; font-weight: bold;">
                     <h:outputText value="#{sentence.keyWord}"/>
                 </p:column>
-                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.postContext}" sortable="false" style="width: auto; text-align: left">
+                <p:column rendered="#{kwicDataView.kwicView}" sortBy="#{sentence.postContext}" style="width: auto; text-align: left">
                     <h:outputText value="#{sentence.postContext}"/>
                 </p:column>
 
