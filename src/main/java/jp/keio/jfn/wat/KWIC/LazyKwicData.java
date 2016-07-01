@@ -22,7 +22,7 @@ public class LazyKwicData extends LazyDataModel<DTOSentenceDisplay>{
 
     private KwicTransactions kwicTransactions;
 
-    private Map<String, DTOSentenceDisplay> rowKeyMap;
+    private Map<String, DTOSentenceDisplay> rowKeyMap =  new HashMap<>();
 
     private LazyKwicData() {}
 
@@ -57,12 +57,11 @@ public class LazyKwicData extends LazyDataModel<DTOSentenceDisplay>{
 
     @Override
     public DTOSentenceDisplay getRowData(String rowKey){
-        return rowKeyMap.get(rowKey);
+        return kwicTransactions.getKwicSentenceByRowKey(rowKey);
     }
 
     @Override
     public Object getRowKey(DTOSentenceDisplay DTOSentenceDisplay){
-        rowKeyMap.put(""+DTOSentenceDisplay.getKwicSentence().getId(), DTOSentenceDisplay);
-        return  DTOSentenceDisplay.getKwicSentence().getId();
+        return DTOSentenceDisplay.getKwicsID();
     }
 }

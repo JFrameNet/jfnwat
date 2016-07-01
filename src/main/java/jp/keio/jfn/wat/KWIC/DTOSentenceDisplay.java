@@ -12,6 +12,7 @@ import java.util.*;
  */
 public class DTOSentenceDisplay implements Serializable{
 
+    private int kwicsID;
     private KwicSentence kwicSentence;
     private String preContext;
     private String beginning;
@@ -24,8 +25,9 @@ public class DTOSentenceDisplay implements Serializable{
     private List<String> after5;
     private String reverseBeginning;
 
-    public DTOSentenceDisplay(int contextScope, KwicSentence kwicSentence,int splitIndex, List<String> before5, List<String> after5) {
+    public DTOSentenceDisplay(int contextScope, int kwicID, KwicSentence kwicSentence,int splitIndex, List<String> before5, List<String> after5) {
         this.CONTEXT_SCOPE = contextScope;
+        this.kwicsID = kwicID;
         this.kwicSentence = kwicSentence;
         this.splitIndex = splitIndex;
         this.before5 = before5;
@@ -34,12 +36,12 @@ public class DTOSentenceDisplay implements Serializable{
         reverseBeginningToSort();
     }
 
-    public DTOSentenceDisplay(KwicSentence kwicSentence, int splitIndex,  List<String> befor5, List<String> after5){
-        this(20, kwicSentence, splitIndex, befor5, after5);
+    public DTOSentenceDisplay(int kwicID, KwicSentence kwicSentence, int splitIndex,  List<String> befor5, List<String> after5){
+        this(20, kwicID, kwicSentence, splitIndex, befor5, after5);
         }
 
-    public DTOSentenceDisplay(int contextScope, KwicSentence kwicSentence, int splitIndex) {
-        this(contextScope, kwicSentence, splitIndex, new ArrayList<>(), new ArrayList<>());
+    public DTOSentenceDisplay(int contextScope, int kwicID, KwicSentence kwicSentence, int splitIndex) {
+        this(contextScope, kwicID, kwicSentence, splitIndex, new ArrayList<>(), new ArrayList<>());
     }
 
 
@@ -55,6 +57,11 @@ public class DTOSentenceDisplay implements Serializable{
     public String getPostContext() {
         if (postContext == null){extendAfter();}
         return postContext;
+    }
+
+
+    public int getKwicsID() {
+        return kwicsID;
     }
 
     public String getFile(){
@@ -181,6 +188,10 @@ public class DTOSentenceDisplay implements Serializable{
             e.printStackTrace();
             throw new UncheckedIOException(e);
         }
+    }
+
+    public boolean equals(DTOSentenceDisplay obj){
+        return kwicsID == obj.kwicsID;
     }
 
 }

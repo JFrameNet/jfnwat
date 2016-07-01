@@ -33,4 +33,19 @@ public class DTOKwicSearch {
     public DTOKwicSearch(String keyWord){
         this.word = keyWord;
     }
+
+    public boolean equals(DTOKwicSearch obj) {
+
+        return obj != null
+                && this.word.equals(obj.word)
+                && this.corpora.equals(obj.corpora)
+                && this.collocate.equals(obj.collocate)
+                && this.PRE_COLLOCATE == obj.PRE_COLLOCATE
+                && this.POST_COLLOCATE == obj.POST_COLLOCATE
+                && this.END_SCOPE == obj.END_SCOPE
+                && this.randomNumber == obj.randomNumber
+                && this.hasCollocate == obj.hasCollocate
+                && this.end == obj.end
+                && this.random == obj.random;
+    }
 }

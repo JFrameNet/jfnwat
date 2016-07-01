@@ -2,6 +2,7 @@ package jp.keio.jfn.wat.KWIC.viewelements;
 
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
@@ -10,6 +11,7 @@ import jp.keio.jfn.wat.domain.Frame;
 import org.primefaces.model.TreeNode;
 
 @ViewScoped
+@ManagedBean
 public class FrameListView implements Serializable {
     private final Frame frame;
 
@@ -17,7 +19,7 @@ public class FrameListView implements Serializable {
     private FrameTreeService service;
 
     private TreeNode root;
-    private String selectedElement;
+    private TreeNode selectedNode;
 
     public FrameListView(Frame frame) {
         this.frame = frame;
@@ -37,11 +39,11 @@ public class FrameListView implements Serializable {
         this.service = service;
     }
 
-    public String getSelectedElement() {
-        return selectedElement;
+    public TreeNode getSelectedNode() {
+        return selectedNode;
     }
 
-    public void setSelectedElement(String selectedElement) {
-        this.selectedElement = selectedElement;
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
     }
 }

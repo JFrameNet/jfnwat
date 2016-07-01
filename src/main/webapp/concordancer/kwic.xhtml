@@ -77,17 +77,48 @@
         <p:accordionPanel id="relevantFrames" styleClass="relevant-frames" value="#{kwicController.relevantFrames}" var="frame" activeIndex="0" multiple="true">
             <p:tab title="#{frame.name}">
                 <h:outputText value="#{kwicIndexController.getFrameDef(frame.id)}" escape="false"/>
-                <h:form>
-                    <p:treeTable value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
-                                 styleClass="structural-table" emptyMessage="#{text['noLU']}">
-                        <p:column>
-                            <h:outputText value="#{elementName}"/>
-                        </p:column>
-                    </p:treeTable>
-                </h:form>
 
+                    <p:dataList value="#{kwicController.getRelevantLUs(frame)}" var="lu" type="unordered" >
+                        <p:commandButton id="subcorporateLUbtn" value="#{lu.name}" icon="fa fa-list-alt"
+                                         action="#{subcorporationController.setSelectedLU(lu)}"
+                                         update="subcorporationDialog"
+                                         oncomplete="PF('subcorporationDialog').show()"/>
+                        <p:tooltip id="toolTip" for="subcorporateLUbtn" value="Subcorporate selected sentences under: #{frame.name} #{lu.name}" position="left"/>
+                    </p:dataList>
+
+                <h:form>
+                    <p:tree id="relevantLUs" value="#{kwicIndexController.getFrameTree(frame.id)}" var="elementName"
+                                 styleClass="structural-table" emptyMessage="#{text['noLU']}"
+                                 >
+                        <p:treeNode>
+                            <h:outputText value="#{elementName}"/>
+                        </p:treeNode>
+                    </p:tree>
+                </h:form>
             </p:tab>
         </p:accordionPanel>
+
+        <p:dialog id="subcorporationDialog" resizable="false" modal="true" closable="true" showEffect="fade" widgetVar="subcorporationDialog"
+                  header="Subcorporate selected sentences under #{subcorporationController.selectedLu.name} in the #{subcorporationController.selectedLu.frame.name} frame">
+            <h:form>
+
+                <p:dataTable styleClass="structural-table" value="#{kwicDataView.selectedSentences}" var="selected" rendered="#{not empty kwicDataView.selectedSentences}"
+                             >
+                    <p:column  style="width: 115px">
+                        <h:outputText value="#{selected.file}, #{selected.corpus}"/>
+                    </p:column>
+                    <p:column >
+                        <h:outputText value="#{selected.nonKwicDisplay}" escape="false"/>
+                    </p:column>
+ <!--                   <p:column  selectionMode="multiple" style="width:20px; text-align: right"/> -->
+                </p:dataTable>
+                <div style="text-align: center">
+                    <p:commandButton value="Subcorportate" action="#{subcorporationController.subcorporate()}" oncomplete="PF('subcorporationDialog').hde()"/>
+                    <p:commandButton value="Cancel" onclick="subcorporationDialog.hide()"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
     </ui:define>
 
     <script>
@@ -95,3 +126,8 @@
         document.getElementById('framesHeader').style.lineHeight=follow;
     </script>
 </ui:composition>
+
+        <!--
+        process="#{p:component('output')}"
+selectionMode="multiple" selection="#{kwicDataView.selectedSentences}" rowKey="#{selected.kwicSentence.id}"
+        -->

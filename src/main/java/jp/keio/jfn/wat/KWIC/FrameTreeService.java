@@ -27,9 +27,10 @@ public class FrameTreeService {
     private void addLUs() {
         List<LexUnit> lus = mainFrame.getLexUnits();
         if(!lus.isEmpty()){
-            TreeNode lusTN = new DefaultTreeNode("LU's", root);
+            TreeNode lusTN = new DefaultTreeNode("All LU's", root);
             for (LexUnit lu : lus) {
                 TreeNode luTN = new DefaultTreeNode(lu.getName(), lusTN);
+//                luTN.setType("lu");
 //                addLemma(luTN, lu);
 //                addSentences(luTN, lu);
             }

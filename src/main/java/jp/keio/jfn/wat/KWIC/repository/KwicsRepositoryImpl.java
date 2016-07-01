@@ -7,9 +7,7 @@ import jp.keio.jfn.wat.KWIC.domain.Kwics;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by jfn on 6/8/16.
@@ -61,14 +59,18 @@ public class KwicsRepositoryImpl implements KwicsRepositoryCustom{
     }
 
     private List<Integer> getXRandomFromList(List<Integer> list, int x){
-        List<Integer> randomIDs = new ArrayList<Integer>();
         int range = list.size();
-        Random randomGenerator = new Random();
-        for(int i = 0; i<x; i++){
-            int randomIndex = randomGenerator.nextInt(range);
-            randomIDs.add(list.get(randomIndex));
+        if(range <= x) {
+            return list;
+        } else {
+            Set<Integer> randomIDs = new HashSet<>();
+            Random randomGenerator = new Random();
+            while (randomIDs.size() < x) {
+                int randomIndex = randomGenerator.nextInt(range);
+                randomIDs.add(list.get(randomIndex));
+            }
+            return new ArrayList<>(randomIDs);
         }
-        return randomIDs;
     }
 
     private List<Kwics> getKwicsByRandomIDs(List<Integer> ids ){

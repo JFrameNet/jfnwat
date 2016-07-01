@@ -8,6 +8,7 @@ import javax.faces.context.FacesContext;
 
 import jp.keio.jfn.wat.KWIC.*;
 import jp.keio.jfn.wat.KWIC.viewelements.KwicDataView;
+import jp.keio.jfn.wat.Utils;
 import jp.keio.jfn.wat.domain.Frame;
 import jp.keio.jfn.wat.webreport.controller.FrameController;
 import org.primefaces.component.api.UIColumn;
@@ -40,6 +41,7 @@ public class KwicController implements Serializable {
     private final int DEFAULT_POST_SCOPE = 5;
     private final int DEFAULT_END_SCOPE = 5;
     private final int DEFAULT_N_RANDOM = 100;
+    private List<SortMeta> defaultSort;
 
     @Autowired
     LexUnitRepository lexUnitRepository;
@@ -52,7 +54,6 @@ public class KwicController implements Serializable {
 
     @Autowired
     FrameController frameController;
-
 
     // Form variables used in kwicSearch.xhtml
     private String keyWord; // TODO need to remove unwanted spaces and other unwanted input?
@@ -71,13 +72,13 @@ public class KwicController implements Serializable {
     private LazyDataModel<DTOSentenceDisplay> lazyKwicData;
     private List<Frame> relevantFrames = new ArrayList<Frame>();
     private String sort = "keyWord";
-    private List<SortMeta> defaultSort;
 
 
+// ********************************************************************************************************************
     // Navigation to the kwic page
     public String toKwic() { return "concordancer/kwic?faces-redirect=true";}
 
-
+// ********************************************************************************************************************
     public List<String> completeText(String query) { //TODO doesnt get called to first time after pageload
 
         List<String> results = new ArrayList<String>();
@@ -91,7 +92,7 @@ public class KwicController implements Serializable {
         }
         return results;
     }
-
+// ********************************************************************************************************************
     // Form getters and setters for kwicSearch.xhtml
     public void setKeyWord(String keyWord) {
         search = new DTOKwicSearch(keyWord);
@@ -204,11 +205,14 @@ public class KwicController implements Serializable {
         this.sort = sort;
     }
 
+
+// ********************************************************************************************************************
     public void matchLazyDataWithSearch() {
         try {
             if(keyWord != null){
                 lazyKwicData = new LazyKwicData(search, kwicTransactions);
                 relevantFrames = kwicTransactions.findRelevantFrames();
+                dataView.setLazyKwicData(lazyKwicData);
             }
         } catch (Exception e) {
             if(e.getClass() == UnknownWordExeption.class){
@@ -230,7 +234,15 @@ public class KwicController implements Serializable {
         return relevantFrames;
     }
 
-
+    public List<LexUnit> getRelevantLUs(Frame frame) {
+        List<LexUnit> relevantLUs = new ArrayList<>();
+        for (LexUnit lu : frame.getLexUnits()) {
+            if (Utils.matchSearch(keyWord, lu.getName())) {
+                relevantLUs.add(lu);
+            }
+        }
+        return relevantLUs;
+    }
 
     // Determines the with of the Key Word column in the view according to the length of the key word that was searched
     public int getWordColumnSize() {
@@ -238,6 +250,7 @@ public class KwicController implements Serializable {
     }
 
 
+// *********************************************************************************************************************
 
     /*adjusted from http://stackoverflow.com/questions/2914025/ */
     public void download() throws IOException {
@@ -282,6 +295,8 @@ public class KwicController implements Serializable {
         return streamedKwicData.getStream();
     }
 
+// *********************************************************************************************************************
+
     public List<SortMeta> getDefaultSort() {
         if(defaultSort == null ){buildDefaultSort();}
         return defaultSort;
@@ -299,10 +314,7 @@ public class KwicController implements Serializable {
         defaultSort.add(sm1);
     }
 
-
-
-
-
+// *********************************************************************************************************************
     /*
     public void documentLink(String fileName){
         Document document = documentRepository.findByName(fileName);

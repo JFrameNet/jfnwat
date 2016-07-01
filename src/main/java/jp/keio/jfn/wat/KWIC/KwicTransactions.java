@@ -57,6 +57,7 @@ public class KwicTransactions implements Serializable {
     private Comparator<DTOSentenceDisplay> currentSorter;
     private DTOKwicSearch currentDataSearch;
     private DTOKwicSearch currentRandomSearch;
+    private List<DTOSentenceDisplay> currentPage;
 
     private int CONTEXT_SCOPE = 20;
 
@@ -127,22 +128,23 @@ public class KwicTransactions implements Serializable {
     public List<DTOSentenceDisplay> getData(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         boolean isRandomSearch = searchIn.random;
         if(isRandomSearch){
-            totalResults = pageSize;
-            if(searchIn != currentRandomSearch){
+            if(!searchIn.equals(currentRandomSearch)){
                 currentRandomData = kwicsRepository.findNRandom(searchIn);
                 currentRandomSearch = searchIn;
             }
+            totalResults = Math.min(pageSize, currentRandomData.size());
             return sortPaginateTransform(currentRandomData, first, pageSize, multiSortMeta);
         } else {
 /**/long startTime = System.currentTimeMillis();
-            if(searchIn != currentDataSearch){
+            if(!searchIn.equals(currentDataSearch)){
                 currentSearchData = kwicsRepository.readAll(searchIn);
                 currentDataSearch = searchIn;
             }
 /**/long stopTime = System.currentTimeMillis();
 /**/long elapsedTime = stopTime - startTime;
 /**/System.out.println("DB query took: " + elapsedTime);
-            return sortPaginateTransform(currentSearchData, first, pageSize, multiSortMeta);//TODO prevent resort for view change
+            currentPage = sortPaginateTransform(currentSearchData, first, pageSize, multiSortMeta);
+            return currentPage;//TODO prevent resort for view change
         }
     }
 
@@ -231,7 +233,7 @@ public class KwicTransactions implements Serializable {
         int keyWordIndex = kwic.getPlace();
         List<KwicSentence> BeforeAndAfter5 =find5BeforeAndAfter(kwicSentence);
         ArrayList<String>[] fiveBeforeAndAfter = separateBeforeAndAfter(kwicSentence.getSentencePlace(), BeforeAndAfter5);
-        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, keyWordIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
+        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwic.getId(), kwicSentence, keyWordIndex, fiveBeforeAndAfter[0], fiveBeforeAndAfter[1]);
     }
 
     private List<KwicSentence> find5BeforeAndAfter(KwicSentence kwicSentence) {
@@ -260,7 +262,7 @@ public class KwicTransactions implements Serializable {
     private DTOSentenceDisplay kwicsToSort(Kwics kwic){
         KwicSentence kwicSentence = kwic.getKwicSentence();
         int keyWordIndex = kwic.getPlace();
-        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwicSentence, keyWordIndex);
+        return new DTOSentenceDisplay(CONTEXT_SCOPE, kwic.getId(), kwicSentence, keyWordIndex);
     }
 
     private DTOSentenceDisplay set5(DTOSentenceDisplay display){
@@ -272,6 +274,12 @@ public class KwicTransactions implements Serializable {
         return display;
     }
 
+// ********************************************************************************************************************
+    public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey) throws NoSuchElementException{
+        Kwics kwics = kwicsRepository.findById(Integer.parseInt(rowKey));
+        DTOSentenceDisplay dtoSentenceDisplay = aKwicToDisplay(kwics);
+        return dtoSentenceDisplay;
+    }
 // ********************************************************************************************************************
 
     @Transactional
@@ -286,6 +294,7 @@ public class KwicTransactions implements Serializable {
                             Hibernate.initialize(frame.getFrameElements());
                             Hibernate.initialize(frame.getFrameRelations1());
                             Hibernate.initialize(frame.getFrameRelations2());
+                            Hibernate.initialize(frame.getLexUnits());
                         }
                     }
                 }
@@ -326,8 +335,5 @@ public class KwicTransactions implements Serializable {
 }
 
 /*
-    public DTOSentenceDisplay getKwicSentenceByRowKey(String rowKey){
-        KwicSentence kwicSentence = kwicSentenceRepository.findById(Integer.parseInt(rowKey));
-        return sentenceToDisplay(kwicSentence);
-    }
+
 */
