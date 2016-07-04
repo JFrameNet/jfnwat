@@ -6,7 +6,7 @@
                 xmlns:p="http://primefaces.org/ui"
 >
 
-    <div class="KWIC kwicOutput">
+    <div class="KWIC kwicOutput" style="min-height: 100vh">
 
         <p:dataTable id="output" emptyMessage="#{text['noKwics']}"
 
@@ -31,7 +31,11 @@
             </f:facet>
 
             <p:column  style="width: 115px">
-                <h:outputText value="#{sentence.file}, #{sentence.corpus}"/>
+                <p:commandLink value="#{sentence.file}"
+                               action="#{kwicDataView.setContextSentence(sentence)}"
+                               update="contextDialog"
+                               oncomplete="PF('contextDialog').show()"/>
+                <h:outputText value=", #{sentence.corpus}"/>
             </p:column>
 
                 <p:column rendered="#{kwicDataView.kwicView}" field="preContext" sortBy="#{sentence.preContext}" style="width: auto; text-align: right">
@@ -51,5 +55,16 @@
             <p:column  selectionMode="multiple" style="width:20px; text-align: right"/>
         </p:dataTable>
     </div>
+
+        <p:dialog header="Context" id="contextDialog" widgetVar="contextDialog" closable="true" resizable="false" draggable="false" styleClass="KWIC kwicOutput">
+
+                <ui:repeat value="#{kwicDataView.contextSentence.before5}" var="before" type="unordered">
+                    <h:outputText value="#{before}"/><br/>
+                </ui:repeat>
+                <h:outputText value="#{kwicDataView.contextSentence.kwicSentence.sentence}" style="font-weight: bold"/>
+                <ui:repeat value="#{kwicDataView.contextSentence.after5}" var="after">
+                    <br/><h:outputText value="#{after}"/>
+                </ui:repeat>
+        </p:dialog>
 
 </ui:composition>

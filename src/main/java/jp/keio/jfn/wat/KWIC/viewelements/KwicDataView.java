@@ -35,6 +35,7 @@ public class KwicDataView implements Serializable {
     private boolean kwicView = true;
 
     private List<DTOSentenceDisplay> selectedSentences = new ArrayList<>();
+    private DTOSentenceDisplay contextSentence;
 
     public KwicDataView() {
     }
@@ -97,5 +98,13 @@ public class KwicDataView implements Serializable {
 
     public void setLazyKwicData(LazyDataModel<DTOSentenceDisplay> lazyKwicData) {
         this.lazyDataModel = lazyKwicData;
+    }
+
+    public void setContextSentence(DTOSentenceDisplay sentence) {
+        this.contextSentence = sentence;
+    }
+
+    public DTOSentenceDisplay getContextSentence() {
+        return this.contextSentence;
     }
 }

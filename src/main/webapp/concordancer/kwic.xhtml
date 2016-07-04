@@ -62,8 +62,8 @@
         </div>
     </ui:define>
 
-    <ui:define name="kwicHorizontalSearch">
-        <ui:include src="../WEB-INF/kwicHorizontalSearch.xhtml"/>
+    <ui:define name="kwicTopSearch">
+        <ui:include src="../WEB-INF/kwicTopSearch.xhtml"/>
     </ui:define>
 
     <ui:define name="kwicOutput">
@@ -74,15 +74,17 @@
         <div id="framesHeader">
             <h:outputText value="#{text['frameHeader']}"/>
         </div>
-        <p:accordionPanel id="relevantFrames" styleClass="relevant-frames" value="#{kwicController.relevantFrames}" var="frame" activeIndex="0" multiple="true">
+        <p:accordionPanel id="relevantFrames" styleClass="kwicOutput relevant-frames" value="#{kwicController.relevantFrames}" var="frame" activeIndex="0" multiple="true">
             <p:tab title="#{frame.name}">
                 <h:outputText value="#{kwicIndexController.getFrameDef(frame.id)}" escape="false"/>
 
                     <p:dataList value="#{kwicController.getRelevantLUs(frame)}" var="lu" type="unordered" >
-                        <p:commandButton id="subcorporateLUbtn" value="#{lu.name}" icon="fa fa-list-alt"
+                        <p:commandButton value="#{lu.name}" icon="fa fa-list-alt"
                                          action="#{subcorporationController.setSelectedLU(lu)}"
                                          update="subcorporationDialog"
-                                         oncomplete="PF('subcorporationDialog').show()"/>
+                                         oncomplete="PF('subcorporationDialog').show()"
+                                         id="subcorporateLUbtn"
+                                         styleClass="GreenButton"/>
                         <p:tooltip id="toolTip" for="subcorporateLUbtn" value="Subcorporate selected sentences under: #{frame.name} #{lu.name}" position="left"/>
                     </p:dataList>
 
@@ -98,8 +100,9 @@
             </p:tab>
         </p:accordionPanel>
 
-        <p:dialog id="subcorporationDialog" resizable="false" modal="true" closable="true" showEffect="fade" widgetVar="subcorporationDialog"
+        <p:dialog id="subcorporationDialog" modal="true" resizable="false" closable="true" widgetVar="subcorporationDialog"
                   header="Subcorporate selected sentences under #{subcorporationController.selectedLu.name} in the #{subcorporationController.selectedLu.frame.name} frame">
+
             <h:form>
 
                 <p:dataTable styleClass="structural-table" value="#{kwicDataView.selectedSentences}" var="selected" rendered="#{not empty kwicDataView.selectedSentences}"
@@ -128,6 +131,7 @@
 </ui:composition>
 
         <!--
-        process="#{p:component('output')}"
 selectionMode="multiple" selection="#{kwicDataView.selectedSentences}" rowKey="#{selected.kwicSentence.id}"
+<p:blockUI block="#{p:component('kwicContent')}" trigger="#{p:component('subcorporateLUbtn')}"/>
         -->
+        <!--             -->

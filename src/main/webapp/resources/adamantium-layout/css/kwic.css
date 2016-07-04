@@ -26,11 +26,6 @@
 .Flex85 {
   flex: 85%;
 }
-.relevant-frames .ui-accordion-header {
-  line-height: 1.1;
-  padding-top: 11px !important;
-  padding-bottom: 11px !important;
-}
 #framesHeader {
   display: block;
   padding-left: 10px;
@@ -38,15 +33,15 @@
   color: #ffffff;
   line-height: 46px;
 }
-.relevant-frames .ui-datalist-item {
-  list-style-type: none !important;
-}
-.relevant-frames .ui-datalist-data {
-  padding: 0px;
+.relevant-frames .ui-accordion-header {
+  line-height: 1.1;
+  padding-top: 11px !important;
+  padding-bottom: 11px !important;
 }
 .relevant-frames .ui-button {
-  background-color: transparent;
-  color: #66BB6A;
+  background-color: #3D6F3A;
+  width: 100%;
+  margin: 5px 0px;
 }
 #kwic-frame-filter {
   margin-top: 1px;
@@ -150,14 +145,40 @@
   background-color: #f5f5f5;
 }
 .kwicOutput .ui-datatable table tbody .ui-state-highlight > td {
-  background-color: #7BCEEE;
+  background-color: #3D6F3A;
 }
 .kwicOutput .ui-datatable-empty-message td {
   text-align: center;
   padding: 100px 0px 425px 115px !important;
 }
+.kwicOutput .ui-datatable-body {
+  height: auto;
+}
 .kwicOutput .ui-paginator .ui-paginator-current {
   color: #ffffff;
+}
+.kwicOutput .ui-datalist-item {
+  list-style-type: none !important;
+}
+.kwicOutput .ui-datalist-data {
+  padding: 0px;
+}
+.kwicOutput .ui-dialog-content {
+  max-height: 45vh;
+  padding: 5px !important;
+}
+.kwicOutput .ui-dialog-titlebar {
+  background-color: #66BB6A;
+}
+#contextDialog {
+  width: 100% !important;
+  z-index: 1500 !important;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: inline-table;
+  overflow: auto;
 }
 #subcorporationDialog {
   border: solid 3px #66BB6A;

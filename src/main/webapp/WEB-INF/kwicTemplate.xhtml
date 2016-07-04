@@ -28,30 +28,32 @@
                 </div>
             </div>
         </div>
-        <div class="Container100 BorderTop BorderBottom">
-            <div class="ContainerIndent">
-                <ui:insert name="kwicHorizontalSearch"/>
-            </div>
-        </div>
-        <div class="Container100">
-            <div class="Card NoPadding FlexContainer">
-
-                <div class="Flex85 OvHidden">
-                    <div class="Container100">
-                        <ui:insert name="kwicOutput"/>
-                    </div>
+        <div id="kwicContent">
+            <div class="Container100 BorderTop BorderBottom">
+                <div class="ContainerIndent">
+                    <ui:insert name="kwicTopSearch"/>
                 </div>
+            </div>
+            <div class="Container100">
+                <div class="Card NoPadding FlexContainer">
 
-                <div class="Flex15 OvHidden BorderLeft">
-                    <div class="Container100">
-                        <ui:insert name="correspondingFrames"/>
+                    <div class="Flex85 OvHidden">
+                        <div class="Container100">
+                            <ui:insert name="kwicOutput"/>
+                        </div>
                     </div>
-                    <div class="Container100">
-                        <ui:insert name="filter"/>
-                    </div>
-                    <div class="Container100 OvXScroll BorderBottom">
-                        <div class="ContainerIndent" style="padding-left: 5px; padding-right: 0px">
-                            <ui:insert name="indexList"/>
+
+                    <div class="Flex15 OvHidden BorderLeft">
+                        <div class="Container100">
+                            <ui:insert name="correspondingFrames"/>
+                        </div>
+                        <div class="Container100">
+                            <ui:insert name="filter"/>
+                        </div>
+                        <div class="Container100 OvXScroll BorderBottom" style="overflow-y:auto; min-height: 100vh; max-height: 3000px">
+                            <div class="ContainerIndent" style="padding-left: 5px; padding-right: 0px">
+                                <ui:insert name="indexList"/>
+                            </div>
                         </div>
                     </div>
                 </div>

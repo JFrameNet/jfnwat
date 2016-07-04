@@ -144,10 +144,17 @@ public class DTOSentenceDisplay implements Serializable{
         if (preContext == null){extendBefore();}
     }
 
+    public List<String> getBefore5() {
+        return before5;
+    }
+
     public void setAfter5(List<String> after5) {
         this.after5 = after5;
         if (postContext == null){extendAfter();}
+    }
 
+    public List<String> getAfter5() {
+        return after5;
     }
 
     public void setCONTEXT_SCOPE(int charNum){
